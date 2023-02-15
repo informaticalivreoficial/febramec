@@ -244,7 +244,7 @@ return [
             'can'  =>  'configuracoes', // permissão configuracoes
         ],
         [
-            'text' => 'Empresas',
+            'text' => 'Academias',
             'url'  => 'admin/tenants',
             'icon' => 'fas fa-building',
             'can'  =>  'tenants', // permissão Tenants
@@ -276,7 +276,7 @@ return [
             'can'  =>  'users', //permissão users
             'submenu' => [
                 [
-                    'text' => 'Clientes',
+                    'text' => 'Alunos',
                     'url'  => 'admin/clientes',
                 ],
                 [

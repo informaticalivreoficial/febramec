@@ -68,20 +68,8 @@ class User extends FormRequest
             'password' => (empty($this->request->all()['id']) ? 'required' : ''),
             
             // Contact
-            'celular' => 'required',
-                        
-            // Spouse
-            'tipo_de_comunhao' => 'required_if:estado_civil,casado|in:universal,parcial,total,final',
-            'nome_conjuje' => 'required_if:estado_civil,casado|min:3|max:191',
-            'genero_conjuje' => 'required_if:estado_civil,casado|in:masculino,feminino',
-//            'cpf_conjuje' => 'required_if:estado_civil,casado,separado|min:11|max:14',
-//            'rg_conjuje' => 'required_if:estado_civil,casado,separado|min:8|max:12',
-//            'rg_expedicao_conjuje' => 'required_if:estado_civil,casado,separado',
-            'nasc_conjuje' => 'required_if:estado_civil,casado|date_format:d/m/Y',
-//            'naturalidade_conjuje' => 'required_if:estado_civil,casado,separado',
-//            'profissao_conjuje' => 'required_if:estado_civil,casado,separado',
-//            'renda_conjuje' => 'required_if:estado_civil,casado,separado',
-//            'profissao_empresa_conjuje' => 'required_if:estado_civil,casado,separado'
+            'celular' => 'required',                        
+           
         ];
     }
 }

@@ -89,7 +89,7 @@ class UserController extends Controller
 
         $userCreate = User::create($data);
         if(!empty($request->file('avatar'))){
-            $userCreate->avatar = $request->file('avatar')->storeAs('user/' . auth()->user()->tenant->uuid . '/', Str::slug($request->name)  . '-' . str_replace('.', '', microtime(true)) . '.' . $request->file('avatar')->extension());
+            $userCreate->avatar = $request->file('avatar')->storeAs(env('AWS_PASTA') . 'user' . auth()->user()->tenant->uuid . '/', Str::slug($request->name)  . '-' . str_replace('.', '', microtime(true)) . '.' . $request->file('avatar')->extension());
             $userCreate->save();
         }
         return redirect()->route('users.edit', $userCreate->id)->with(['color' => 'success', 'message' => 'Cadastro realizado com sucesso!']);        
@@ -123,16 +123,8 @@ class UserController extends Controller
             return redirect()->back()->with(['color' => 'danger', 'message' => 'Data de nascimento inválida!']);
         }
 
-        if($request->estado_civil == 'casado'){
-            $nasc_conjuje = Carbon::createFromFormat('d/m/Y', $request->nasc_conjuje)->format('d-m-Y');
-            if(Carbon::parse($nasc_conjuje)->age < 18){
-                return redirect()->back()->with(['color' => 'danger', 'message' => 'Data de nascimento do conjuje inválida!']);
-            }            
-        }
-
         if(!empty($request->file('avatar'))){
             Storage::delete($user->avatar);
-            Cropper::flush($user->avatar);
             $user->avatar = '';
         }
 
@@ -146,7 +138,7 @@ class UserController extends Controller
         $user->senha = $request->password;
         
         if(!empty($request->file('avatar'))){
-            $user->avatar = $request->file('avatar')->storeAs('user/' . auth()->user()->tenant->uuid . '/', Str::slug($request->name)  . '-' . str_replace('.', '', microtime(true)) . '.' . $request->file('avatar')->extension());
+            $user->avatar = $request->file('avatar')->storeAs(env('AWS_PASTA') . 'user' . auth()->user()->tenant->uuid . '/', Str::slug($request->name)  . '-' . str_replace('.', '', microtime(true)) . '.' . $request->file('avatar')->extension());
         }
 
         if(!$user->save()){
@@ -210,7 +202,6 @@ class UserController extends Controller
                       ($user->admin == '1' && $user->client == '0' ? 'Administrador' :
                       ($user->admin == '0' && $user->client == '1' ? 'Cliente' : 'Cliente')));
             Storage::delete($user->avatar);
-            Cropper::flush($user->avatar);
             $user->delete();
         }
         if($user->admin == '1' || $user->Editor == '1'){

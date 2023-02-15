@@ -25,6 +25,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'tenant_id',
+        'graduacao',
         'email',
         'email1',
         'password',
@@ -46,18 +47,7 @@ class User extends Authenticatable
         //Contato
         'telefone', 'celular', 'whatsapp', 'skype',
         //Redes Sociais
-        'facebook', 'twitter', 'instagram', 'linkedin', 'vimeo', 'youtube', 'fliccr', 'soundclound', 'snapchat',
-        'tipo_de_comunhao',
-        'nome_conjuje',
-        'genero_conjuje',
-        'cpf_conjuje',
-        'rg_conjuje',
-        'rg_expedicao_conjuje',
-        'nasc_conjuje',
-        'naturalidade_conjuje',
-        'profissao_conjuje',
-        'renda_conjuje',
-        'profissao_empresa_conjuje',
+        'facebook', 'twitter', 'instagram', 'linkedin', 'vimeo', 'youtube', 'fliccr',        
         'admin',
         'client',
         'editor',
