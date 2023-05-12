@@ -35,6 +35,12 @@ if($catpai != 'null'){
                         {{ $error }}
                         @endmessage
                     @endforeach
+                @endif 
+
+                @if(session()->exists('message'))
+                    @message(['color' => session()->get('color')])
+                    {{ session()->get('message') }}
+                    @endmessage
                 @endif
             </div>            
         </div>

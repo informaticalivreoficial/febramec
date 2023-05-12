@@ -24,6 +24,8 @@ $config = [
 ]
 @endphp
 
+
+
 @section('content_header')
 <div class="row mb-2">
     <div class="col-sm-6">
@@ -113,7 +115,6 @@ $config = [
                                             <select name="tipo" class="form-control tipo_post">
                                                 <option value=""> Selecione </option>
                                                 <option value="artigo" {{ (old('artigo') == '1' ? 'selected' : ($post->tipo == 'artigo' ? 'selected' : '')) }}>Artigo</option>
-                                                <option value="noticia" {{ (old('noticia') == '0' ? 'selected' : ($post->tipo == 'noticia' ? 'selected' : '')) }}>Notícia</option>
                                                 <option value="pagina" {{ (old('pagina') == '0' ? 'selected' : ($post->tipo == 'pagina' ? 'selected' : '')) }}>Página</option>
                                             </select>
                                         </div>
@@ -306,8 +307,7 @@ $config = [
                 }
             });     
 
-            // Função para chamar as categorias do Post            
-
+            // Função para chamar as categorias do Post   
             $('.tipo_post').on('change', function (){
                 var categoria = this.value;
 
@@ -348,7 +348,7 @@ $config = [
                         $('.categoria').attr('disabled', false);
                     }
                 });
-            });       
+            });        
               
             
             $('input[name="files[]"]').change(function (files) {

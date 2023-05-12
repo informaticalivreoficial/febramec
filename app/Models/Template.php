@@ -36,10 +36,7 @@ class Template extends Model
     /**
      * Relacionamentos
     */
-    public function countClientes()
-    {
-        return $this->hasMany(Tenant::class, 'template', 'name')->count();
-    }
+    
 
     /**
      * Accerssors and Mutators

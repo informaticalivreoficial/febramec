@@ -7,12 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use App\Support\Cropper;
-use App\Tenant\Traits\TenantTrait;
+use Illuminate\Notifications\Notifiable;
 
 class Post extends Model
 {
-    use HasFactory, TenantTrait;
+    use HasFactory, Notifiable;
 
     protected $table = 'posts'; 
 
@@ -28,6 +27,7 @@ class Post extends Model
         'comentarios',
         'cat_pai',        
         'status',
+        'menu',
         'thumb_legenda',
         'publish_at'
     ];
@@ -54,11 +54,6 @@ class Post extends Model
     {
         return $this->belongsTo(User::class, 'autor', 'id');
     }
-
-    public function tenant()
-    {
-        return $this->belongsTo(Tenant::class);
-    }
     
     public function categoriaObject()
     {
@@ -75,13 +70,18 @@ class Post extends Model
         return $this->hasMany(PostGb::class, 'post', 'id')->orderBy('cover', 'ASC');
     }
 
+    public function countimages()
+    {
+        return $this->hasMany(PostGb::class, 'post', 'id')->count();
+    }
+
     /**
      * Accerssors and Mutators
      */
 
     public function getContentWebAttribute()
     {
-        return Str::words($this->content, '9', ' ...');
+        return Str::words($this->content, '20', ' ...');
     }
         
     public function cover()
@@ -98,6 +98,7 @@ class Post extends Model
             return url(asset('backend/assets/images/image.jpg'));
         }
 
+        //return Storage::url(Cropper::thumb($cover['path'], 720, 480));
         return Storage::url($cover['path']);
     }
 
@@ -121,6 +122,11 @@ class Post extends Model
     public function setStatusAttribute($value)
     {
         $this->attributes['status'] = ($value == '1' ? 1 : 0);
+    }
+
+    public function setMenuAttribute($value)
+    {
+        $this->attributes['menu'] = ($value == '1' ? 1 : 0);
     }
     
     public function setPublishAtAttribute($value)

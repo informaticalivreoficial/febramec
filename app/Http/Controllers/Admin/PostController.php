@@ -14,17 +14,9 @@ use App\Models\User;
 use App\Models\Post;
 use App\Models\PostGb;
 use App\Models\CatPost;
-use Illuminate\Support\Facades\Redirect;
 
 class PostController extends Controller
 {
-    public function __construct()
-    {
-        //Verifica se expirou a assinatura
-        $this->middleware(['subscribed']);
-        $this->middleware(['can:posts']);
-    }
-
     public function index(Request $request)
     {
         if($request->segments()[2] == 'artigos'){
@@ -41,7 +33,10 @@ class PostController extends Controller
             $tituloPagina = 'Páginas';
         }
 
-        $posts = Post::where('tipo', $tipo)->orderBy('status', 'ASC')->orderBy('created_at', 'DESC')->paginate(25);
+        $posts = Post::where('tipo', $tipo)
+                ->orderBy('status', 'ASC')
+                ->orderBy('created_at', 'DESC')
+                ->paginate(25);
         
         return view('admin.posts.index', [
             'posts' => $posts,
@@ -53,11 +48,7 @@ class PostController extends Controller
     public function create()
     {
         $categorias = CatPost::orderBy('titulo', 'ASC')->get();
-
-        $users = User::where('tenant_id', auth()->user()->tenant->id)
-                        ->where('admin', '=', '1')
-                        ->orWhere('editor', '=', '1')
-                        ->get();                        
+        $users = User::where('admin', '=', '1')->orWhere('editor', '=', '1')->get();
         return view('admin.posts.create',[
             'users' => $users,
             'categorias' => $categorias
@@ -65,13 +56,9 @@ class PostController extends Controller
     }
 
     public function store(PostRequest $request)
-    {        
-        $data = $request->all();
-        $catPai = CatPost::where('id', $request->categoria)->first();
-        $data['cat_pai'] = $catPai->id_pai;
-
-        $criarPost = Post::create($data);
-        //$criarPost->fill($request->all());
+    {
+        $criarPost = Post::create($request->all());
+        $criarPost->fill($request->all());
 
         $secao = ($request->tipo == 'artigo' ? 'artigos' : 
                  ($request->tipo == 'noticia' ? 'noticias' : 
@@ -82,7 +69,7 @@ class PostController extends Controller
         $validator = Validator::make($request->only('files'), ['files.*' => 'image']);
 
         if ($validator->fails() === true) {
-            return Redirect::back()->withInput()->with([
+            return redirect()->back()->withInput()->with([
                 'color' => 'orange',
                 'message' => 'Todas as imagens devem ser do tipo jpg, jpeg ou png.',
             ]);
@@ -92,21 +79,21 @@ class PostController extends Controller
             foreach ($request->allFiles()['files'] as $image) {
                 $postGb = new PostGb();
                 $postGb->post = $criarPost->id;
-                $postGb->path = $image->storeAs($secao.'/'. auth()->user()->tenant->uuid . '/' . $criarPost->id, Str::slug($request->titulo) . '-' . str_replace('.', '', microtime(true)) . '.' . $image->extension());
+                $postGb->path = $image->storeAs(env('AWS_PASTA') . $secao.'/' . $criarPost->id, Str::slug($request->titulo) . '-' . str_replace('.', '', microtime(true)) . '.' . $image->extension());
                 $postGb->save();
                 unset($postGb);
             }
         }
-        return Redirect::route('posts.edit', [
+        return redirect()->route('posts.edit', [
             'id' => $criarPost->id,
         ])->with(['color' => 'success', 'message' => $request->tipo.' cadastrado com sucesso!']);
     }
 
     public function edit($id)
     {
-        $categorias = CatPost::orderBy('titulo', 'ASC')->where('id_pai', null)->get();
+        $categorias = CatPost::orderBy('titulo', 'ASC')->get();
         $editarPost = Post::where('id', $id)->first();
-        $users = User::where('tenant_id', auth()->user()->tenant->id)->where('admin', '=', '1')->orWhere('editor', '=', '1')->get();
+        $users = User::where('admin', '=', '1')->orWhere('editor', '=', '1')->get();
 
         if($editarPost->tipo == 'artigo'){
             $tipo = 'artigos';
@@ -129,7 +116,7 @@ class PostController extends Controller
     }
 
     public function update(PostRequest $request, $id)
-    {        
+    {
         $postUpdate = Post::where('id', $id)->first();
         $postUpdate->fill($request->all());
 
@@ -143,7 +130,7 @@ class PostController extends Controller
         $validator = Validator::make($request->only('files'), ['files.*' => 'image']);
 
         if ($validator->fails() === true) {
-            return Redirect::back()->withInput()->with([
+            return redirect()->back()->withInput()->with([
                 'color' => 'orange',
                 'message' => 'Todas as imagens devem ser do tipo jpg, jpeg ou png.',
             ]);
@@ -153,13 +140,13 @@ class PostController extends Controller
             foreach ($request->allFiles()['files'] as $image) {
                 $postImage = new PostGb();
                 $postImage->post = $postUpdate->id;
-                $postImage->path = $image->storeAs($secao.'/' . auth()->user()->tenant->uuid . '/' . $postUpdate->id, Str::slug($request->titulo) . '-' . str_replace('.', '', microtime(true)) . '.' . $image->extension());
+                $postImage->path = $image->storeAs(env('AWS_PASTA') . $secao.'/' . $postUpdate->id, Str::slug($request->titulo) . '-' . str_replace('.', '', microtime(true)) . '.' . $image->extension());
                 $postImage->save();
                 unset($postImage);
             }
         }
 
-        return Redirect::route('posts.edit', [
+        return redirect()->route('posts.edit', [
             'id' => $postUpdate->id,
         ])->with(['color' => 'success', 'message' => $request->tipo.' atualizado com sucesso!']);
     } 
@@ -168,6 +155,14 @@ class PostController extends Controller
     {        
         $post = Post::find($request->id);
         $post->status = $request->status;
+        $post->save();
+        return response()->json(['success' => true]);
+    }
+
+    public function postSetMenu(Request $request)
+    {        
+        $post = Post::find($request->id);
+        $post->menu = $request->menu;
         $post->save();
         return response()->json(['success' => true]);
     }
@@ -196,7 +191,6 @@ class PostController extends Controller
     {
         $imageDelete = PostGb::where('id', $request->image)->first();
         Storage::delete($imageDelete->path);
-        Cropper::flush($imageDelete->path);
         $imageDelete->delete();
         $json = [
             'success' => true,
@@ -224,7 +218,7 @@ class PostController extends Controller
     {
         $postdelete = Post::where('id', $request->id)->first();
         $postGb = PostGb::where('post', $postdelete->id)->first();
-        $nome = getPrimeiroNome(Auth::user()->name);
+        $nome = \App\Helpers\Renato::getPrimeiroNome(Auth::user()->name);
 
         $tipo = ($postdelete->tipo == 'artigo' ? 'este artigo' : 
                  ($postdelete->tipo == 'noticia' ? 'esta notícia' : 
@@ -256,14 +250,13 @@ class PostController extends Controller
         if(!empty($postdelete)){
             if(!empty($imageDelete)){
                 Storage::delete($imageDelete->path);
-                Cropper::flush($imageDelete->path);
                 $imageDelete->delete();
                 Storage::deleteDirectory($secao.'/'.$postdelete->id);
                 $postdelete->delete();
             }
             $postdelete->delete();
         }
-        return Redirect::route('posts.'.$secao.'')->with([
+        return redirect()->route('posts.'.$secao.'')->with([
             'color' => 'success', 
             'message' => $postdelete->tipo.' '.$postR.' foi removido com sucesso!'
         ]);

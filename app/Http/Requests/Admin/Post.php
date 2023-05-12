@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Admin;
 
-use App\Rules\Tenant\TenantUnique;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,12 +25,7 @@ class Post extends FormRequest
     public function rules()
     {
         return [
-            'titulo' => [
-                'required',
-                'min:3',
-                'max:191',
-                new TenantUnique('posts', $this->segment(3)),
-            ],
+            'titulo' => 'required|min:3|max:191',
             'autor' => 'required',
             'categoria' => 'required',
             'tipo' => 'required',

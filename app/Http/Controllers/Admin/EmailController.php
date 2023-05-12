@@ -7,27 +7,21 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use App\Mail\Admin\AdminSend;
 use App\Mail\Admin\SuporteSend;
+use App\Models\Empresa;
 use App\Models\User;
 
 class EmailController extends Controller
 {    
-    public function __construct()
-    {
-        //Verifica se expirou a assinatura
-        $this->middleware(['subscribed']);
-        $this->middleware(['can:emails']);
-    }
 
     public function send(Request $request)
     {
-        $tenant = auth()->user()->tenant;
+        $user = auth()->user();
         $destinatario = $request->except('_token');        
         
         return view('admin.email.send', [
-            'tenant' => $tenant,
+            'user' => $user,
             'destinatario' => $destinatario
-        ]);
-        
+        ]);        
     }    
     
     
@@ -92,4 +86,5 @@ class EmailController extends Controller
             return response()->json(['success' => $json]);            
         }
     }
+    
 }

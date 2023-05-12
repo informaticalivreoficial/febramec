@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Tenant;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
 
@@ -15,11 +14,9 @@ class CatPostsTableSeeder extends Seeder
      */
     public function run()
     {
-        $tenant = Tenant::first();
         DB::table('cat_post')->insert([
             [
                 'id' => 1,
-                'tenant_id' => $tenant->id,
                 'id_pai' => null,
                 'titulo' => 'Tecnologia',
                 'content' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
@@ -31,7 +28,6 @@ class CatPostsTableSeeder extends Seeder
             ],
             [
                 'id' => 2,
-                'tenant_id' => $tenant->id,
                 'id_pai' => null,
                 'titulo' => 'Meio Ambiente',
                 'content' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
@@ -43,7 +39,6 @@ class CatPostsTableSeeder extends Seeder
             ],
             [
                 'id' => 3,
-                'tenant_id' => $tenant->id,
                 'id_pai' => 1,
                 'titulo' => 'Dicas de informática',
                 'content' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
@@ -55,7 +50,6 @@ class CatPostsTableSeeder extends Seeder
             ],
             [
                 'id' => 4,
-                'tenant_id' => $tenant->id,
                 'id_pai' => 2,
                 'titulo' => 'Curiosidades',
                 'content' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',

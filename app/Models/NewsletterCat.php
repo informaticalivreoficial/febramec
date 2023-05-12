@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use App\Tenant\Traits\TenantTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class NewsletterCat extends Model
 {
-    use HasFactory, TenantTrait;
+    use HasFactory;
 
     protected $table = 'newsletter_cat';
 
@@ -39,11 +38,6 @@ class NewsletterCat extends Model
     /**
      * Relacionamentos
     */
-    public function tenant()
-    {
-        return $this->belongsTo(Tenant::class);
-    }
-
     public function newsletters()
     {
         return $this->hasMany(Newsletter::class, 'categoria', 'id');

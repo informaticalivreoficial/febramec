@@ -1,16 +1,16 @@
 @extends('adminlte::page')
 
-@section('title', 'Gerenciar Clientes')
+@section('title', 'Gerenciar Alunos')
 
 @section('content_header')
 <div class="row mb-2">
     <div class="col-sm-6">
-        <h1><i class="fas fa-users mr-2"></i> Clientes</h1>
+        <h1><i class="fas fa-search mr-2"></i> Alunos</h1>
     </div>
     <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">                    
             <li class="breadcrumb-item"><a href="{{route('home')}}">Painel de Controle</a></li>
-            <li class="breadcrumb-item active">Clientes</li>
+            <li class="breadcrumb-item active">Alunos</li>
         </ol>
     </div>
 </div>
@@ -58,8 +58,9 @@
                         <tr>
                             <th>Foto</th>
                             <th>Nome</th>
-                            <th>CPF</th>
-                            <th>Perfil</th>
+                            <th>Plano</th>
+                            <th>Horário</th>
+                            <th>Situação</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -67,8 +68,8 @@
                         @foreach($users as $user)                    
                         <tr style="{{ ($user->status == '1' ? '' : 'background: #fffed8 !important;')  }}">
                             @php
-                                if(!empty($user->avatar) && \Illuminate\Support\Facades\File::exists(public_path() . '/storage/' . $user->avatar)){
-                                    $cover = url('storage/'.$user->avatar);
+                                if(!empty($user->avatar) && \Illuminate\Support\Facades\Storage::exists($user->avatar)){
+                                    $cover = \Illuminate\Support\Facades\Storage::url($user->avatar);
                                 } else {
                                     if($user->genero == 'masculino'){
                                         $cover = url(asset('backend/assets/images/avatar5.png'));
@@ -81,23 +82,24 @@
                             @endphp
                             <td class="text-center">
                                 <a href="{{url($cover)}}" data-title="{{$user->name}}" data-toggle="lightbox">
-                                    <img alt="{{$user->name}}" class="table-avatar" src="{{url($cover)}}">
+                                    <img style="max-height:55px !important;min-width:50px !important;min-height:50px !important;" alt="{{$user->name}}" class="table-avatar" src="{{url($cover)}}">
                                 </a>
                             </td>
                             <td>{{$user->name}}</td>
-                            <td>{{$user->cpf}}</td>
+                            <td>{{$user->getPlano->name}}</td>
+                            <td>{{\Carbon\Carbon::parse($user->getPlano->horario)->format('H:i')}}</td>
                             <td>{{$user->getFuncao()}}</td>
                             <td>
                                 <input type="checkbox" data-onstyle="success" data-offstyle="warning" data-size="mini" class="toggle-class" data-id="{{ $user->id }}" data-toggle="toggle" data-style="slow" data-on="<i class='fas fa-check'></i>" data-off="<i style='color:#fff !important;' class='fas fa-exclamation-triangle'></i>" {{ $user->status == true ? 'checked' : ''}}>
                                 @if($user->whatsapp != '')
-                                    <a target="_blank" href="{{getNumZap($user->whatsapp)}}" class="btn btn-xs btn-success text-white"><i class="fab fa-whatsapp"></i></a>
-                                @endif 
+                                    <a target="_blank" href="{{\App\Helpers\WhatsApp::getNumZap($user->whatsapp)}}" class="btn btn-xs btn-success text-white"><i class="fab fa-whatsapp"></i></a>
+                                @endif
                                 <form class="btn btn-xs" action="{{route('email.send')}}" method="post">
                                     @csrf
                                     <input type="hidden" name="nome" value="{{ $user->name }}">
                                     <input type="hidden" name="email" value="{{ $user->email }}">
                                     <button title="Enviar Email" type="submit" class="btn btn-xs text-white bg-teal"><i class="fas fa-envelope"></i></button>
-                                </form>
+                                </form> 
                                 <a href="{{route('users.view',['id' => $user->id])}}" class="btn btn-xs btn-info text-white"><i class="fas fa-search"></i></a>
                                 <a href="{{route('users.edit',['id' => $user->id])}}" class="btn btn-xs btn-default"><i class="fas fa-pen"></i></a>
                                 <button type="button" class="btn btn-xs btn-danger text-white j_modal_btn" data-id="{{$user->id}}" data-toggle="modal" data-target="#modal-default">
@@ -159,6 +161,35 @@
 @stop
 
 @section('css')
+<style>
+    .pagination-custom{
+            margin: 0;
+            display: -ms-flexbox;
+            display: flex;
+            padding-left: 0;
+            list-style: none;
+            border-radius: 0.25rem;
+        }
+        .pagination-custom li a {
+            border-radius: 30px;
+            margin-right: 8px;
+            color:#7c7c7c;
+            border: 1px solid #ddd;
+            position: relative;
+            float: left;
+            padding: 6px 12px;
+            width: 50px;
+            height: 40px;
+            text-align: center;
+            line-height: 25px;
+            font-weight: 600;
+        }
+        .pagination-custom>.active>a, .pagination-custom>.active>a:hover, .pagination-custom>li>a:hover {
+            color: #fff;
+            background: #007bff;
+            border: 1px solid transparent;
+        }
+</style>
 <link rel="stylesheet" href="{{url(asset('backend/plugins/ekko-lightbox/ekko-lightbox.css'))}}">
 <link href="{{url(asset('backend/plugins/bootstrap-toggle/bootstrap-toggle.min.css'))}}" rel="stylesheet">
 @stop

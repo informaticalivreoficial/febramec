@@ -11,17 +11,9 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Slide;
 use App\Http\Requests\Admin\Slide as SlideRequest;
 use App\Support\Cropper;
-use Illuminate\Support\Facades\Redirect;
 
 class SlideController extends Controller
 {
-    public function __construct()
-    {
-        //Verifica se expirou a assinatura
-        $this->middleware(['subscribed']);
-        $this->middleware(['can:slides']);
-    }
-
     public function index()
     {
         $slides = Slide::orderBy('created_at', 'DESC')->orderBy('status', 'ASC')->paginate(25);
@@ -43,18 +35,18 @@ class SlideController extends Controller
         $validator = Validator::make($request->only('files'), ['files.*' => 'image']);
 
         if ($validator->fails() === true) {
-            return Redirect::back()->withInput()->with([
+            return redirect()->back()->withInput()->with([
                 'color' => 'orange',
                 'message' => 'Todas as imagens devem ser do tipo jpg, jpeg ou png.',
             ]);
         }
 
         if(!empty($request->file('imagem'))){
-            $slideCreate->imagem = $request->file('imagem')->storeAs(env('AWS_PASTA') . 'slides/'. auth()->user()->tenant->uuid, Str::slug($request->titulo)  . '-' . str_replace('.', '', microtime(true)) . '.' . $request->file('imagem')->extension());
+            $slideCreate->imagem = $request->file('imagem')->storeAs(env('AWS_PASTA') . 'slides', Str::slug($request->titulo)  . '-' . str_replace('.', '', microtime(true)) . '.' . $request->file('imagem')->extension());
             $slideCreate->save();
         }
 
-        return Redirect::route('slides.edit', $slideCreate->id)->with(['color' => 'success', 'message' => 'Slide cadastrado com sucesso!']);
+        return redirect()->route('slides.edit', $slideCreate->id)->with(['color' => 'success', 'message' => 'Slide cadastrado com sucesso!']);
     }    
     
     public function edit($id)
@@ -73,7 +65,7 @@ class SlideController extends Controller
         $validator = Validator::make($request->only('files'), ['files.*' => 'image']);
 
         if ($validator->fails() === true) {
-            return Redirect::back()->withInput()->with([
+            return redirect()->back()->withInput()->with([
                 'color' => 'orange',
                 'message' => 'Todas as imagens devem ser do tipo jpg, jpeg ou png.',
             ]);
@@ -81,25 +73,25 @@ class SlideController extends Controller
 
         if(!empty($request->file('imagem'))){
             Storage::delete($slide->imagem);
-            Cropper::flush($slide->imagem);
+            //Cropper::flush($slide->imagem);
             $slide->imagem = '';
         }
-
+        //dd($request->all());
         $slide->fill($request->all());
         $slide->setSlug();
 
         if(!empty($request->file('imagem'))){
-            $slide->imagem = $request->file('imagem')->storeAs(env('AWS_PASTA') . 'slides/'. auth()->user()->tenant->uuid, Str::slug($request->titulo)  . '-' . str_replace('.', '', microtime(true)) . '.' . $request->file('imagem')->extension());
+            $slide->imagem = $request->file('imagem')->storeAs(env('AWS_PASTA') . 'slides', Str::slug($request->titulo)  . '-' . str_replace('.', '', microtime(true)) . '.' . $request->file('imagem')->extension());
         }
 
         if(!$slide->save()){
-            return Redirect::back()->withInput()->with([
+            return redirect()->back()->withInput()->with([
                 'color' => 'orange',
                 'message' => 'Erro ao salvar Slide',
             ]);
         }        
 
-        return Redirect::route('slides.edit', $slide->id)->with(['color' => 'success', 'message' => 'Slide atualizado com sucesso!']);
+        return redirect()->route('slides.edit', $slide->id)->with(['color' => 'success', 'message' => 'Slide atualizado com sucesso!']);
     }
 
     public function slideSetStatus(Request $request)
@@ -113,7 +105,7 @@ class SlideController extends Controller
     public function delete(Request $request)
     {
         $slide = Slide::where('id', $request->id)->first();
-        $nome = getPrimeiroNome(Auth::user()->name);
+        $nome = \App\Helpers\Renato::getPrimeiroNome(Auth::user()->name);
         if(!empty($slide)){
             $json = "<b>$nome</b> você tem certeza que deseja excluir este Slide?";
             return response()->json(['error' => $json,'id' => $slide->id]);
@@ -128,8 +120,9 @@ class SlideController extends Controller
         $slideR = $slide->titulo;
         if(!empty($slide)){
             Storage::delete($slide->imagem);
+            //Cropper::flush($slide->imagem);
             $slide->delete();
         }
-        return Redirect::route('slides.index')->with(['color' => 'success', 'message' => 'O slide '.$slideR.' foi removido com sucesso!']);
+        return redirect()->route('slides.index')->with(['color' => 'success', 'message' => 'O slide '.$slideR.' foi removido com sucesso!']);
     }
 }

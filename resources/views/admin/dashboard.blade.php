@@ -20,171 +20,174 @@
 <div class="row">
     <div class="col-12 col-sm-6 col-md-4 col-lg-3">
         <div class="info-box">
-            <span class="info-box-icon bg-teal"><i class="fa far fa-pen"></i></span>
+            <span class="info-box-icon bg-info"><a href="" title="Reservas"><i class="fa far fa-store"></i></a></span>
 
             <div class="info-box-content">
-                <span class="info-box-text"><b>Posts</b></span>
-                <span class="info-box-text"><a href="{{route('posts.paginas')}}" title="Produtos">Páginas:</a> {{ $postsPaginas }}</span>
-                <span class="info-box-text"><a href="{{route('posts.artigos')}}" title="Artigos">Artigos:</a> {{ $postsArtigos }}</span>
-                <span class="info-box-text"><a href="{{route('posts.noticias')}}" title="Notícias">Notícias:</a> {{ $postsNoticias }}</span>
+                <span class="info-box-text"><b>Reservas</b></span>
+                <span class="info-box-text">Pendentes: </span>
+                <span class="info-box-text">Finalizada: </span>
+                <span class="info-box-text">Total: </span>
             </div>            
         </div>
     </div>
     <div class="col-12 col-sm-6 col-md-4 col-lg-3">
         <div class="info-box">
-            <span class="info-box-icon bg-teal"><a href="{{route('imoveis.index')}}" title="Imóveis"><i class="fa far fa-home"></i></a></span>
+            <span class="info-box-icon bg-info"><a href="{{-- route('apartamentos.index') --}}" title="Apartamentos"><i class="fa far fa-building"></i></a></span>
 
             <div class="info-box-content">
-                <span class="info-box-text"><b>Imóveis</b></span>
-                <span class="info-box-text">Disponíveis: {{ $imoveisAvailable }}</span>
-                <span class="info-box-text">Inativos: {{ $imoveisUnavailable }}</span>
-                <span class="info-box-text">Total: {{ $imoveisAvailable + $imoveisUnavailable }}</span>
+                <span class="info-box-text"><b>Apartamentos</b></span>
+                <span class="info-box-text">Publicado: {{-- $apartamentosAvailable --}}</span>
+                <span class="info-box-text">Rascunho: {{-- $apartamentosUnavailable --}}</span>
+                <span class="info-box-text">Total: {{-- $apartamentosAvailable + $apartamentosUnavailable --}}</span>
+            </div>            
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="info-box">
+            <span class="info-box-icon bg-teal"><a href="{{ route('users.index') }}" title="Clientes"><i class="fa far fa-users"></i></a></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text"><b>Alunos</b></span>
+                <span class="info-box-text">Ativos: {{ $clientesAvailable }}</span>
+                <span class="info-box-text">Inativos: {{ $clientesUnavailable }}</span>
+                <span class="info-box-text">Total: {{ $clientesAvailable + $clientesUnavailable }}</span>
             </div>
         </div>
     </div> 
     <div class="col-12 col-sm-6 col-md-4 col-lg-3">
         <div class="info-box">
-            <span class="info-box-icon bg-teal"><i class="fa far fa-users"></i></span>
+            <span class="info-box-icon bg-teal"><a href="" title="Newsletter"><i class="fa far fa-envelope"></i></a></span>
 
             <div class="info-box-content">
-                <span class="info-box-text"><b>Usuários</b></span>
-                <span class="info-box-text"><a href="{{route('users.team')}}" title="Time">Time:</a> {{ $time }}</span>
-                <span class="info-box-text"><a href="{{route('users.index')}}" title="Clientes">Clientes:</a> {{ $usersAvailable + $usersUnavailable }}</span>
-                <span class="info-box-text">Total: {{ $usersAvailable + $usersUnavailable + $time }}</span>
+                <span class="info-box-text"><b>Newsletter</b></span>
+                <span class="info-box-text">Listas: {{$listas}}</span>
+                <span class="info-box-text">Emails: {{$emails}}</span>
+                <span class="info-box-text">Envios: {{$emailsCount}}</span>
             </div>
             <!-- /.info-box-content -->
         </div>
         <!-- /.info-box -->
     </div>       
     <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-        <div class="info-box">
-            <span class="info-box-icon bg-teal"><a href="{{--route('embarcacoes.index')--}}" title="Pedidos"><i class="fa far fa-money-check"></i></a></span>
-
-            <div class="info-box-content">
-                <span class="info-box-text"><b>Pedidos</b></span>
-                <span class="info-box-text">Aprovados: {{-- $pedidosApproved --}}</span>
-                <span class="info-box-text">Processando: {{-- $pedidosInprocess --}}</span>
-                <span class="info-box-text">Cancelado: {{-- $pedidosRejected --}}</span>
-            </div>
-            <!-- /.info-box-content -->
-        </div>
-    <!-- /.info-box -->
+        
     </div>
 </div>
- 
-<div class="row {{(!auth()->user()->tenant->analytics_view && !auth()->user()->tenant->tagmanager_id ? 'd-none' : '')}}">
-    <section class="col-lg-6 connectedSortable">
-        <div class="card card-teal">
-            <div class="card-header">
-                <h3 class="card-title">Visitas/Últimos 6 meses</h3>
-                <div class="card-tools">
-                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
-                    <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="chart">
-                <canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="col-lg-6 connectedSortable">
-        <div class="card card-teal">
-            <div class="card-header">
-                <h3 class="card-title">Dispositivos/Últimos 6 meses</h3>
-                <div class="card-tools">
-                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
-                    <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
-                </div>
-            </div>
-            <div class="card-body">
-                <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-            </div>
-        </div>
-    </section>
-</div>
 
+<div class="row">
+    <section class="col-lg-6 connectedSortable">
+            <!-- BAR CHART -->
+            <div class="card card-teal">
+                <div class="card-header">
+                    <h3 class="card-title">Visitas/Últimos 6 meses</h3>
+
+                    <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="chart">
+                    <canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </section>
+        <section class="col-lg-6 connectedSortable">
+        <!-- DONUT CHART -->
+        <div class="card card-teal">
+            <div class="card-header">
+            <h3 class="card-title">Dispositivos/Últimos 6 meses</h3>
+
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+            </div>
+            </div>
+            <div class="card-body">
+            <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+        </section>
+    </div><!-- /.row -->
 
 
 <div class="row">
-    
-    <div class="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3 {{(!$usersUnavailable && !$usersAvailable && !$time ? 'd-none' : '')}}">
+    <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-3">
         <div class="card card-danger">                
             <div class="card-body">
-            <canvas id="donutChartusers" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+              <canvas id="donutChartusers" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
             </div>
         </div>
     </div>
-    
-    <div class="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3 {{(!$postsArtigos && !$postsPaginas && !$postsNoticias ? 'd-none' : '')}}">
+    <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-3">
         <div class="card card-danger">                
             <div class="card-body">
-            <canvas id="donutChartposts" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+              <canvas id="donutChartposts" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
             </div>
         </div>
     </div>
-
-    <div class="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3 {{(!$imoveisAvailable && !$imoveisUnavailable ? 'd-none' : '')}}">
+    <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-3">
         <div class="card card-danger">                
             <div class="card-body">
-            <canvas id="donutChartimoveis" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+              <canvas id="donutChartpedidos" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
             </div>
         </div>
     </div>
-       
 </div>
 
-@if(!empty($imoveisTop) && $imoveisTop->count() > 0)
+@if(!empty($apartamentosTop) && $apartamentosTop->count() > 0)
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Imóveis mais visitados</h3>
+            <h3 class="card-title">Apartamentos mais visitados</h3>
         </div>
         <div class="card-body p-0">
-            <table class="table table-sm">
+          <table class="table table-sm">
             <thead>
-                <tr>
-                    <th class="text-center">#</th>
-                    <th class="text-center">Foto</th>
+              <tr>
+                    <th>Foto</th>
                     <th>Título</th>
                     <th></th>
                     <th class="text-center">Visitas</th>
-                </tr>
+              </tr>
             </thead>
             <tbody>                            
-                @foreach($imoveisTop as $imoveltop)
-                @php                    
+                @foreach($apartamentosTop as $apartamentotop)
+                @php
                     //REALIZA PORCENTAGEM DE VISITAS!
-                    if($imoveltop->views == '0'){
+                    if($apartamentotop->views == 0){
                         $percent = 1;
                     }else{
-                        $percent = substr(( $imoveltop['views'] / $imoveistotalviews ) * 100, 0, 5);
-                    }
-                    
+                        $percent = substr(( $apartamentotop->views / $apartamentostotalviews ) * 100, 0, 5);
+                    }                    
                     $percenttag = str_replace(",", ".", $percent);
                 @endphp
                 <tr>
-                    <td class="text-center">{{$imoveltop->id}}</td>
-                    <td class="text-center">
-                        <a href="{{url($imoveltop->nocover())}}" data-title="{{$imoveltop->titulo}}" data-toggle="lightbox"> 
-                            <img src="{{url($imoveltop->cover())}}" alt="{{$imoveltop->titulo}}" class="img-size-50">
+                    <td>
+                        <a href="{{url($apartamentotop->cover())}}" data-title="{{$apartamentotop->titulo}}" data-toggle="lightbox"> 
+                            <img src="{{url($apartamentotop->cover())}}" alt="{{$apartamentotop->titulo}}" class="img-size-50">
                         </a>
                     </td>
-                    <td>{{$imoveltop->titulo}}</td>
+                    <td>{{$apartamentotop->titulo}}</td>
                     <td style="width:10%;">
-                        <div class="progress progress-md progress-striped active">
-                        <div class="progress-bar bg-primary" style="width: {{$percenttag}}%"></div>
-                        </div>
+                      <div class="progress progress-md progress-striped active">
+                        <div class="progress-bar bg-success" style="width: {{$percenttag}}%" title="{{$percenttag}}%"></div>
+                      </div>
                     </td>
                     <td class="text-center">
-                        <span class="badge bg-primary">{{$imoveltop->views}}</span>
-                        <a data-toggle="tooltip" data-placement="top" title="Editar Imóvel" href="{{route('imoveis.edit', ['imovel' => $imoveltop->id])}}" class="btn btn-xs btn-default ml-2"><i class="fas fa-pen"></i></a>
-                        <a target="_blank" href="{{route(($imoveltop->venda == true || $imoveltop->locacao == true ? 'web.buyProperty' : 'web.rentProperty'),['slug' => $imoveltop->slug])}}" class="btn btn-xs btn-info text-white"><i class="fas fa-search"></i></a>
+                      <span class="badge bg-success">{{$apartamentotop->views}}</span>
+                      <a data-toggle="tooltip" data-placement="top" title="Editar Apartamento" href="{{route('posts.edit', ['id' => $apartamentotop->id])}}" class="btn btn-xs btn-default ml-2"><i class="fas fa-pen"></i></a>
+                      <a target="_blank" href="{{route('web.acomodacao',['slug' => $apartamentotop->slug])}}" class="btn btn-xs btn-info text-white"><i class="fas fa-search"></i></a>
                     </td>
                 </tr>
                 @endforeach                            
             </tbody>
-            </table>
+          </table>
         </div>
     </div>
 @endif
@@ -208,10 +211,10 @@
                 @foreach($artigosTop as $artigotop)
                 @php
                     //REALIZA PORCENTAGEM DE VISITAS!
-                    if($artigotop->views == '0'){
+                    if($artigotop->views == 0){
                         $percent = 1;
                     }else{
-                        $percent = substr(( $artigotop['views'] / $artigostotalviews ) * 100, 0, 5);
+                        $percent = substr(( $artigotop->views / $artigostotalviews ) * 100, 0, 5);
                     }
                     
                     $percenttag = str_replace(",", ".", $percent);
@@ -263,7 +266,7 @@
                     if($paginatop->views == '0'){
                         $percent = 1;
                     }else{
-                        $percent = substr(( $paginatop['views'] / $paginastotalviews ) * 100, 0, 5);
+                        $percent = substr(( $paginatop->views / $paginastotalviews ) * 100, 0, 5);
                     }
                     
                     $percenttag = str_replace(",", ".", $percent);
@@ -296,7 +299,12 @@
 @stop
 
 @section('footer')
-    <strong>Copyright &copy; {{env('DESENVOLVEDOR_INICIO')}} <a href="{{env('DESENVOLVEDOR_URL')}}">{{env('DESENVOLVEDOR')}}</a>.</strong> Desenvolvido por <a href="https://informaticalivre.com.br">Informática Livre</a>.
+
+    <div class="pull-right hidden-xs">
+      <b>Versão</b> {{env('VERSAO_SISTEMA')}}
+    </div>
+    <strong>Copyright © 2005 - {{date('Y')}} <a href="https://informaticalivre.com.br">Informática Livre</a>.</strong>
+  
 @endsection
 
 @section('css')
@@ -320,45 +328,52 @@
             });
         }); 
 
-        var areaChartData = {
-            labels  : [
-            @foreach($analyticsData->rows as $dataMonth)                
-                'Mês/{{substr($dataMonth[0], -2)}}',                                 
-            @endforeach
-            ],
-            datasets: [
-                {
-                label               : 'Visitas Únicas',
-                backgroundColor     : 'rgba(60,141,188,0.9)',
-                borderColor         : 'rgba(60,141,188,0.8)',
-                pointRadius          : false,
-                pointColor          : '#3b8bba',
-                pointStrokeColor    : 'rgba(60,141,188,1)',
-                pointHighlightFill  : '#fff',
-                pointHighlightStroke: 'rgba(60,141,188,1)',
-                data                : [
-                                    @foreach($analyticsData->rows as $dataMonth)                
-                                        '{{$dataMonth[2]}}',                                 
-                                    @endforeach
-                                    ]
-                },
-                {
-                label               : 'Visitas',
-                backgroundColor     : 'rgba(210, 214, 222, 1)',
-                borderColor         : 'rgba(210, 214, 222, 1)',
-                pointRadius         : false,
-                pointColor          : 'rgba(210, 214, 222, 1)',
-                pointStrokeColor    : '#c1c7d1',
-                pointHighlightFill  : '#fff',
-                pointHighlightStroke: 'rgba(220,220,220,1)',
-                data                : [
-                                    @foreach($analyticsData->rows as $dataMonth)                
-                                        '{{$dataMonth[1]}}',                                 
-                                    @endforeach
-                                    ]
-                },
-            ]
+        @php
+        if($analyticsData->rows != null){
+        @endphp
+            var areaChartData = {
+                labels  : [
+                @foreach($analyticsData->rows as $dataMonth)                
+                    'Mês/{{substr($dataMonth[0], -2)}}',                                 
+                @endforeach
+                ],
+                datasets: [
+                    {
+                    label               : 'Visitas Únicas',
+                    backgroundColor     : 'rgba(60,141,188,0.9)',
+                    borderColor         : 'rgba(60,141,188,0.8)',
+                    pointRadius          : false,
+                    pointColor          : '#3b8bba',
+                    pointStrokeColor    : 'rgba(60,141,188,1)',
+                    pointHighlightFill  : '#fff',
+                    pointHighlightStroke: 'rgba(60,141,188,1)',
+                    data                : [
+                                        @foreach($analyticsData->rows as $dataMonth)                
+                                            '{{$dataMonth[2]}}',                                 
+                                        @endforeach
+                                        ]
+                    },
+                    {
+                    label               : 'Visitas',
+                    backgroundColor     : 'rgba(210, 214, 222, 1)',
+                    borderColor         : 'rgba(210, 214, 222, 1)',
+                    pointRadius         : false,
+                    pointColor          : 'rgba(210, 214, 222, 1)',
+                    pointStrokeColor    : '#c1c7d1',
+                    pointHighlightFill  : '#fff',
+                    pointHighlightStroke: 'rgba(220,220,220,1)',
+                    data                : [
+                                        @foreach($analyticsData->rows as $dataMonth)                
+                                            '{{$dataMonth[1]}}',                                 
+                                        @endforeach
+                                        ]
+                    },
+                ]
+            }
+        @php    
         }
+        @endphp
+        
 
         //-------------
         //- BAR CHART -
@@ -454,7 +469,7 @@
             datasets: [
                 {
                 data: [{{ $usersUnavailable }},{{ $usersAvailable }}, {{ $time }}],
-                    backgroundColor : ['#E17039', '#18A475', '#5594D3'],
+                    backgroundColor : ['#4BC0C0', '#36A2EB', '#FF6384'],
                 }
             ]
             }
@@ -476,15 +491,11 @@
             labels: [ 
                 'Artigos', 
                 'Páginas',
-                'Notícias'            
+                'Notícias'             
             ],
             datasets: [
                 {
-                    data: [
-                        {{ $postsArtigos }}, 
-                        {{ $postsPaginas }}, 
-                        {{ $postsNoticias }}
-                    ],
+                data: [{{ $postsArtigos }}, {{ $postsPaginas }}, {{ $postsNoticias }}],
                     backgroundColor : ['#8EC63D', '#60BA47', '#69BD63'],
                 }
             ]
@@ -499,38 +510,33 @@
             data: donutDataposts,
             options: donutOptions      
             });
-    });
-
-    $(function (){
-        var donutChartCanvasImoveis = $('#donutChartimoveis').get(0).getContext('2d');
-        var donutDataimoveis = {
-            labels: [ 
-                'Imóveis Ativos', 
-                'Imóveis Inativos'           
-            ],
-            datasets: [
-                {
-                    data: [
-                        {{ $imoveisAvailable }}, 
-                        {{ $imoveisUnavailable }}
-                    ],
-                    backgroundColor : ['#18A475', '#E17039'],//#5594D3
-                }
-            ]
-            }
-
-            var donutOptions = {
-                maintainAspectRatio : false,
-                responsive : true,
-            }
-
-            var donutChart = new Chart(donutChartCanvasImoveis, {
-                type: 'doughnut',
-                data: donutDataimoveis,
-                options: donutOptions      
-            });
     });  
 
-       
+    // $(function (){
+    //     var donutChartCanvasPedidos = $('#donutChartpedidos').get(0).getContext('2d');
+    //     var donutDatapedidos        = {
+    //         labels: [ 
+    //             'Aprovados', 
+    //             'Processando',
+    //             'Cancelado'             
+    //         ],
+    //         datasets: [
+    //             {
+    //             data: [{{-- $pedidosApproved --}},{{-- $pedidosInprocess --}}, {{-- $pedidosRejected --}}],
+    //                 backgroundColor : ['#97C490', '#EBCF7F', '#E98BA5'],
+    //             }
+    //         ]
+    //         }
+    //         var donutOptions     = {
+    //         maintainAspectRatio : false,
+    //         responsive : true,
+    //         }
+
+    //         var donutChart = new Chart(donutChartCanvasPedidos, {
+    //         type: 'doughnut',
+    //         data: donutDatapedidos,
+    //         options: donutOptions      
+    //         });
+    // });    
     </script>
 @stop

@@ -3,102 +3,70 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Collection;
+use App\Models\CatPost;
+use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Models\User;
 use Analytics;
+use App\Models\Newsletter;
+use App\Models\NewsletterCat;
+use Illuminate\Support\Facades\DB;
 use Spatie\Analytics\Period;
-use App\Models\{
-    CatPost,
-    Empresa,
-    Imovel,
-    Orcamento,
-    User,
-    Post,
-    Produto
-};
 
 class AdminController extends Controller
-{    
-
+{
     public function home()
     {
         //Users
-        $time = User::where('admin', 1)
-                        ->where('tenant_id', auth()->user()->tenant->id)
-                        ->orWhere('editor', 1)
-                        ->where('client', 0)
-                        ->count();
-        $usersAvailable = User::where('client', 1)
-                        ->where('tenant_id', auth()->user()->tenant->id)
-                        ->where('admin', 0)
-                        ->where('editor', 0)
-                        ->where('superadmin', 0)
-                        ->available()
-                        ->count();
-        $usersUnavailable = User::where('client', 1)
-                        ->where('tenant_id', auth()->user()->tenant->id)
-                        ->where('admin', 0)
-                        ->where('editor', 0)
-                        ->where('superadmin', 0)
-                        ->unavailable()
-                        ->count();
+        $time = User::where('admin', 1)->orWhere('editor', 1)->count();
+        $usersAvailable = User::where('client', 1)->available()->count();
+        $usersUnavailable = User::where('client', 1)->unavailable()->count();
+        //Clientes
+        $clientesAvailable = User::where('client', 1)->available()->count();
+        $clientesUnavailable = User::where('client', 1)->unavailable()->count();
+        //Newsletter
+        $listas = NewsletterCat::count();
+        $emails = Newsletter::count();
+        $emailsCount = Newsletter::get();
+        //CHART PIZZA
+        $postsArtigos = Post::where('tipo', 'artigo')->count();
+        $postsPaginas = Post::where('tipo', 'pagina')->count();
+        $postsNoticias = Post::where('tipo', 'noticia')->count();
+               
         //Artigos
-        $postsArtigos = Post::where('tipo', 'artigo')->where('tenant_id', auth()->user()->tenant->id)->count();
-        $postsPaginas = Post::where('tipo', 'pagina')->where('tenant_id', auth()->user()->tenant->id)->count();
-        $postsNoticias = Post::where('tipo', 'noticia')->where('tenant_id', auth()->user()->tenant->id)->count();
-        $artigosTop = Post::where('tipo', 'artigo')
-                ->limit(4)
-                ->where('tenant_id', auth()->user()->tenant->id)
-                ->postson()
-                ->get()
-                ->sortByDesc('views');
-        $totalViewsArtigos = Post::selectRaw('SUM(views) AS VIEWS')
+        $artigosAvailable = Post::postson()->where('tipo', 'artigo')->count();
+        $artigosUnavailable = Post::postsoff()->where('tipo', 'artigo')->count();
+        $artigosTop = Post::orderBy('views', 'DESC')
                 ->where('tipo', 'artigo')
-                ->where('tenant_id', auth()->user()->tenant->id)
+                ->limit(6)
+                ->postson()   
+                ->get();                
+        $totalViewsArtigos = Post::orderBy('views', 'DESC')
+                ->where('tipo', 'artigo')
                 ->postson()
-                ->first();
-        $paginasTop = Post::where('tipo', 'pagina')
-                ->limit(4)
-                ->where('tenant_id', auth()->user()->tenant->id)
-                ->postson()
+                ->limit(6)
                 ->get()
-                ->sortByDesc('views');
-        $totalViewsPaginas = Post::selectRaw('SUM(views) AS VIEWS')
+                ->sum('views');
+        //Páginas
+        $paginasTop = Post::orderBy('views', 'DESC')
                 ->where('tipo', 'pagina')
-                ->where('tenant_id', auth()->user()->tenant->id)
+                ->limit(6)
+                ->postson()   
+                ->get();
+        $totalViewsPaginas = Post::orderBy('views', 'DESC')
+                ->where('tipo', 'pagina')
                 ->postson()
-                ->first(); 
-        $imoveisTop = Imovel::limit(6)
-                ->available()
-                ->where('tenant_id', auth()->user()->tenant->id) 
-                ->get()               
-                ->sortByDesc('views');
-        $totalViewsImoveis = Imovel::selectRaw('SUM(views) AS VIEWS')
-                ->where('tenant_id', auth()->user()->tenant->id)
-                ->available()
-                ->first();          
-        //Orçamentos
-        //$orcamentosPendentes = Orcamento::available()->count();   
-        //$orcamentosConcluidos = Orcamento::unavailable()->count();   
-        //Imóveis
-        $imoveisAvailable = Imovel::available()->count();
-        $imoveisUnavailable = Imovel::unavailable()->count();
-        //Empresas
-        //$empresasAvailable = Empresa::available()->count();
-        //$empresasUnavailable = Empresa::unavailable()->count();
-        //$empresasTotal = Empresa::all()->count();
-        //Pedidos
-        // $pedidosApproved = Pedido::approved()->count();
-        // $pedidosInprocess = Pedido::inprocess()->count();
-        // $pedidosRejected = Pedido::rejected()->count();
+                ->limit(6)
+                ->get()
+                ->sum('views');
 
         //Analitcs
         $visitasHoje = Analytics::fetchMostVisitedPages(Period::days(1));
-        //$visitas365 = Analytics::fetchTotalVisitorsAndPageViews(Period::months(5));
+        $visitas365 = Analytics::fetchTotalVisitorsAndPageViews(Period::months(5));
         $top_browser = Analytics::fetchTopBrowsers(Period::months(5));
 
+        
         $analyticsData = Analytics::performQuery(
             Period::months(5),
                'ga:sessions',
@@ -106,26 +74,30 @@ class AdminController extends Controller
                    'metrics' => 'ga:sessions, ga:visitors, ga:pageviews',
                    'dimensions' => 'ga:yearMonth'
                ]
-         );     
-         
+         );         
+        
         return view('admin.dashboard',[
-            'time' => $time,
+            //Newsletter
+            'listas' => $listas,
+            'emails' => $emails,
+            'emailsCount' => $emailsCount->sum('count'),
+            'time' => $time,            
+            //Artigos
+            'artigosAvailable' => $artigosAvailable,
+            'artigosUnavailable' => $artigosUnavailable,
+            'artigosTop' => $artigosTop,
+            'artigostotalviews' => $totalViewsArtigos,
+            //Páginas
+            'paginasTop' => $paginasTop,
+            'paginastotalviews' => $totalViewsPaginas,
             'usersAvailable' => $usersAvailable,
             'usersUnavailable' => $usersUnavailable,
-            //Artigos
+            //Clientes
+            'clientesAvailable' => $clientesAvailable,
+            'clientesUnavailable' => $clientesUnavailable,
             'postsArtigos' => $postsArtigos,
-            'postsPaginas' => $postsPaginas,
             'postsNoticias' => $postsNoticias,
-            'artigosTop' => $artigosTop,
-            'artigostotalviews' => $totalViewsArtigos->VIEWS,
-            'paginasTop' => $paginasTop,
-            'paginastotalviews' => $totalViewsPaginas->VIEWS,
-            //Imóveis            
-            'imoveisTop' => $imoveisTop,
-            'imoveistotalviews' => $totalViewsImoveis->VIEWS, 
-            //Imóveis
-            'imoveisAvailable' => $imoveisAvailable,
-            'imoveisUnavailable' => $imoveisUnavailable,
+            'postsPaginas' => $postsPaginas,
             //Analytics
             'visitasHoje' => $visitasHoje,
             //'visitas365' => $visitas365,

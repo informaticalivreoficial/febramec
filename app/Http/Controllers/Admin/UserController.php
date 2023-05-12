@@ -3,34 +3,22 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Admin\User as UserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use App\Support\Cropper;
 use App\Models\Cidades;
 use App\Models\Estados;
 use App\Models\User;
-use App\Services\UserService;
 use Carbon\Carbon;
 
 class UserController extends Controller
 {
-    protected $userService;
-
-    public function __construct(UserService $userService)
-    {
-        $this->userService = $userService;
-        //Verifica se expirou a assinatura
-        $this->middleware(['subscribed']);
-        $this->middleware(['can:users']);
-    }
-
     public function index()
     {
-        $users = $this->userService->getUsers();
+        $users = User::orderBy('created_at', 'DESC')->orderBy('status', 'ASC')->where('client', '1')->paginate(25);
+
         return view('admin.users.index',[
             'users' => $users
         ]);
@@ -38,7 +26,7 @@ class UserController extends Controller
 
     public function show($id)
     {
-        $user = $this->userService->getUser($id);
+        $user = User::where('id', $id)->first();
         return view('admin.users.view',[
             'user' => $user
         ]);
@@ -46,16 +34,18 @@ class UserController extends Controller
 
     public function team()
     {
-        $team = $this->userService->getTeam();
+        $users = User::where('admin', '=', '1')->orWhere('editor', '=', '1')->paginate(12);
         return view('admin.users.team', [
-            'team' => $team   
+            'users' => $users    
         ]);
     }
 
     public function userSetStatus(Request $request)
-    {   
-        $status = $this->userService->setStatus($request->all()); 
-        return response()->json($status);
+    {        
+        $user = User::find($request->id);
+        $user->status = $request->status;
+        $user->save();
+        return response()->json(['success' => true]);
     }
 
     public function fetchCity(Request $request)
@@ -68,7 +58,7 @@ class UserController extends Controller
     {
         $estados = Estados::orderBy('estado_nome', 'ASC')->get();
         $cidades = Cidades::orderBy('cidade_nome', 'ASC')->get();        
-        
+
         return view('admin.users.create',[
             'estados' => $estados,
             'cidades' => $cidades
@@ -80,16 +70,11 @@ class UserController extends Controller
         $data = $request->all();
         if($request->client == '' && $request->admin == '' && $request->editor == '' && $request->superadmin == ''){
             $data['client'] = 'on';
-        } 
-        $data['tenant_id'] = auth()->user()->tenant->id;   
-        
-        $data['password'] = Hash::make($request->password);
-        $data['senha'] = $request->password;
-        $data['remember_token'] = Str::random(60);
+        }        
 
         $userCreate = User::create($data);
         if(!empty($request->file('avatar'))){
-            $userCreate->avatar = $request->file('avatar')->storeAs(env('AWS_PASTA') . 'user' . auth()->user()->tenant->uuid . '/', Str::slug($request->name)  . '-' . str_replace('.', '', microtime(true)) . '.' . $request->file('avatar')->extension());
+            $userCreate->avatar = $request->file('avatar')->storeAs(env('AWS_PASTA') . 'user', Str::slug($request->name)  . '-' . str_replace('.', '', microtime(true)) . '.' . $request->file('avatar')->extension());
             $userCreate->save();
         }
         return redirect()->route('users.edit', $userCreate->id)->with(['color' => 'success', 'message' => 'Cadastro realizado com sucesso!']);        
@@ -125,20 +110,14 @@ class UserController extends Controller
 
         if(!empty($request->file('avatar'))){
             Storage::delete($user->avatar);
+            //Cropper::flush($user->avatar);
             $user->avatar = '';
         }
 
         $user->fill($request->all());
 
-        if(empty($request->password)){
-            unset($user->password);
-        }
-
-        $user->password = Hash::make($request->password);
-        $user->senha = $request->password;
-        
         if(!empty($request->file('avatar'))){
-            $user->avatar = $request->file('avatar')->storeAs(env('AWS_PASTA') . 'user' . auth()->user()->tenant->uuid . '/', Str::slug($request->name)  . '-' . str_replace('.', '', microtime(true)) . '.' . $request->file('avatar')->extension());
+            $user->avatar = $request->file('avatar')->storeAs(env('AWS_PASTA') . 'user', Str::slug($request->name)  . '-' . str_replace('.', '', microtime(true)) . '.' . $request->file('avatar')->extension());
         }
 
         if(!$user->save()){
@@ -171,7 +150,7 @@ class UserController extends Controller
     public function delete(Request $request)
     {
         $user = User::where('id', $request->id)->first();
-        $nome = getPrimeiroNome(Auth::user()->name);
+        $nome = \App\Helpers\Renato::getPrimeiroNome(Auth::user()->name);
         if(!empty($user)){
             if($user->id == Auth::user()->id){
                 $json = "<b>$nome</b> você não pode excluir sua própria conta!";
@@ -202,6 +181,7 @@ class UserController extends Controller
                       ($user->admin == '1' && $user->client == '0' ? 'Administrador' :
                       ($user->admin == '0' && $user->client == '1' ? 'Cliente' : 'Cliente')));
             Storage::delete($user->avatar);
+            //Cropper::flush($user->avatar);
             $user->delete();
         }
         if($user->admin == '1' || $user->Editor == '1'){

@@ -2,7 +2,7 @@
 
     {{-- Sidebar brand logo --}}
     <a href="#" class="brand-link text-center navbar-light">                    
-        <img width="{{env('LOGOMARCA_GERENCIADOR_WIDTH')}}" height="{{env('LOGOMARCA_GERENCIADOR_HEIGHT')}}" src="{{auth()->user()->tenant->getlogoadmin() ?? env('DESENVOLVEDOR_LOGO_ADMIN')}}" alt="{{auth()->user()->tenant->name ?? 'Super Imóveis'}}" class="elevation-3">
+        <img width="{{env('LOGOMARCA_GERENCIADOR_WIDTH')}}" height="{{env('LOGOMARCA_GERENCIADOR_HEIGHT')}}" src="{{$configuracoes->getlogoadmin()}}" alt="{{$configuracoes->nomedosite}}" class="elevation-3">
     </a>
     @php
         if(!empty(\Illuminate\Support\Facades\Auth::user()->avatar) &&
@@ -32,7 +32,7 @@
                     data-accordion="false"
                 @endif>
                 {{-- Configured sidebar links --}}
-                @each('adminlte::partials.sidebar.menu-item', $adminlte->menu('sidebar'), 'item')
+                @each('adminlte::partials.sidebar.menu-item', $adminlte->menu('sidebar'), 'item') 
             </ul>
         </nav>
     </div>

@@ -12,13 +12,6 @@ use Illuminate\Support\Facades\Redirect;
 
 class NewsletterController extends Controller
 {
-    public function __construct()
-    {
-        //Verifica se expirou a assinatura
-        $this->middleware(['subscribed']);
-        $this->middleware(['can:newsletter']);
-    }
-
     public function listas()
     {
         $listas = NewsletterCat::orderBy('created_at', 'DESC')->paginate(25);
@@ -80,7 +73,7 @@ class NewsletterController extends Controller
     public function listaDelete(Request $request)
     {
         $lista = NewsletterCat::where('id', $request->id)->first();
-        $nome = getPrimeiroNome(auth()->user()->name);
+        $nome = \App\Helpers\Renato::getPrimeiroNome(auth()->user()->name);
 
         if(!empty($lista)){
             if($lista->newsletters->count() > 0){
@@ -113,7 +106,7 @@ class NewsletterController extends Controller
     public function newsletters($categoria)
     {
         $lista = NewsletterCat::where('id', $categoria)->first();
-        $newsletters = Newsletter::orderBy('created_at', 'Desc')->where('categoria', $categoria)->paginate(35);
+        $newsletters = Newsletter::orderBy('created_at', 'Desc')->where('categoria', $categoria)->paginate(55);
 
         return view('admin.newsletters.newsletters',[
             'emails' => $newsletters,
@@ -179,8 +172,8 @@ class NewsletterController extends Controller
     public function emailDelete(Request $request)
     {
         $email = Newsletter::where('id', $request->id)->first();
-        $nome = getPrimeiroNome(auth()->user()->name);
-
+        $nome = \App\Helpers\Renato::getPrimeiroNome(auth()->user()->name);
+        
         if(!empty($email)){
             $json = "<b>$nome</b> você tem certeza que deseja excluir este Email da Lista?";
             return response()->json(['error' => $json,'id' => $email->id]);           
@@ -190,16 +183,18 @@ class NewsletterController extends Controller
     }
     
     public function emailDeleteon(Request $request)
-    { 
+    {         
         $email = Newsletter::where('id', $request->email_id)->first();  
         $emailR = $email->email;
+
+        $lista = NewsletterCat::where('id', $email->categoria)->first();
         
         if(!empty($email)){
             $email->delete();
-        }
-
+        }        
+        
         return Redirect::route('lista.newsletters',[
-            'categoria' => $email->categoria
+            'categoria' => $lista->id
         ])->with([
             'color' => 'success', 
             'message' => 'O email '.$emailR.' foi removido com sucesso da lista!'

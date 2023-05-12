@@ -3,48 +3,27 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Models\Plan;
+use App\Models\Configuracoes;
 use Illuminate\Http\Request;
-use App\Tenant\ManangerTenant;
-use App\Support\Seo;
-use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 
 class ClienteController extends Controller
 {
-    protected $tenant;
-    protected $seo;
-
-    public function __construct(ManangerTenant $tenant)
+    public function login()
     {
-        $this->tenant = $tenant->tenant();
-        $this->seo = new Seo();
+        return view('web.cliente.login');
     }
 
-    public function planos()
+    public function passeios()
     {
-        $planos = Plan::orderBy('valor', 'ASC')->limit(3)->available()->get();
-        return view('web.sites.'.$this->tenant->template.'.cliente.planos',[
-            'tenant' => $this->tenant,
-            'planos' => $planos
+        $Configuracoes = Configuracoes::where('id', '1')->first();
+        $head = $this->seo->render('Meus Passeios - ' . $Configuracoes->nomedosite ?? 'Informática Livre',
+            $Configuracoes->descricao ?? 'Informática Livre desenvolvimento de sistemas web desde 2005',
+            route('web.home'),
+            Storage::url($Configuracoes->metaimg ?? 'https://informaticalivre.com/media/metaimg.jpg')
+        ); 
+        return view('web.cliente.meus-passeios',[
+            'head' => $head
         ]);
-    }
-
-    // public function plano($slug)
-    // {
-    //     $plano = Plan::where('slug', $slug)->first();
-    //     return view('web.cliente.plano',[
-    //         'plano' => $plano
-    //     ]);
-    // }
-
-    public function assinar($slug)
-    {
-        if (!$plan = Plan::where('slug', $slug)->available()->first()) {
-            return redirect()->back();
-        }
-
-        session()->put('plan', $plan);
-
-        return redirect()->route('register');        
     }
 }

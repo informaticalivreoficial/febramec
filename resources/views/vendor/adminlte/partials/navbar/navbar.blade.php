@@ -12,9 +12,6 @@
 
         {{-- Custom left links --}}
         @yield('content_top_nav_left')
-        <li class="nav-item d-none d-sm-inline-block">
-            <a href="{{route('assinatura')}}" class="nav-link" style="color: #007AFF;"><i class="fas fa-check-square"></i> Assinatura</a>
-        </li>
     </ul>
 
     {{-- Navbar right links --}}
@@ -29,7 +26,7 @@
         @each('adminlte::partials.navbar.menu-item', $adminlte->menu('navbar-right'), 'item')
 
         <li class="nav-item dropdown">
-            <a class="nav-link j_modal_suporte" data-id="{{auth()->user()->tenant->id}}" data-toggle="modal" data-target="#modal-suporte" href="javascript:void(0)" aria-selected="false" title="Suporte"><i style="color: rgb(223, 87, 87);" class="fas fa-life-ring"></i></a>
+            <a class="nav-link j_modal_suporte" data-id="{{auth()->user()->id}}" data-toggle="modal" data-target="#modal-suporte" href="javascript:void(0)" aria-selected="false" title="Suporte"><i style="color: rgb(223, 87, 87);" class="fas fa-life-ring"></i></a>
         </li>
 
         {{-- User menu link --}}

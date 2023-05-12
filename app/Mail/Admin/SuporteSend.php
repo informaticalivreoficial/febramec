@@ -27,19 +27,16 @@ class SuporteSend extends Mailable
      * Build the message.
      *
      * @return $this
-    */
+     */
     public function build()
     {
         $this->replyTo($this->data['email'], $this->data['username']);
         $this->to(env('DESENVOLVEDOR_EMAIL'), $this->data['username']);
         $this->from($this->data['email'], $this->data['username']);
-        $this->subject('📣 Solicitação de suporte - '.$this->data['sitename']);
+        $this->subject('#Solicitação de suporte - '.$this->data['sitename']);
         $this->markdown('admin.email.sendsuporte', [
-            'mensagem' => $this->data['mensagem'],
-            'tenant' => $this->data['sitename'],
-            'responsavel' => $this->data['username'],
-            'email' => $this->data['email']
+            'mensagem' => $this->data['mensagem']
         ]);
-        return $this;        
+        return $this;         
     }
 }

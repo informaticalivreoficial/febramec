@@ -18,11 +18,6 @@ class UserService
        return $this->userRepository->getUsersAll();
     }
 
-    public function getClientes()
-    {
-       return $this->userRepository->getClientesAll();
-    }
-
     public function getUser($id)
     {
        return $this->userRepository->getUser($id);

@@ -8,11 +8,10 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Support\Cropper;
-use App\Tenant\Traits\TenantTrait;
 
 class Parceiro extends Model
 {
-    use HasFactory, TenantTrait;
+    use HasFactory;
 
     protected $table = 'parceiros';
 
@@ -49,10 +48,7 @@ class Parceiro extends Model
     /**
      * Relacionamentos
      */
-    public function tenant()
-    {
-        return $this->belongsTo(Tenant::class);
-    }
+
 
      /**
      * Accerssors and Mutators
@@ -69,30 +65,27 @@ class Parceiro extends Model
         }
 
         if(empty($metaimg['path']) || !Storage::disk()->exists($metaimg['path'])) {
-            if(empty($this->logomarca) || !File::exists($this->logomarca)) {
+            if(empty($this->logomarca) || !Storage::disk()->exists($this->logomarca)) {
                 return url(asset('backend/assets/images/image.jpg'));
             }
-            return Storage::url($this->logomarca, 300, 300);
+            return Storage::url($this->logomarca);
         }
-
         return Storage::url($metaimg['path']);
     }
-	
+
     public function cover()
     {       
         if(empty($this->logomarca) || !Storage::disk()->exists($this->logomarca)) {
             return url(asset('backend/assets/images/image.jpg'));
         }
-
         return Storage::url($this->logomarca);
     }
-	
-	public function nocover()
+
+    public function nocover()
     {       
         if(empty($this->logomarca) || !Storage::disk()->exists($this->logomarca)) {
             return url(asset('backend/assets/images/image.jpg'));
         }
-
         return Storage::url($this->logomarca);
     }
 

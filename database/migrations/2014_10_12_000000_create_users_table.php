@@ -15,17 +15,22 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('tenant_id');
             $table->string('name');
-            $table->string('graduacao');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('senha');
-            $table->rememberToken();
+            $table->rememberToken();            
+            $table->timestamps();
 
             $table->dateTime('last_login_at')->nullable();
             $table->string('last_login_ip')->nullable();
+
+            /** Responsável */
+            $table->string('responsavel_nome')->nullable();
+            $table->string('responsavel_cpf')->nullable();
+            $table->string('responsavel_rg', 20)->nullable();
+            $table->string('responsavel_telefone')->nullable();
 
             /** data */
             $table->string('genero')->nullable();
@@ -56,7 +61,6 @@ class CreateUsersTable extends Migration
             $table->string('telefone')->nullable();
             $table->string('celular')->nullable();
             $table->string('whatsapp')->nullable();
-            $table->string('skype')->nullable();
             $table->string('telegram')->nullable();
 
             /** Redes Sociais */
@@ -76,10 +80,6 @@ class CreateUsersTable extends Migration
 
             $table->integer('status')->default('0');
             $table->text('notasadicionais')->nullable();
-            
-            $table->timestamps();
-
-            $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('CASCADE');
         });
     }
 

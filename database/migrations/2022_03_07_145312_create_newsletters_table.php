@@ -15,11 +15,11 @@ class CreateNewslettersTable extends Migration
     {
         Schema::create('newsletter', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('tenant_id');
             $table->string('email')->unique();
             $table->string('nome');
             $table->string('sobrenome')->nullable();
-            $table->integer('status')->nullable();
+            $table->text('content')->nullable();
+            $table->integer('status')->default(1);
             $table->integer('autorizacao')->nullable();
             $table->unsignedInteger('categoria');
             $table->string('whatsapp')->nullable();
@@ -28,7 +28,6 @@ class CreateNewslettersTable extends Migration
             $table->timestamps();
             
             $table->foreign('categoria')->references('id')->on('newsletter_cat')->onDelete('CASCADE');
-            $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('CASCADE');
         });
     }
 

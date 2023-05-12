@@ -1,7 +1,6 @@
 <?php
 namespace Database\Seeders;
 
-use App\Models\Tenant;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
 
@@ -14,11 +13,9 @@ class PostsTableSeeder extends Seeder
      */
     public function run()
     {
-        $tenant = Tenant::first();
         DB::table('posts')->insert([
             [
                 'id' => 1,
-                'tenant_id' => $tenant->id,
                 'autor' => 1,
                 'tipo' => 'artigo',
                 'titulo' => 'Lorem Ipsum is simply dummy',
@@ -36,7 +33,6 @@ class PostsTableSeeder extends Seeder
             ],
             [
                 'id' => 2,
-                'tenant_id' => $tenant->id,
                 'autor' => 1,
                 'tipo' => 'artigo',
                 'titulo' => 'Lorem Ipsum is simply dummy1',
@@ -54,7 +50,6 @@ class PostsTableSeeder extends Seeder
             ],
             [
                 'id' => 3,
-                'tenant_id' => $tenant->id,
                 'autor' => 1,
                 'tipo' => 'artigo',
                 'titulo' => 'Lorem Ipsum is simply dummy2',
@@ -72,7 +67,6 @@ class PostsTableSeeder extends Seeder
             ],
             [
                 'id' => 4,
-                'tenant_id' => $tenant->id,
                 'autor' => 1,
                 'tipo' => 'artigo',
                 'titulo' => 'Lorem Ipsum is simply dummy3',

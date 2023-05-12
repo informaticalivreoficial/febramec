@@ -4,21 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use App\Tenant\Traits\TenantTrait;
+use App\Support\Cropper;
+use Carbon\Carbon;
 
 class Slide extends Model
 {
-    use HasFactory, TenantTrait;
+    use HasFactory;
 
     protected $table = 'slides';
 
     protected $fillable = [
         'titulo',
-        'tenant_id',
-        'subtitulo',
-        'botaolabel',
         'imagem',
         'content',
         'link',
@@ -29,14 +28,6 @@ class Slide extends Model
         'exibir_titulo',
         'categoria'
     ];
-
-    /**
-     * Relacionamentos
-    */
-    public function tenant()
-    {
-        return $this->belongsTo(Tenant::class);
-    }
 
     /**
      * Scopes
@@ -58,19 +49,28 @@ class Slide extends Model
 
     public function getimagem()
     {
+        //$image = $this->imagem;        
         if(empty($this->imagem) || !Storage::disk()->exists($this->imagem)) {
             return url(asset('backend/assets/images/image.jpg'));
         } 
+        //return Storage::url(Cropper::thumb($this->imagem, 1200, 420));
         return Storage::url($this->imagem);
     }
 
     public function getUrlImagemAttribute()
     {
         if (!empty($this->imagem)) {
+            //return Storage::url(Cropper::thumb($this->imagem, 600, 210));
             return Storage::url($this->imagem);
         }
         return '';
-    }    
+    }  
+    
+    public function getDataExpira()
+    {
+        $diff =  Carbon::now()->gt($this->expira);        
+        return $diff;        
+    }
 
     public function setExpiraAttribute($value)
     {
@@ -87,13 +87,13 @@ class Slide extends Model
         $this->attributes['status'] = ($value == '1' ? 1 : 0);
     }
     
-    public function getExpiraAttribute($value)
-    {
-        if (empty($value)) {
-            return null;
-        }
-        return date('d/m/Y', strtotime($value));
-    }
+    // public function getExpiraAttribute($value)
+    // {
+    //     if (empty($value)) {
+    //         return null;
+    //     }
+    //     return date('d/m/Y', strtotime($value));
+    // }
 
     public function getCreatedAtAttribute($value)
     {

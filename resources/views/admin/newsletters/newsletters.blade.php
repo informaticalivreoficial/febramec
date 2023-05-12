@@ -114,6 +114,35 @@
 {{-- @section('plugins.Toastr', true) --}}
 
 @section('css')
+<style>
+    .pagination-custom{
+            margin: 0;
+            display: -ms-flexbox;
+            display: flex;
+            padding-left: 0;
+            list-style: none;
+            border-radius: 0.25rem;
+        }
+        .pagination-custom li a {
+            border-radius: 30px;
+            margin-right: 8px;
+            color:#7c7c7c;
+            border: 1px solid #ddd;
+            position: relative;
+            float: left;
+            padding: 6px 12px;
+            width: 50px;
+            height: 40px;
+            text-align: center;
+            line-height: 25px;
+            font-weight: 600;
+        }
+        .pagination-custom>.active>a, .pagination-custom>.active>a:hover, .pagination-custom>li>a:hover {
+            color: #fff;
+            background: #007bff;
+            border: 1px solid transparent;
+        }
+</style>
 <link href="{{url(asset('backend/plugins/bootstrap-toggle/bootstrap-toggle.min.css'))}}" rel="stylesheet">
 @stop
 
@@ -134,7 +163,7 @@
                 $.ajax({
                     type: 'GET',
                     dataType: 'JSON',
-                    url: "{{ route('emails.delete') }}",
+                    url: "{{ route('listas.newsletter.delete') }}",
                     data: {
                        'id': email_id
                     },
@@ -142,9 +171,9 @@
                         if(data.error){
                             $('.j_param_data').html(data.error);
                             $('#id_email').val(data.id);
-                            $('#frm').prop('action','{{ route('emails.deleteon') }}');
+                            $('#frm').prop('action','{{ route('listas.newsletter.deleteon') }}');
                         }else{
-                            $('#frm').prop('action','{{ route('emails.deleteon') }}');
+                            $('#frm').prop('action','{{ route('listas.newsletter.deleteon') }}');
                         }
                     }
                 });
@@ -157,14 +186,14 @@
             
             $('.toggle-class').on('change', function() {
                 var status = $(this).prop('checked') == true ? 1 : 0;
-                var email_id = $(this).data('id');
+                var lista_id = $(this).data('id');
                 $.ajax({
                     type: 'GET',
                     dataType: 'JSON',
-                    url: "{{ route('emails.emailSetStatus') }}",
+                    url: "{{ route('listas.listaSetStatus') }}",
                     data: {
                         'status': status,
-                        'id': email_id
+                        'id': lista_id
                     },
                     success:function(data) {
                         

@@ -16,7 +16,7 @@ class CatPostController extends Controller
 {
     public function index()
     {
-        $categorias = CatPost::where('id_pai', null)->orderBy('tipo', 'ASC')
+        $categorias = CatPost::whereNull('id_pai')->orderBy('tipo', 'ASC')
                     ->orderBy('status', 'ASC')
                     ->orderBy('created_at', 'DESC')->paginate(25);
         return view('admin.categorias.index', [
@@ -90,7 +90,7 @@ class CatPostController extends Controller
         $categoria = CatPost::where('id', $request->id)->first();
         $subcategoria = CatPost::where('id_pai', $request->id)->first();
         $post = Post::where('categoria', $request->id)->first();
-        $nome = getPrimeiroNome(Auth::user()->name);
+        $nome = \App\Helpers\Renato::getPrimeiroNome(Auth::user()->name);
 
         $secao = ($categoria->tipo == 'artigo' ? 'artigos' : 
                  ($categoria->tipo == 'noticia' ? 'notícias' : 
@@ -134,7 +134,7 @@ class CatPostController extends Controller
             if(!empty($post) && !empty($postgb)){
                 $postgb = PostGb::where('post', $post->id)->first();
                 Storage::delete($postgb->path);
-                Cropper::flush($postgb->path);
+                //Cropper::flush($postgb->path);
                 $postgb->delete();
                 Storage::deleteDirectory($secao.'/'.$post->id);
                 $categoria->delete();

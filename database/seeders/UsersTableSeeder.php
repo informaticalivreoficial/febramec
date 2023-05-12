@@ -1,7 +1,6 @@
 <?php
 namespace Database\Seeders;
 
-use App\Models\Tenant;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -14,11 +13,9 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        $tenant = Tenant::first();
         DB::table('users')->insert([
             [
                 'id' => 1,
-                'tenant_id' => $tenant->id,
                 'name' => env('ADMIN_NOME'),
                 'email' => env('ADMIN_EMAIL'),
                 'email_verified_at' => now(),

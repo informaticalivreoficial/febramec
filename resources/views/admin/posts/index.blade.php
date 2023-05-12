@@ -40,6 +40,7 @@
                             <th>Título</th>
                             <th>Categoria</th>
                             <th class="text-center">Views</th>
+                            <th class="text-center">Imagens</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -54,11 +55,13 @@
                             <td>{{$post->titulo}}</td>
                             <td>{{$post->categoriaObject->titulo}}</td>
                             <td class="text-center">{{$post->views}}</td>
+                            <td class="text-center">{{$post->countimages()}}</td>
+                            
                             <td>
                                 <input type="checkbox" data-onstyle="success" data-offstyle="warning" data-size="mini" class="toggle-class" data-id="{{ $post->id }}" data-toggle="toggle" data-style="slow" data-on="<i class='fas fa-check'></i>" data-off="<i style='color:#fff !important;' class='fas fa-exclamation-triangle'></i>" {{ $post->status == true ? 'checked' : ''}}>
                                 <a href="{{ route('posts.edit', [ 'id' => $post->id ]) }}" class="btn btn-xs btn-default"><i class="fas fa-pen"></i></a>
                                 <a target="_blank" href="{{route('web.'.$linkView,['slug' => $post->slug])}}" class="btn btn-xs btn-info text-white"><i class="fas fa-search"></i></a>
-                                <button type="button" class="btn btn-xs btn-danger text-white j_modal_btn" data-id="{{$post->id}}" data-toggle="modal" data-target="#modal-default"><i class="fas fa-trash"></i></button>
+                                <button type="button" class="btn btn-xs btn-danger text-white j_modal_btn" data-id="{{$post->id}}" data-toggle="modal" data-target="#modal-default" {{($post->id == 555 ? 'disabled' : '')}}><i class="fas fa-trash"></i></button>
                             </td>
                         </tr>                            
                         @endforeach
@@ -75,7 +78,7 @@
             @endif
         </div>
         <div class="card-footer paginacao">  
-            {{ $posts->links() }}
+            {{ $posts->onEachSide(2)->links() }}
         </div>
     </div>
     <!-- /.card -->   
@@ -109,6 +112,35 @@
 
 
 @section('css')
+<style>
+    .pagination-custom{
+            margin: 0;
+            display: -ms-flexbox;
+            display: flex;
+            padding-left: 0;
+            list-style: none;
+            border-radius: 0.25rem;
+        }
+        .pagination-custom li a {
+            border-radius: 30px;
+            margin-right: 8px;
+            color:#7c7c7c;
+            border: 1px solid #ddd;
+            position: relative;
+            float: left;
+            padding: 6px 12px;
+            width: 50px;
+            height: 40px;
+            text-align: center;
+            line-height: 25px;
+            font-weight: 600;
+        }
+        .pagination-custom>.active>a, .pagination-custom>.active>a:hover, .pagination-custom>li>a:hover {
+            color: #fff;
+            background: #007bff;
+            border: 1px solid transparent;
+        }
+</style>
 <link href="{{url(asset('backend/plugins/bootstrap-toggle/bootstrap-toggle.min.css'))}}" rel="stylesheet">
 @stop
 
@@ -165,9 +197,26 @@
                 $.ajax({
                     type: 'GET',
                     dataType: 'JSON',
-                    url: '{{ route('posts.postSetStatus') }}',
+                    url: "{{ route('posts.postSetStatus') }}",
                     data: {
                         'status': status,
+                        'id': post_id
+                    },
+                    success:function(data) {
+                        
+                    }
+                });
+            });
+
+            $('.toggle-menu').on('change', function() {
+                var menu = $(this).prop('checked') == true ? 1 : 0;
+                var post_id = $(this).data('id');
+                $.ajax({
+                    type: 'GET',
+                    dataType: 'JSON',
+                    url: '{{ route('posts.postSetMenu') }}',
+                    data: {
+                        'menu': menu,
                         'id': post_id
                     },
                     success:function(data) {

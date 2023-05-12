@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use App\Tenant\Traits\TenantTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class CatPost extends Model
 {
-    use HasFactory, TenantTrait;
+    use HasFactory;
 
     protected $table = 'cat_post';
 

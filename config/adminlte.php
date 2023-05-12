@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title' => 'Informática Livre',
+    'title' => 'AdminLTE 3',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -87,7 +87,7 @@ return [
     'layout_boxed' => null,
     'layout_fixed_sidebar' => null,
     'layout_fixed_navbar' => null,
-    'layout_fixed_footer' => true,
+    'layout_fixed_footer' => null,
     'layout_dark_mode' => null,
 
     /*
@@ -191,7 +191,7 @@ return [
     'dashboard_url' => 'home',
     'logout_url' => 'logout',
     'login_url' => 'login',
-    'register_url' => 'cadastro',
+    'register_url' => 'register',
     'password_reset_url' => 'password/reset',
     'password_email_url' => 'password/email',
     'profile_url' => false,
@@ -241,101 +241,15 @@ return [
             'text' => 'Configurações',
             'url'  => 'admin/configuracoes',
             'icon' => 'fas fa-cog',
-            'can'  =>  'configuracoes', // permissão configuracoes
         ],
         [
-            'text' => 'Academias',
-            'url'  => 'admin/tenants',
-            'icon' => 'fas fa-building',
-            'can'  =>  'tenants', // permissão Tenants
-        ],
-        [
-            'text' => 'Cargos',
-            'url'  => 'admin/cargos',
-            'icon' => 'fas fa-address-card',
-            'can'  =>  'cargos', // permissão cargos
-        ],
-        [
-            'text' => 'Permissões',            
-            'icon' => 'fas fa-fw fa-lock',
-            'can'  =>  'permissions', // permissão permissions
-            'submenu' => [
-                [
-                    'text' => 'Listar Permissões',
-                    'url'  => 'admin/permissoes',
-                ],
-                [
-                    'text' => 'Cadastrar Permissão',
-                    'url'  => 'admin/permissoes/create',
-                ],
-            ]
-        ],
-        [
-            'text' => 'Usuários',            
-            'icon' => 'fas fa-fw fa-users',
-            'can'  =>  'users', //permissão users
-            'submenu' => [
-                [
-                    'text' => 'Alunos',
-                    'url'  => 'admin/clientes',
-                ],
-                [
-                    'text' => 'Time',
-                    'url'  => 'admin/usuarios/time',
-                    'can'  =>  'time', //permissão time
-                ],
-                [
-                    'text' => 'Criar Novo',
-                    'url'  => 'admin/usuarios/create',
-                ]
-            ]
-        ],
-        [
-            'text' => 'Imóveis',            
-            'icon' => 'fas fa-fw fa-home',
-            'can'  =>  'imoveis', //permissão imóveis
-            'submenu' => [
-                [
-                    'text' => 'Ver Todos',
-                    'url'  => 'admin/imoveis',
-                ], 
-                [
-                    'text' => 'Cadastrar Imóvel',
-                    'url'  => 'admin/imoveis/create',
-                ]
-            ]
-        ],
-        [
-            'text' => 'Posts',            
-            'icon' => 'fas fa-fw fa-pen',
-            'can'  =>  'posts', // permissão posts
-            'submenu' => [
-                [
-                    'text' => 'Cadastrar Post',
-                    'url'  => 'admin/posts/create',
-                ],
-                [
-                    'text' => 'Artigos',
-                    'url'  => 'admin/posts/artigos',
-                ],
-                [
-                    'text' => 'Notícias',
-                    'url'  => 'admin/posts/noticias',
-                ],
-                [
-                    'text' => 'Páginas',
-                    'url'  => 'admin/posts/paginas',
-                ],
-                [
-                    'text' => 'Categorias',
-                    'url'  => 'admin/posts/categorias',
-                ]
-            ]
+            'text' => 'Menu Site',
+            'url'  => 'admin/menus',
+            'icon' => 'fas fa-bars',
         ],
         [
             'text' => 'Planos',            
             'icon' => 'fas fa-fw fa-list-alt',
-            'can'  =>  'planos', // permissão planos
             'submenu' => [
                 [
                     'text' => 'Listar Planos',
@@ -348,37 +262,68 @@ return [
             ]
         ],
         [
-            'text' => 'Perfis',            
-            'icon' => 'fas fa-fw fa-address-book',
-            'can'  =>  'perfis', // permissão perfis
+            'text' => 'Pedidos',            
+            'icon' => 'fas fa-money-check',
+            'url' => 'admin/pedidos',                
+        ],
+        [
+            'text' => 'Academias',            
+            'icon' => 'fas fa-fw fa-dumbbell',
+            'url' => 'admin/academias',
+        ],        
+        [
+            'text' => 'Usuários',            
+            'icon' => 'fas fa-fw fa-users',
             'submenu' => [
                 [
-                    'text' => 'Listar Perfis',
-                    'url'  => 'admin/perfis',
+                    'text' => 'Alunos',
+                    'url'  => 'admin/usuarios',
                 ],
                 [
-                    'text' => 'Cadastrar Perfil',
-                    'url'  => 'admin/perfis/create',
+                    'text' => 'Time',
+                    'url'  => 'admin/usuarios/time',
                 ],
+                [
+                    'text' => 'Criar Novo',
+                    'url'  => 'admin/usuarios/create',
+                ]
             ]
         ],
-        
         [
-            'text' => 'Parceiros',
-            'url'  => 'admin/parceiros',
-            'icon' => 'fas fa-puzzle-piece',
-            'can'  =>  'parceiros', // permissão parceiros
+            'text' => 'Posts',            
+            'icon' => 'fas fa-fw fa-pen',
+            'submenu' => [
+                [
+                    'text' => 'Cadastrar Post',
+                    'url'  => 'admin/posts/create',
+                ],                
+                [
+                    'text' => 'Artigos',
+                    'url'  => 'admin/posts/artigos',
+                ],
+                [
+                    'text' => 'Páginas',
+                    'url'  => 'admin/posts/paginas',
+                ],
+                [
+                    'text' => 'Categorias',
+                    'url'  => 'admin/posts/categorias',
+                ]
+            ]
         ],
         [
             'text' => 'Banner Slides',
             'url'  => 'admin/slides',
             'icon' => 'fas fa-film',
-            'can'  =>  'slides', // permissão slides
+        ],
+        [
+            'text' => 'Galerias',
+            'url'  => 'admin/galerias',
+            'icon' => 'fas fa-images',
         ],
         [
             'text' => 'Email',            
             'icon' => 'fas fa-fw fa-envelope',
-            'can'  =>  'emails', // permissão emails
             'submenu' => [
                 [
                     'text' => 'Enviar Email',
@@ -387,27 +332,17 @@ return [
                 [
                     'text' => 'Listas',
                     'url'  => 'admin/listas',
-                    'can'  =>  'newsletter', // permissão newsletter
                 ],
                 [
                     'text' => 'Cadastrar Lista',
                     'url'  => 'admin/listas/cadastrar',
-                    'can'  =>  'newsletter', // permissão newsletter
                 ],
                 [
                     'text' => 'Cadastrar Email',
                     'url'  => 'admin/listas/email/cadastrar',
-                    'can'  =>  'newsletter', // permissão newsletter
                 ],
             ]
-        ], 
-        [
-            'text' => 'Templates',
-            'url'  => 'admin/templates',
-            'icon' => 'fas fa-columns',
-            'can'  =>  'templates', // permissão templates
         ],
-        
     ],
 
     /*

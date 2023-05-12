@@ -64,7 +64,7 @@ $config = [
                 @csrf                                           
                 <input type="hidden" name="destinatario_nome" value="{{ $destinatario['nome'] ?? '' }}">
                 <input type="hidden" name="remetente_nome" value="{{ auth()->user()->name }}">
-                <input type="hidden" name="sitename" value="{{ $tenant->name }}">
+                <input type="hidden" name="sitename" value="{{ $configuracoes->nomedosite }}">
             <div class="card-header">
                 <label class="">Remetente:</label>
                 <select class="form-control" name="remetente_email">
@@ -74,11 +74,11 @@ $config = [
                     @if(!empty(auth()->user()->email1))
                         <option value="{{ auth()->user()->email1 }}">{{ auth()->user()->email1 }}</option>
                     @endif
-                    @if(!empty($tenant->email))
-                        <option value="{{ $tenant->email }}">{{ $tenant->email }}</option>
+                    @if(!empty($configuracoes->email))
+                        <option value="{{ $configuracoes->email }}">{{ $configuracoes->email }}</option>
                     @endif
-                    @if(!empty($tenant->email1))
-                        <option value="{{ $tenant->email1 }}">{{ $tenant->email1 }}</option>
+                    @if(!empty($configuracoes->email1))
+                        <option value="{{ $configuracoes->email1 }}">{{ $configuracoes->email1 }}</option>
                     @endif
                 </select>
             </div>
@@ -100,7 +100,7 @@ $config = [
                 <div class="form-group">
                     <x-adminlte-text-editor name="mensagem" v :config="$config">
                         <p>Olá {{ $destinatario['nome'] ?? '' }},</p> 
-                        <p>{{ getPrimeiroNome(auth()->user()->name) }} digite sua mensagem aqui...</p>
+                        <p>{{ \App\Helpers\Renato::getPrimeiroNome(auth()->user()->name) }} digite sua mensagem aqui...</p>
                         <p style="font-size:11px;text-align:left;color:#666;margin-top: 40px;line-height:1em !important;">
                         att<br />
                         {{ auth()->user()->name }}
@@ -109,26 +109,26 @@ $config = [
                             WhatsApp: {{auth()->user()->whatsapp}}
                         @endif
                         <br /> 
-                        <b>{{ $tenant->name }}</b><br />
-                        {{ $tenant->telefone }} {{ $tenant->celular }} 
+                        <b>{{ $configuracoes->nomedosite }}</b><br />
+                        {{ $configuracoes->telefone }} {{ $configuracoes->celular }} 
                         @php 
-                            if($tenant->whatsapp){ 
-                                echo '<br />WhatsApp: '.$tenant->whatsapp;
+                            if($configuracoes->whatsapp){ 
+                                echo '<br />WhatsApp: '.$configuracoes->whatsapp;
                             }
-                            if($tenant->dominio){
-                                echo '<br /><a href="'.$tenant->dominio.'">website</a>';
+                            if($configuracoes->dominio){
+                                echo '<br /><a href="'.$configuracoes->dominio.'">website</a>';
                             }
-                            if($tenant->facebook){
-                                echo ($tenant->dominio ? ' - <a href="'.$tenant->facebook.'">Facebook</a>' : '<br /><a href="'.$tenant->facebook.'">Facebook</a>') ;
+                            if($configuracoes->facebook){
+                                echo ($configuracoes->dominio ? ' - <a href="'.$configuracoes->facebook.'">Facebook</a>' : '<br /><a href="'.$configuracoes->facebook.'">Facebook</a>') ;
                             }
-                            if($tenant->instagram){
-                                echo ($tenant->dominio || $tenant->facebook ? ' - <a href="'.$tenant->instagram.'">Instagram</a>' : '<br /><a href="'.$tenant->instagram.'">Instagram</a>') ;
+                            if($configuracoes->instagram){
+                                echo ($configuracoes->dominio || $configuracoes->facebook ? ' - <a href="'.$configuracoes->instagram.'">Instagram</a>' : '<br /><a href="'.$configuracoes->instagram.'">Instagram</a>') ;
                             }
-                            if($tenant->linkedin){
-                                echo ($tenant->dominio || $tenant->facebook || $tenant->instagram ? ' - <a href="'.$tenant->linkedin.'">Linkedin</a>' : '<br /><a href="'.$tenant->linkedin.'">Linkedin</a>') ;
+                            if($configuracoes->linkedin){
+                                echo ($configuracoes->dominio || $configuracoes->facebook || $configuracoes->instagram ? ' - <a href="'.$configuracoes->linkedin.'">Linkedin</a>' : '<br /><a href="'.$configuracoes->linkedin.'">Linkedin</a>') ;
                             }
-                            if($tenant->youtube){
-                                echo ($tenant->dominio || $tenant->facebook || $tenant->instagram || $tenant->linkedin ? ' - <a href="'.$tenant->youtube.'">Youtube</a>' : '<br /><a href="'.$tenant->youtube.'">Youtube</a>') ;
+                            if($configuracoes->youtube){
+                                echo ($configuracoes->dominio || $configuracoes->facebook || $configuracoes->instagram || $configuracoes->linkedin ? ' - <a href="'.$configuracoes->youtube.'">Youtube</a>' : '<br /><a href="'.$configuracoes->youtube.'">Youtube</a>') ;
                             }
                         @endphp                                
                         </p>

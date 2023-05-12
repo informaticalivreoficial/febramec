@@ -15,7 +15,6 @@ class CreateCatPostsTable extends Migration
     {
         Schema::create('cat_post', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('tenant_id');
             $table->integer('id_pai')->unsigned()->nullable();
             $table->string('titulo');
             $table->text('content')->nullable();
@@ -26,8 +25,6 @@ class CreateCatPostsTable extends Migration
             $table->integer('status')->nullable();
             
             $table->timestamps();
-
-            $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('CASCADE');
         });
     }
 

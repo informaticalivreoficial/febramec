@@ -9,6 +9,7 @@
 namespace App\Support;
 
 use CoffeeCode\Optimizer\Optimizer;
+//use App\Models\Configuracoes;
 
 class Seo
 {
@@ -16,9 +17,12 @@ class Seo
 
     public function __construct()
     {
+        //chama as configuracoes do site
+        //$Configuracoes = Configuracoes::where('id', '1')->first();
+
         $this->optimizer = new Optimizer();
         $this->optimizer->openGraph(
-            'Informática Livre',
+            'Moriah Treinamento Físico Funcional' ?? 'Informática Livre',
             'pt_BR',
             'article'
         )->publisher(

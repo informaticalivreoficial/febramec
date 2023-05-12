@@ -15,7 +15,6 @@ class CreateNewsletterCatsTable extends Migration
     {
         Schema::create('newsletter_cat', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('tenant_id');
             $table->string('titulo');
             $table->integer('status')->nullable();
             $table->string('servidor_smtp')->nullable();
@@ -27,7 +26,6 @@ class CreateNewsletterCatsTable extends Migration
             
             $table->timestamps();
 
-            $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('CASCADE');
         });
     }
 

@@ -58,16 +58,18 @@ $config1 = [
     </div>            
 </div>
 
-<form action="{{ route('configuracoes.update', ['config' => $config->id]) }}" method="post" enctype="multipart/form-data">
+<form action="{{ route('configuracoes.update', $config->id) }}" method="post" enctype="multipart/form-data">
     @csrf
     @method('PUT')
+    <input type="hidden" name="id" value="{{$config->id }}">
     <div class="row">            
         <div class="col-12">
             <div class="card card-teal card-outline card-outline-tabs">
+
                 <div class="card-header p-0 border-bottom-0">
                     <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill" href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home" aria-selected="false">INFORMAÇÕES GERAIS</a>
+                            <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill" href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">INFORMAÇÕES GERAIS</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#custom-tabs-four-profile" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">REDES SOCIAIS</a>
@@ -82,11 +84,11 @@ $config1 = [
                             <a class="nav-link" id="custom-tabs-four-imagens-tab" data-toggle="pill" href="#custom-tabs-four-imagens" role="tab" aria-controls="custom-tabs-four-imagens" aria-selected="false">IMAGENS</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="custom-tabs-four-seo-tab" data-toggle="pill" href="#custom-tabs-four-seo" role="tab" aria-controls="custom-tabs-four-seo" aria-selected="false">SEO</a>
+                            <a class="nav-link" id="custom-tabs-four-seo-tab" data-toggle="pill" href="#custom-tabs-four-seo" role="tab" aria-controls="custom-tabs-four-mapas" aria-selected="false">SEO</a>
                         </li>
-                       <li class="nav-item">
-                        <a class="nav-link" id="custom-tabs-four-layout-tab" data-toggle="pill" href="#custom-tabs-four-layout" role="tab" aria-controls="custom-tabs-four-layout" aria-selected="false">TEMA</a>
-                       </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="custom-tabs-four-layout-tab" data-toggle="pill" href="#custom-tabs-four-layout" role="tab" aria-controls="custom-tabs-four-layout" aria-selected="false">TEMA</a>
+                        </li>
                     </ul>
                 </div>
                 <div class="card-body">
@@ -98,7 +100,7 @@ $config1 = [
                                     <!-- checkbox -->
                                     <div class="form-group p-3 mb-0">
                                         <h5 class="mr-3"><b>Informações Gerais</b></h5>  
-                                        <p>{{ getPrimeiroNome(\Illuminate\Support\Facades\Auth::user()->name) }} aqui você pode configurar as informações do sistema.</p>                                          
+                                        <p>{{ \Illuminate\Support\Facades\Auth::user()->name }} aqui você pode configurar as informações do sistema.</p>                                          
                                     </div>
                                 </div>
                             </div>
@@ -109,7 +111,7 @@ $config1 = [
                                         <div class="col-12 col-md-6 col-sm-6 col-lg-6 mb-2">
                                             <div class="form-group">
                                                 <label class="labelforms text-muted"><b>Nome do site</b></label>
-                                                <input type="text" class="form-control text-muted" placeholder="Nome do site" name="name" value="{{ old('name') ?? $config->name }}">
+                                                <input type="text" class="form-control text-muted" placeholder="Nome do site" name="nomedosite" value="{{ old('nomedosite') ?? $config->nomedosite }}">
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-6 col-sm-6 col-lg-6 mb-2">
@@ -117,7 +119,7 @@ $config1 = [
                                                 <div class="form-group">
                                                     <label class="labelforms text-muted"><b>URL do site</b></label>
                                                     <div class="input-group">
-                                                        <input type="text" class="form-control text-muted" placeholder="URL do site" name="dominio" value="{{ old('dominio') ?? $config->dominio }}" disabled/>
+                                                        <input type="text" class="form-control text-muted" placeholder="URL do site" name="dominio" value="{{ old('dominio') ?? $config->dominio }}"/>
                                                         <div class="input-group-append">
                                                             <div class="input-group-text">
                                                             <a href="javascript:void(0)" title="QrCode" data-toggle="modal" data-target="#modal-qrcode"><i class="fa fa-qrcode"></i></a>
@@ -338,14 +340,20 @@ $config1 = [
                                 <hr>
                                 <div class="col-12 col-md-6 col-lg-4"> 
                                     <div class="form-group">
-                                        <label class="labelforms"><b>Telefone Fixo:</b></label>
-                                        <input type="text" class="form-control text-muted" placeholder="Telefone fixo com DDD" name="telefone" value="{{old('telefone') ?? $config->telefone}}">
+                                        <label class="labelforms"><b>Telefone 1:</b></label>
+                                        <input type="text" class="form-control text-muted" placeholder="Telefone 1 com DDD" name="telefone1" value="{{old('telefone1') ?? $config->telefone1}}">
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 col-lg-4"> 
                                     <div class="form-group">
-                                        <label class="labelforms"><b>Telefone Móvel:</b></label>
-                                        <input type="text" class="form-control text-muted" placeholder="Telefone móvel com DDD" name="celular" value="{{old('celular') ?? $config->celular}}">
+                                        <label class="labelforms"><b>Telefone 2:</b></label>
+                                        <input type="text" class="form-control text-muted" placeholder="Telefone 2 com DDD" name="telefone2" value="{{old('telefone2') ?? $config->telefone2}}">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-4"> 
+                                    <div class="form-group">
+                                        <label class="labelforms"><b>Telefone 3:</b></label>
+                                        <input type="text" class="form-control text-muted" placeholder="Telefone 3 com DDD" name="telefone3" value="{{old('telefone3') ?? $config->telefone3}}">
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 col-lg-4"> 
@@ -460,7 +468,7 @@ $config1 = [
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <h5><b>Sitemap</b></h5>  
-                                        <p>Caminho: <a target="_blank" href="{{url(asset(\Str::slug($config->name)))}}_sitemap.xml">{{url(asset(\Str::slug($config->name)))}}_sitemap.xml</a></p>                                          
+                                        <p>Caminho: <a target="_blank" href="{{$config->sitemap}}">{{url(asset(\Str::slug($config->nomedosite)))}}_sitemap.xml</a></p>                                          
                                         <h5><b>Feed/RSS</b></h5>  
                                         <p>Caminho: <a target="_blank" href="{{route('web.feed')}}">{{route('web.feed')}}</a></p>                                          
                                     </div>
@@ -499,6 +507,7 @@ $config1 = [
                                 </div>
                             </div> 
                         </div> 
+                        
                         <div class="tab-pane fade" id="custom-tabs-four-layout" role="tabpanel" aria-labelledby="custom-tabs-four-layout-tab">
                             <div class="row mb-2 text-muted">                                        
                                 <div class="col-sm-12">
@@ -513,16 +522,13 @@ $config1 = [
                                             <div class="form-check my-2">
                                                 <input class="form-check-input" type="radio" name="template" value="{{$template->name}}" {{(old('template') == '1' ? $template->name : ($config->template == $template->name ? 'checked' : ''))}}>
                                                 <label class="form-check-label">{{$template->name}}</label>
-                                            </div>
-                                            @if ($template->exclusivo == 1)
-                                                <div class="tag-2 bg-active">Exclusivo</div>
-                                            @endif
+                                            </div>                                            
                                             <img src="{{$template->getimagem()}}" alt="{{$template->name}}">                                            
                                         </div>                                                                                
                                     @endforeach
                                 @endif                                                                                                       
                             </div> 
-                        </div>                     
+                        </div>
                     </div>
                 </div>
                 <!-- /.card -->
@@ -537,31 +543,37 @@ $config1 = [
     </div> 
 </form>
 
+<div class="modal fade" id="modal-qrcode">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Copiar QrCode</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">  
+                <p>Este QrCode direciona para: <br> {{$config->dominio ?? 'https://informaticalivre.com.br'}}</p>
+                @php 
+                    $qrcode = QRCode::url($config->dominio ?? 'https://informaticalivre.com.br')
+                            ->setSize(8)
+                            ->setMargin(2)
+                            ->svg();
+                @endphp             
+                <img src="{{$qrcode}}">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+            </div>            
+        </div>        
+    </div>
+</div>
 @stop
 
 @section('css')
 <!--tags input-->
 <link rel="stylesheet" href="{{url(asset('backend/plugins/jquery-tags-input/jquery.tagsinput.css'))}}" />
 <style>
-    .tag-2 {
-        float: left;
-        position: absolute;
-        transform: rotate(-45deg);
-        left: -5px;
-        top: 50px;
-        text-align: center;
-        width: 80px;
-        font-size: 11px;
-        margin: 0;
-        color: #fff;
-        font-weight: 500;
-        line-height: 32px;
-        background: red;
-        text-transform: uppercase;
-    }
-    iframe{
-        width: 100% !important;
-    }
     div.tagsinput span.tag {
         background: #65CEA7 !important;
         border-color: #65CEA7;
@@ -595,7 +607,6 @@ $config1 = [
 
 @section('plugins.Toastr', true)
 
-
 @section('js')
 <!--tags input-->
 <script src="{{url(asset('backend/plugins/jquery-tags-input/jquery.tagsinput.js'))}}"></script>
@@ -628,7 +639,7 @@ $config1 = [
             $.ajax({
                 type: 'GET',
                 dataType: 'JSON',
-                url: "{{ route('admin.gerarxml') }}",
+                url: "{{ route('gerarxml') }}",
                 data: {
                    'id': conf_id
                 },

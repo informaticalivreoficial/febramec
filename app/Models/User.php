@@ -2,31 +2,27 @@
 
 namespace App\Models;
 
-use App\Models\Traits\UserACLTrait;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-use Laravel\Cashier\Billable;
 use Illuminate\Support\Facades\Storage;
 use App\Support\Cropper;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use Billable;
-    use HasApiTokens, HasFactory, Notifiable, UserACLTrait;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var string[]
      */
     protected $fillable = [
         'name',
-        'tenant_id',
-        'graduacao',
         'email',
+        'plano',
         'email1',
         'password',
         'remember_token',
@@ -45,22 +41,23 @@ class User extends Authenticatable
         //Endereço
         'cep', 'rua', 'num', 'complemento', 'bairro', 'uf', 'cidade',
         //Contato
-        'telefone', 'celular', 'whatsapp', 'skype',
-        //Redes Sociais
-        'facebook', 'twitter', 'instagram', 'linkedin', 'vimeo', 'youtube', 'fliccr',        
-        'admin',
-        'client',
-        'editor',
-        'superadmin',
-        'status',
-        'notasadicionais'
+        'telefone', 'celular', 'whatsapp', 'telegram',
+        //Redes
+        'facebook', 'twitter', 'instagram', 'linkedin', 'vimeo', 'youtube', 'fliccr', 
+        //Responsável
+        'responsavel_nome',
+        'responsavel_cpf',
+        'responsavel_rg',
+        'responsavel_telefone',
+        //Permissão
+        'admin', 'client', 'editor', 'superadmin', 'status'
     ];
 
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var array<int, string>
-     */
+     * @var array
+    */
     protected $hidden = [
         'password',
         'remember_token',
@@ -69,19 +66,18 @@ class User extends Authenticatable
     /**
      * The attributes that should be cast.
      *
-     * @var array<string, string>
+     * @var array
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
 
-    
     /**
      * Relacionamentos
     */
-    public function tenant()
+    public function getPlano()
     {
-        return $this->belongsTo(Tenant::class);
+        return $this->hasOne(Plano::class, 'id', 'plano');
     }
 
     public function posts()
@@ -89,33 +85,14 @@ class User extends Authenticatable
         return $this->hasMany(Post::class, 'autor', 'id');
     }
 
-    public function roles()
+    public function pedidos()
     {
-        return $this->belongsToMany(Role::class);
-    }
-
-    /**
-     * Roles not linked with this user
-     */
-    public function rolesAvailable($filter = null)
-    {
-        $roles = Role::whereNotIn('roles.id', function($query) {
-            $query->select('role_user.role_id');
-            $query->from('role_user');
-            $query->whereRaw("role_user.user_id={$this->id}");
-        })
-        ->where(function ($queryFilter) use ($filter) {
-            if ($filter)
-                $queryFilter->where('roles.name', 'LIKE', "%{$filter}%");
-        })
-        ->paginate();
-
-        return $roles;
+        return $this->hasMany(Pedidos::class, 'user', 'id');
     }
 
     /**
      * Scopes
-    */
+     */
     public function scopeAvailable($query)
     {
         return $query->where('status', 1);
@@ -126,7 +103,7 @@ class User extends Authenticatable
         return $query->where('status', 0);
     }
 
-    /**
+     /**
      * Accerssors and Mutators
      */
 
@@ -135,7 +112,7 @@ class User extends Authenticatable
         if($this->admin == 1 && $this->client == 0 && $this->superadmin == 0){
             return 'Administrador';
         }elseif($this->admin == 0 && $this->client == 1 && $this->superadmin == 0){
-            return 'Cliente';
+            return 'Aluno';
         }elseif($this->admin == 0 && $this->client == 0 && $this->editor == 1 && $this->superadmin == 0){
             return 'Editor';
         }elseif($this->admin == 1 && $this->client == 1 && $this->superadmin == 0){
@@ -181,10 +158,11 @@ class User extends Authenticatable
 
     public function getUrlAvatarAttribute()
     {
-        if (!empty($this->avatar) || !Storage::disk()->exists($this->avatar)) {
+        if (!empty($this->avatar)) {
+            //return Storage::url(Cropper::thumb($this->avatar, 500, 500));
             return Storage::url($this->avatar);
         }
-        return url(asset('backend/assets/images/image.jpg'));
+        return '';
     }
 
     public function setCpfAttribute($value)
@@ -300,66 +278,16 @@ class User extends Authenticatable
             substr($value, 2, 5) . '-' .
             substr($value, 7, 4) ;
     }
-    //tirei daqui e joguei para o serviço
-    // public function setSenhaAttribute($value)
-    // {
-    //     if (empty($value)) {
-    //         unset($this->attributes['password']);
-    //         return;
-    //     }
-    //     $this->attributes['senha'] = $value;
-    //     $this->attributes['password'] = bcrypt($value);
-    // } 
 
-    public function setCpfconjujeAttribute($value)
-    {
-        $this->attributes['cpf_conjuje'] = (!empty($value) ? $this->clearField($value) : null);
-    }
-    
-    public function getCpfconjujeAttribute($value)
+    public function setPasswordAttribute($value)
     {
         if (empty($value)) {
-            return null;
+            unset($this->attributes['password']);
+            return;
         }
-
-        return
-            substr($value, 0, 3) . '.' .
-            substr($value, 3, 3) . '.' .
-            substr($value, 6, 3) . '-' .
-            substr($value, 9, 2);
-    }
-    
-    public function setRgconjujeAttribute($value)
-    {
-        $this->attributes['rg_conjuje'] = (!empty($value) ? $this->clearField($value) : null);
-    }
-    
-    public function getRgconjujeAttribute($value)
-    {
-        if (empty($value)) {
-            return null;
-        }
-
-        return
-            substr($value, 0, 2) . '.' .
-            substr($value, 2, 3) . '.' .
-            substr($value, 5, 3) . '-' .
-            substr($value, 8, 1);
-    }
-    
-    public function setNascconjujeAttribute($value)
-    {
-        $this->attributes['nasc_conjuje'] = (!empty($value) ? $this->convertStringToDate($value) : null);
-    }
-    
-    public function getNascconjujeAttribute($value)
-    {
-        if (empty($value)) {
-            return null;
-        }
-
-        return date('d/m/Y', strtotime($value));
-    }
+        $this->attributes['senha'] = $value;
+        $this->attributes['password'] = bcrypt($value);
+    } 
 
     public function setAdminAttribute($value)
     {

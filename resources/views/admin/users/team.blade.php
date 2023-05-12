@@ -32,9 +32,9 @@
                     @endif
                 </div>            
             </div>
-            @if(!empty($team) && $team->count() > 0)
+            @if(!empty($users) && $users->count() > 0)
                 <div class="row d-flex align-items-stretch">
-                @foreach($team as $user)  
+                @foreach($users as $user)  
                 <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
                   <div class="card bg-light" style="{{ ($user->status == '1' ? '' : 'background: #fffed8 !important;')  }}">
                     <div class="card-header text-muted border-bottom-0">
@@ -61,7 +61,7 @@
                                     , {{$user->bairro}}
                                 @endif
                                 @if($user->rua != '' || $user->num != '' || $user->bairro != '')
-                                    - {{ getCidadeNome($user->cidade, 'cidades') }}
+                                    - {{ \App\Helpers\Cidade::getCidadeNome($user->cidade, 'cidades') ?? '' }}
                                 @endif
                             </li>
                             @if($user->telefone)
@@ -78,9 +78,9 @@
                         </div>
                         <div class="col-5 text-center">
                         @php
-                            if(!empty($user->avatar) && \Illuminate\Support\Facades\File::exists(public_path() . '/storage/' . $user->avatar)){
-                                $cover = url('storage/'.$user->avatar);
-                            } else {
+                            if(!empty($user->avatar) && \Illuminate\Support\Facades\Storage::exists($user->avatar)){
+                                    $cover = \Illuminate\Support\Facades\Storage::url($user->avatar);
+                                } else {
                                 if($user->genero == 'masculino'){
                                     $cover = url(asset('backend/assets/images/avatar5.png'));
                                 }else{
@@ -95,10 +95,9 @@
                     <div class="card-footer">
                       <div class="text-right"> 
                         <input type="checkbox" data-onstyle="success" data-offstyle="warning" data-size="mini" class="toggle-class" data-id="{{ $user->id }}" data-toggle="toggle" data-style="slow" data-on="<i class='fas fa-check'></i>" data-off="<i style='color:#fff !important;' class='fas fa-exclamation-triangle'></i>" {{ $user->status == true ? 'checked' : ''}}> 
-                        <a href="{{route('users.roles',['idUser' => $user->id])}}" class="btn btn-xs btn-warning text-white"><i class="fas fa-address-card"></i></a>
                         @if ($user->id != auth()->user()->id)
                             @if($user->whatsapp != '')
-                                <a target="_blank" href="{{getNumZap($user->whatsapp)}}" class="btn btn-xs btn-success text-white"><i class="fab fa-whatsapp"></i></a>
+                                <a target="_blank" href="{{\App\Helpers\WhatsApp::getNumZap($user->whatsapp)}}" class="btn btn-xs btn-success text-white"><i class="fab fa-whatsapp"></i></a>
                             @endif
                         
                             <form class="btn btn-xs" action="{{route('email.send')}}" method="post">
@@ -107,8 +106,7 @@
                                 <input type="hidden" name="email" value="{{ $user->email }}">
                                 <button title="Enviar Email" type="submit" class="btn btn-xs text-white bg-teal"><i class="fas fa-envelope"></i></button>
                             </form>
-                        @endif
-                                          
+                        @endif                    
                         <a href="{{route('users.view',['id' => $user->id])}}" class="btn btn-xs btn-primary"><i class="fas fa-search"></i></a>
                         @if($user->superadmin == true && \Illuminate\Support\Facades\Auth::user()->admin == true)
                             
@@ -140,7 +138,7 @@
         </div>
         <!-- /.card-body -->
         <div class="card-footer paginacao">  
-            {{ $team->links() }}
+            {{ $users->links() }}
         </div>
           
       </div>

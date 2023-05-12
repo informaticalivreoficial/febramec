@@ -32,15 +32,13 @@ class Atendimento extends Mailable
     public function build()
     {
         return $this->replyTo($this->data['reply_email'], $this->data['reply_name'])
-            ->to($this->data['clisiteemail'], $this->data['sitename'])
-            ->cc('suporte@informaticalivre.com.br')
+            ->to($this->data['siteemail'], $this->data['sitename'])
+            ->cc(env('DESENVOLVEDOR_EMAIL'))
             ->from($this->data['siteemail'], $this->data['sitename'])
             ->subject('#Atendimento: ' . $this->data['reply_name'])
             ->markdown('emails.atendimento', [
                 'nome' => $this->data['reply_name'],
                 'email' => $this->data['reply_email'],
-                'telefone' => $this->data['telefone'],
-                'assunto' => $this->data['assunto'],
                 'mensagem' => $this->data['mensagem']
         ]);
     }

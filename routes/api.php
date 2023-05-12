@@ -1,22 +1,19 @@
 <?php
 
-use App\Http\Controllers\Api\{
-    ImovelController,
-    StripeController,
-    TenantApiController
-};
-
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::group([
-    'prefix' => 'v1'
-], function () {    
-    
-    /********************** Imóveis ************************************/
-    Route::get('/imoveis/{id}', [ImovelController::class, 'show']);
-    Route::get('/imoveis/empresa/{tenant}', [ImovelController::class, 'index']);
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group. Enjoy building your API!
+|
+*/
 
-    /********************** Tenants ************************************/
-    Route::get('/tenants/{uuid}', [TenantApiController::class, 'show']);
-    Route::get('/tenants', [TenantApiController::class, 'index']);
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
 });

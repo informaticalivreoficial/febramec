@@ -5,13 +5,13 @@
 @section('content_header')
 <div class="row mb-2">
     <div class="col-sm-6">
-        <h1>Editar Usuário</h1>
+        <h1>Editar {{($user->client == 1 ? 'Aluno' : 'Usuário')}}</h1>
     </div>
     <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="{{route('home')}}">Painel de Controle</a></li>
-            <li class="breadcrumb-item"><a href="{{route('users.index')}}">Usuários</a></li>
-            <li class="breadcrumb-item active">Editar Usuário</li>
+            <li class="breadcrumb-item"><a href="{{route('users.index')}}">{{($user->client == 1 ? 'Alunos' : 'Usuários')}}</a></li>
+            <li class="breadcrumb-item active">Editar {{($user->client == 1 ? 'Aluno' : 'Usuário')}}</li>
         </ol>
     </div>
 </div>
@@ -42,12 +42,14 @@
             <div class="row">            
                 <div class="col-12">
                     <div class="card card-teal card-outline card-outline-tabs">
-
                         <div class="card-header p-0 border-bottom-0">
                             <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill" href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">Dados Cadastrais</a>
-                                </li>                               
+                                </li>   
+                                <li class="nav-item">
+                                    <a class="nav-link" id="custom-tabs-four-responsavel-tab" data-toggle="pill" href="#custom-tabs-four-responsavel" role="tab" aria-controls="custom-tabs-four-responsavel" aria-selected="false">Responsável</a>
+                                </li>                            
                                 <li class="nav-item">
                                     <a class="nav-link" id="custom-tabs-four-redes-tab" data-toggle="pill" href="#custom-tabs-four-redes" role="tab" aria-controls="custom-tabs-four-redes" aria-selected="false">Redes Sociais</a>
                                 </li>
@@ -59,8 +61,6 @@
                         <div class="card-body">
                             <div class="tab-content" id="custom-tabs-four-tabContent">
                                 <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
-
-
                                     <div class="row">                                        
                                         <div class="col-12 col-md-6 col-lg-3"> 
                                             <div class="form-group">
@@ -290,14 +290,8 @@
                                                         </div>
                                                         <div class="col-12 col-md-6 col-lg-4"> 
                                                             <div class="form-group">
-                                                                <label class="labelforms text-muted"><b>Skype:</b></label>
-                                                                <input type="text" class="form-control" placeholder="Usuário Skype" name="skype" value="{{old('skype') ?? $user->skype}}">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-12 col-md-6 col-lg-4"> 
-                                                            <div class="form-group">
                                                                 <label class="labelforms text-muted"><b>Telegram:</b></label>
-                                                                <input type="text" class="form-control" placeholder="Telegram" name="telegram" value="{{ old('telegram') ?? $user->telegram }}">
+                                                                <input type="text" class="form-control" placeholder="Usuário Telegram" name="telegram" value="{{old('telegram') ?? $user->telegram}}">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -336,8 +330,42 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div> 
+                                </div>
+
+                                <div class="tab-pane fade" id="custom-tabs-four-responsavel" role="tabpanel" aria-labelledby="custom-tabs-four-responsavel-tab">
+                                    <div class="row mb-2 text-muted">
+                                        <div class="col-sm-12 text-muted">
+                                            <div class="form-group">
+                                                <h5><b>Responsável</b></h5>            
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="col-12 col-md-6 col-lg-4"> 
+                                            <div class="form-group">
+                                                <label class="labelforms text-muted"><b>Nome:</b></label>
+                                                <input type="text" class="form-control text-muted" placeholder="Nome" name="responsavel_nome" value="{{old('responsavel_nome') ?? $user->responsavel_nome}}">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6 col-lg-3"> 
+                                            <div class="form-group">
+                                                <label class="labelforms text-muted"><b>CPF:</b></label>
+                                                <input type="text" class="form-control text-muted cpfmask" placeholder="CPF" name="responsavel_cpf" value="{{old('responsavel_cpf') ?? $user->responsavel_cpf}}">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6 col-lg-3"> 
+                                            <div class="form-group">
+                                                <label class="labelforms text-muted"><b>RG:</b></label>
+                                                <input type="text" class="form-control text-muted rgmask" placeholder="RG" name="responsavel_rg" value="{{old('responsavel_rg') ?? $user->responsavel_rg}}">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6 col-lg-2"> 
+                                            <div class="form-group">
+                                                <label class="labelforms text-muted"><b>Telefone:</b></label>
+                                                <input type="text" class="form-control text-muted celularmask" placeholder="Telefone" name="responsavel_telefone" value="{{old('responsavel_telefone') ?? $user->responsavel_telefone}}">
+                                            </div>
+                                        </div>                                                                               
+                                    </div>
                                 </div>
 
                                 <div class="tab-pane fade" id="custom-tabs-four-redes" role="tabpanel" aria-labelledby="custom-tabs-four-redes-tab">
@@ -408,7 +436,7 @@
                                                 </div>
                                                 <div class="form-check d-inline mx-2">
                                                     <input id="client" class="form-check-input" type="checkbox"  name="client" {{ (old('client') == 'on' || old('client') == true ? 'checked' : ($user->client == true ? 'checked' : '')) }}>
-                                                    <label for="client" class="form-check-label">Cliente</label>
+                                                    <label for="client" class="form-check-label">Aluno</label>
                                                 </div>
                                                 @if(\Illuminate\Support\Facades\Auth::user()->superadmin == 1)
                                                 <div class="form-check d-inline mx-2">
@@ -494,9 +522,7 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
-            });  
-
-                      
+            });      
                     
             function readImage() {
                 if (this.files && this.files[0]) {
