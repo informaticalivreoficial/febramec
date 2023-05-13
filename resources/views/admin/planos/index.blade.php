@@ -57,8 +57,6 @@
                 <thead>
                     <tr>
                         <th>Plano</th>
-                        <th class="text-center">Horário</th>
-                        <th class="text-center">Vagas</th>
                         <th class="text-center">Valor</th>
                         <th>Ações</th>
                     </tr>
@@ -67,8 +65,6 @@
                     @foreach($planos as $plano)                    
                         <tr style="{{ ($plano->status == '1' ? '' : 'background: #fffed8 !important;')  }}">
                             <td>{{$plano->name}}</td>
-                            <td class="text-center">{{\Carbon\Carbon::parse($plano->horario)->format('H:i')}}</td>
-                            <td class="text-center">{{$plano->vagas}}</td>
                             <td class="text-center">                            
                                 {{($plano->valor_mensal ? 'Mensal: R$'.$plano->valor_mensal : '')}}
                                 {!!($plano->valor_trimestral ? '<br>Trimestral: R$'.$plano->valor_trimestral : '')!!}

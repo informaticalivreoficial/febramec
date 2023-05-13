@@ -10,40 +10,28 @@ use App\Mail\Web\AtendimentoRetorno;
 use Illuminate\Support\Facades\Storage;
 
 use App\Models\{
+    Academia,
     Post,
     CatPost,
-    Cidades,
-    Estados,
     Galeria,
     Newsletter,
     Parceiro,
     Slide,
     User
 };
-use App\Services\CidadeService;
 use App\Services\ConfigService;
-use App\Services\EstadoService;
 use App\Support\Seo;
 use Carbon\Carbon;
 
 class WebController extends Controller
 {
-    protected $configService, $estadoService, $cidadeService;
+    protected $configService;
     protected $seo;
 
-    public function __construct(
-        ConfigService $configService, 
-        EstadoService $estadoService)
+    public function __construct(ConfigService $configService)
     {
         $this->configService = $configService;
-        $this->estadoService = $estadoService;
         $this->seo = new Seo();        
-    }
-
-    public function fetchCity(Request $request)
-    {
-        $data['cidades'] = Cidades::where("estado_id",$request->estado_id)->get(["cidade_nome", "cidade_id"]);
-        return response()->json($data);
     }
 
     public function home()
@@ -237,6 +225,22 @@ class WebController extends Controller
         return view('web.'.$this->configService->getConfig()->template.'.acomodacoes.index',[
             'head' => $head,
             'acomodacoes' => $acomodacoes
+        ]);
+    }
+
+    public function academia($slug)
+    {
+        $academia = Academia::where('slug', $slug)->available()->first();
+
+        $head = $this->seo->render('Academia - ' . $academia->name ?? $this->configService->getConfig()->nomedosite,
+            $academia->descricao ?? 'Informática Livre desenvolvimento de sistemas web desde 2005',
+            route('web.academia', [ 'slug' => $academia->slug ]),
+            $academia->getMetaImg() ?? $this->configService->getMetaImg()
+        );
+        
+        return view('web.'.$this->configService->getConfig()->template.'.academias.academia',[
+            'head' => $head,
+            'academia' => $academia
         ]);
     }
 

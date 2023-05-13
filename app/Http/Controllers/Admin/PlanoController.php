@@ -43,18 +43,10 @@ class PlanoController extends Controller
 
     public function update(PlanoRequest $request, $id)
     {
-        //dd($request->all());
         $planoEdit = Plano::where('id', $id)->first();
-        $planoEdit->fill($request->all());
-
-        $planoEdit->setSegundaAttribute($request->segunda);
-        $planoEdit->setTercaAttribute($request->terca);
-        $planoEdit->setQuartaAttribute($request->quarta);
-        $planoEdit->setQuintaAttribute($request->quinta);
-        $planoEdit->setSextaAttribute($request->sexta);
-        $planoEdit->setSabadoAttribute($request->sabado);
-
+        $planoEdit->fill($request->all());        
         $planoEdit->save();
+        
         return Redirect::route('planos.edit', [
             'id' => $planoEdit->id,
         ])->with(['color' => 'success', 'message' => 'Plano atualizado com sucesso!']);

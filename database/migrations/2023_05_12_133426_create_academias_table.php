@@ -18,6 +18,7 @@ class CreateAcademiasTable extends Migration
             $table->unsignedInteger('plano');
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('cnpj')->nullable();
             $table->string('logomarca')->nullable();
             $table->string('metaimg')->nullable();
             $table->text('content')->nullable();

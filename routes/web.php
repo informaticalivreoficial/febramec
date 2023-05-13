@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\{
+    AcademiaController,
     AdminController,
     ApartamentoController,
     AvaliacaoController,
@@ -51,10 +52,9 @@ Route::group(['namespace' => 'Web', 'as' => 'web.'], function () {
     Route::get('/blog', [WebController::class, 'artigos'])->name('blog.artigos');
     Route::match(['post', 'get'], '/blog/pesquisar', [WebController::class, 'searchBlog'])->name('blog.searchBlog');
 
-    //*************************************** Acomodações *******************************************/
-    Route::get('/acomodacoes', [WebController::class, 'acomodacoes'])->name('acomodacoes');
-    Route::get('/acomodacao/{slug}', [WebController::class, 'acomodacao'])->name('acomodacao');
-    Route::match(['post', 'get'], '/reservar', [WebController::class, 'reservar'])->name('reservar');
+    //******************************** Academias ************************************/
+    Route::get('/academias', [WebController::class, 'academias'])->name('academias');
+    Route::get('/academia/{slug}', [WebController::class, 'academia'])->name('academia');
 
     //*************************************** Páginas *******************************************/
     Route::get('/pagina/{slug}', [WebController::class, 'pagina'])->name('pagina');
@@ -206,6 +206,19 @@ Route::prefix('admin')->middleware('auth')->group( function(){
     Route::get('planos/create', [PlanoController::class, 'create'])->name('planos.create');
     Route::post('planos/store', [PlanoController::class, 'store'])->name('planos.store');
     Route::get('planos', [PlanoController::class, 'index'])->name('planos.index');
+
+    /******************** Academias *************************************************************/
+    Route::match(['get', 'post'], 'academias/pesquisa', [AcademiaController::class, 'search'])->name('academias.search');
+    Route::get('academia/delete', [AcademiaController::class, 'delete'])->name('academia.delete');
+    Route::post('academia/image-set-cover', [AcademiaController::class, 'imageSetCover'])->name('academia.imageSetCover');
+    Route::delete('academia/image-remove', [AcademiaController::class, 'imageRemove'])->name('academia.imageRemove');
+    Route::delete('academia/deleteon', [AcademiaController::class, 'deleteon'])->name('academia.deleteon');
+    Route::get('academia/set-status', [AcademiaController::class, 'setStatus'])->name('academia.setStatus');
+    Route::put('academia/{id}', [AcademiaController::class, 'update'])->name('academia.update');
+    Route::get('academia/{id}/edit', [AcademiaController::class, 'edit'])->name('academia.edit');
+    Route::get('academia/create', [AcademiaController::class, 'create'])->name('academia.create');
+    Route::post('academia/store', [AcademiaController::class, 'store'])->name('academia.store');
+    Route::get('academias', [AcademiaController::class, 'index'])->name('academias.index');
 
     //******************** Pedidos *************************************************************/
     Route::match(['post', 'get'], 'pedidos/fetchCity', [PedidoController::class, 'fetchPlan'])->name('pedidos.fetchPlan');
