@@ -329,7 +329,7 @@
         }); 
 
         @php
-        if($analyticsData->rows != null){
+        if(!empty($analyticsData->rows) && $analyticsData->rows != null){
         @endphp
             var areaChartData = {
                 labels  : [
@@ -436,9 +436,11 @@
                 @endif                
                 ],
               backgroundColor : [
-                @foreach($top_browser as $key => $browser)
-                  dynamicColors(),
-                @endforeach
+                @if(!empty($top_browser))
+                    @foreach($top_browser as $key => $browser)
+                    dynamicColors(),
+                    @endforeach
+                @endif 
                 ],
             }
           ]

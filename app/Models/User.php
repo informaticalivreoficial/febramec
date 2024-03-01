@@ -20,6 +20,8 @@ class User extends Authenticatable
      * @var string[]
      */
     protected $fillable = [
+        'academia',
+        'graduacao',
         'name',
         'email',
         'plano',
@@ -34,10 +36,7 @@ class User extends Authenticatable
         'nasc',
         'naturalidade',
         'estado_civil',
-        'avatar',
-        'profissao',
-        'renda',
-        'profissao_empresa',
+        'avatar',        
         //Endereço
         'cep', 'rua', 'num', 'complemento', 'bairro', 'uf', 'cidade',
         //Contato
@@ -75,9 +74,9 @@ class User extends Authenticatable
     /**
      * Relacionamentos
     */
-    public function getPlano()
+    public function getAcademia()
     {
-        return $this->hasOne(Plano::class, 'id', 'plano');
+        return $this->hasOne(Academia::class, 'id', 'academia');
     }
 
     public function posts()

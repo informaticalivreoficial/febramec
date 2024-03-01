@@ -101,10 +101,10 @@
                                                 <a href="#" >Institucional</a>
                                             </li>
                                             <li id="menu-item" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home page-item-7">
-                                                <a href="#" >Filiados</a>
+                                                <a href="{{route('web.login')}}" >Filiados</a>
                                             </li>
                                             <li id="menu-item" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home page-item-7">
-                                                <a href="#" >Academias</a>
+                                                <a href="{{route('web.academias')}}" >Academias</a>
                                             </li>
                                             <li id="menu-item" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home page-item-7">
                                                 <a href="#" >Calendário</a>

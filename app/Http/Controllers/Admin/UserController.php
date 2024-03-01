@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Admin\User as UserRequest;
+use App\Models\Academia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\Cidades;
@@ -56,12 +57,9 @@ class UserController extends Controller
     
     public function create()
     {
-        $estados = Estados::orderBy('estado_nome', 'ASC')->get();
-        $cidades = Cidades::orderBy('cidade_nome', 'ASC')->get();        
-
+        $academias = Academia::orderBy('created_at', 'DESC')->available()->get();
         return view('admin.users.create',[
-            'estados' => $estados,
-            'cidades' => $cidades
+            'academias' => $academias
         ]);
     }
     
@@ -179,7 +177,7 @@ class UserController extends Controller
         if(!empty($user)){
             $perfil = ($user->admin == '1' && $user->client == '1' ? 'Administrador e Cliente' :
                       ($user->admin == '1' && $user->client == '0' ? 'Administrador' :
-                      ($user->admin == '0' && $user->client == '1' ? 'Cliente' : 'Cliente')));
+                      ($user->admin == '0' && $user->client == '1' ? 'Aluno(a)' : 'Aluno(a)')));
             Storage::delete($user->avatar);
             //Cropper::flush($user->avatar);
             $user->delete();

@@ -58,8 +58,8 @@
                         <tr>
                             <th>Foto</th>
                             <th>Nome</th>
-                            <th>Plano</th>
-                            <th>Horário</th>
+                            <th>Academia</th>
+                            <th>Graduação</th>
                             <th>Situação</th>
                             <th>Ações</th>
                         </tr>
@@ -86,8 +86,8 @@
                                 </a>
                             </td>
                             <td>{{$user->name}}</td>
-                            <td>{{$user->getPlano->name}}</td>
-                            <td>{{\Carbon\Carbon::parse($user->getPlano->horario)->format('H:i')}}</td>
+                            <td>{{$user->getAcademia->name}}</td>
+                            <td>{{$user->graduacao}}</td>
                             <td>{{$user->getFuncao()}}</td>
                             <td>
                                 <input type="checkbox" data-onstyle="success" data-offstyle="warning" data-size="mini" class="toggle-class" data-id="{{ $user->id }}" data-toggle="toggle" data-style="slow" data-on="<i class='fas fa-check'></i>" data-off="<i style='color:#fff !important;' class='fas fa-exclamation-triangle'></i>" {{ $user->status == true ? 'checked' : ''}}>

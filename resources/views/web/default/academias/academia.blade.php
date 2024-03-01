@@ -118,11 +118,17 @@
             </div>
 
             <div class="row">
-                <div class="col-xs-12 col-md-6 fw-column">                    
+                <div class="col-xs-12 col-md-6 fw-column">   
+                    
+                    <div class="special-heading text-left">
+                        <h4 class="section_header margin_0 ">
+                        <span class="lightfont regular text-uppercase">Atendimento</span>
+                        </h4>
+                    </div>
+                    <div class="fw-divider-space " style="margin-top: 25px;"></div>       
                     <div class="form-wrapper  columns_padding_10">
                         <form>                            
-                            <div class="wrap-forms">
-                                <div class="row"></div>
+                            <div class="wrap-forms">                                
                                 <div class="row">
                                     <div class="col-xs-12 col-md-6 form-builder-item">
                                         <div class="form-group has-placeholder">
@@ -133,30 +139,13 @@
                                     </div>
                                     <div class="col-xs-12 col-md-6 form-builder-item">
                                         <div class="form-group has-placeholder">
-                                            <label for="id-2">Subject <sup>*</sup> </label>
-                                            <input class="form-control" type="text" name="text_dafa6b7"
-                                                placeholder="Subject">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-12 col-md-6 form-builder-item">
-                                        <div class="form-group has-placeholder">
                                             <label for="id-3">Email Address <sup>*</sup> </label>
                                             <input class="form-control" type="text" name="email_dbac577"
                                                 placeholder="Email Address*" value="" id="id-3"
                                                 required="required">
                                         </div>
                                     </div>
-                                    <div class="col-xs-12 col-md-6 form-builder-item">
-                                        <div class="form-group has-placeholder">
-                                            <label for="id-4">Phone Number <sup>*</sup> </label>
-                                            <input class="form-control" type="text" name="text_2e4368a"
-                                                placeholder="Phone Number*" value="" id="id-4"
-                                                required="required">
-                                        </div>
-                                    </div>
-                                </div>
+                                </div>                                
                                 <div class="row">
                                     <div class="col-xs-12 form-builder-item">
                                         <div class="form-group has-placeholder">

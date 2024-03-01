@@ -5,8 +5,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\{
     AcademiaController,
     AdminController,
-    ApartamentoController,
-    AvaliacaoController,
     UserController,
     EmailController,
     PostController,
@@ -20,7 +18,6 @@ use App\Http\Controllers\Admin\{
     ParceiroController,
     PedidoController,
     PlanoController,
-    ReservaController,
     SitemapController,
     SlideController,
     WhatsappController
@@ -54,6 +51,10 @@ Route::group(['namespace' => 'Web', 'as' => 'web.'], function () {
 
     //******************************** Academias ************************************/
     Route::get('/academias', [WebController::class, 'academias'])->name('academias');
+    Route::get('/academia/{slug}', [WebController::class, 'academia'])->name('academia');
+
+    //******************************** Filiados ************************************/
+    Route::get('/filiados/login', [WebController::class, 'login'])->name('login');
     Route::get('/academia/{slug}', [WebController::class, 'academia'])->name('academia');
 
     //*************************************** Páginas *******************************************/

@@ -214,17 +214,19 @@ class WebController extends Controller
         ]);
     }
 
-    public function acomodacoes()
+    public function academias()
     {
-        $acomodacoes = Apartamento::available()->get();
-        $head = $this->seo->render('Acomodações - ' . $this->configService->getConfig()->nomedosite,
+        $academias = Academia::available()->get();
+
+        $head = $this->seo->render('Academias - ' . $this->configService->getConfig()->nomedosite,
             $this->configService->getConfig()->descricao ?? 'Informática Livre desenvolvimento de sistemas web desde 2005',
-            route('web.acomodacoes'),
+            route('web.academias'),
             $this->configService->getConfig()->getMetaImg() ?? 'https://informaticalivre.com/media/metaimg.jpg'
         );
-        return view('web.'.$this->configService->getConfig()->template.'.acomodacoes.index',[
+
+        return view('web.'.$this->configService->getConfig()->template.'.academias.index',[
             'head' => $head,
-            'acomodacoes' => $acomodacoes
+            'academias' => $academias
         ]);
     }
 
@@ -244,76 +246,9 @@ class WebController extends Controller
         ]);
     }
 
-    public function reservar(Request $request)
+    public function login()
     {
-        $dadosForm = $request->all();
-        $acomodacoes = Apartamento::available()->get();
-
-        $paginareserva = Post::where('id', 15)->first();
-        $politicareserva = Post::where('id', 14)->first();
-        $paginareserva->views = $paginareserva->views + 1;
-        $paginareserva->save();
-
-        $head = $this->seo->render('Pré-reserva - ' . $this->configService->getConfig()->nomedosite,
-            'Pré-reserva - ' . $this->configService->getConfig()->nomedosite,
-            route('web.reservar'),
-            $this->configService->getConfig()->getMetaImg() ?? 'https://informaticalivre.com/media/metaimg.jpg'
-        );
-        
-        return view('web.'.$this->configService->getConfig()->template.'.acomodacoes.reservar',[
-            'head' => $head,
-            'dadosForm' => $dadosForm,
-            'acomodacoes' => $acomodacoes,
-            'paginareserva' => $paginareserva,
-            'politicareserva' => $politicareserva,
-            'estados' => $this->estadoService->getEstados()
-        ]);
-    }
-
-    public function acomodacao($slug)
-    {
-        $acomodacao = Apartamento::where('slug', $slug)->available()->first();
-        $acomodacoes = Apartamento::where('id', '!=', $acomodacao->id)->available()->get();
-
-        $postsTags = Post::orderBy('views', 'DESC')
-            ->where('tags', '!=', '')
-            ->where('id', '!=', $acomodacao->id)
-            ->postson()
-            ->limit(11)
-            ->get();
-
-        $acomodacao->views = $acomodacao->views + 1;
-        $acomodacao->save();
-
-        $paginareserva = Post::where('id', 5)->first();
-        $paginareserva->views = $paginareserva->views + 1;
-        $paginareserva->save();
-
-        $head = $this->seo->render($acomodacao->titulo . ' - ' . $this->configService->getConfig()->nomedosite,
-            $acomodacao->descricao ?? 'Informática Livre desenvolvimento de sistemas web desde 2005',
-            route('web.acomodacao', ['slug' => $acomodacao->slug]),
-            $this->configService->getConfig()->getMetaImg() ?? 'https://informaticalivre.com/media/metaimg.jpg'
-        );
-        return view('web.'.$this->configService->getConfig()->template.'.acomodacoes.acomodacao',[
-            'head' => $head,
-            'acomodacao' => $acomodacao,
-            'acomodacoes' => $acomodacoes,
-            'postsTags' => $postsTags,
-            'estados' => $this->estadoService->getEstados()
-        ]);
-    }
-
-    public function avaliacaoCliente(Request $request)
-    {
-        $head = $this->seo->render('Questionário de avaliação - ' . $this->configService->getConfig()->nomedosite,
-            'Questionário de avaliação',
-            route('web.avaliacao'),
-            $this->configService->getConfig()->getMetaImg() ?? 'https://informaticalivre.com/media/metaimg.jpg'
-        );
-
-        return view('web.'.$this->configService->getConfig()->template.'.cliente.avaliacao',[
-            'head' => $head
-        ]);
+        return view('web.'.$this->configService->getConfig()->template.'.filiados.login');
     }
 
     public function sitemap()

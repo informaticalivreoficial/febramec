@@ -15,6 +15,8 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('academia')->nullable();
+            $table->string('graduacao')->nullable();
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
@@ -42,11 +44,6 @@ class CreateUsersTable extends Migration
             $table->string('estado_civil')->nullable();
             $table->string('avatar')->nullable();
             $table->string('email1')->nullable();
-            
-            /** income */
-            $table->string('profissao')->nullable();
-            $table->double('renda', 10, 2)->nullable();
-            $table->string('profissao_empresa')->nullable();
 
             /** address */
             $table->string('cep')->nullable();
@@ -80,6 +77,8 @@ class CreateUsersTable extends Migration
 
             $table->integer('status')->default('0');
             $table->text('notasadicionais')->nullable();
+
+            $table->foreign('academia')->references('id')->on('academias')->onDelete('CASCADE');
         });
     }
 

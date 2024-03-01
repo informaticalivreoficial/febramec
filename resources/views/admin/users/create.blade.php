@@ -147,7 +147,7 @@
                                         <div class="card-header">
                                             <h4>                          
                                                 <a style="border:none;color: #555;" data-toggle="collapse" data-parent="#accordion" href="#collapseRenda">
-                                                    <i class="nav-icon fas fa-plus mr-2"></i> Renda
+                                                    <i class="nav-icon fas fa-plus mr-2"></i> Academia
                                                 </a>
                                             </h4>
                                         </div>
@@ -156,21 +156,25 @@
                                                 <div class="row mb-2">
                                                     <div class="col-12 col-md-4 col-lg-4"> 
                                                         <div class="form-group">
-                                                            <label class="labelforms text-muted"><b>Profissão:</b></label>
-                                                            <input type="text" class="form-control" placeholder="Profissão do Cliente" name="profissao" value="{{old('profissao')}}">
+                                                            <label class="labelforms text-muted"><b>Selecione a Academia:</b></label>
+                                                            <select id="state-dd" class="form-control" name="academia">
+                                                                @if(!empty($academias) && $academias->count() > 0)
+                                                                    <option value="">Selecione</option>
+                                                                    @foreach($academias as $academia)
+                                                                        <option value="{{$academia->id}}" {{ (old('academia') == $academia->id ? 'selected' : '') }}>{{$academia->name}}</option>
+                                                                    @endforeach                                                                        
+                                                                @endif
+                                                            </select>
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-md-4 col-lg-4"> 
                                                         <div class="form-group">
-                                                            <label class="labelforms text-muted"><b>Renda:</b></label>
-                                                            <input type="text" class="form-control mask-money" placeholder="Valores em Reais" name="renda" value="{{old('renda')}}">
+                                                            <label class="labelforms text-muted"><b>Graduação:</b></label>
+                                                            <input type="text" class="form-control" placeholder="Graduação" name="graduacao" value="{{old('graduacao')}}">
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-md-4 col-lg-4"> 
-                                                        <div class="form-group">
-                                                            <label class="labelforms text-muted"><b>Empresa:</b></label>
-                                                            <input type="text" class="form-control" placeholder="Contratante" name="profissao_empresa" value="{{old('profissao_empresa')}}">
-                                                        </div>
+                                                        
                                                     </div>
                                                 </div>
                                             </div>
@@ -187,44 +191,36 @@
                                         <div id="collapseEndereco" class="panel-collapse collapse show">
                                             <div class="card-body">
                                                 <div class="row mb-2">
-                                                    <div class="col-12 col-md-4 col-lg-4"> 
+                                                    <div class="col-12 col-md-6 col-lg-2"> 
                                                         <div class="form-group">
-                                                            <label class="labelforms text-muted"><b>Estado:</b></label>
-                                                            <select id="state-dd" class="form-control" name="uf">
-                                                                @if(!empty($estados))
-                                                                    @foreach($estados as $estado)
-                                                                    <option value="{{$estado->estado_id}}" {{ (old('uf') == $estado->estado_id ? 'selected' : '') }}>{{$estado->estado_nome}}</option>
-                                                                    @endforeach                                                                        
-                                                                @endif
-                                                            </select>
+                                                            <label class="labelforms text-muted"><b>*CEP:</b></label>
+                                                            <input type="text" class="form-control mask-zipcode" id="cep" placeholder="Digite o CEP" name="cep" value="{{old('cep')}}">
                                                         </div>
                                                     </div>
-                                                    <div class="col-12 col-md-4 col-lg-4"> 
+                                                    <div class="col-12 col-md-4 col-lg-3"> 
+                                                        <div class="form-group">
+                                                            <label class="labelforms text-muted"><b>Estado:</b></label>
+                                                            <input type="text" class="form-control" name="uf" id="uf" value="{{old('uf')}}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-md-4 col-lg-3"> 
                                                         <div class="form-group">
                                                             <label class="labelforms text-muted"><b>Cidade:</b></label>
-                                                            <select id="city-dd" class="form-control" name="cidade">
-                                                                @if(!empty($cidades))
-                                                                    <option value="">Selecione o Estado</option>
-                                                                    @foreach($cidades as $cidade)
-                                                                        <option value="{{$cidade->cidade_id}}" 
-                                                                                {{ (old('cidade') == $cidade->cidade_id ? 'selected' : '') }}>{{$cidade->cidade_nome}}</option>                                                                   
-                                                                    @endforeach                                                                        
-                                                                @endif
-                                                            </select>
+                                                            <input type="text" class="form-control" name="cidade" id="cidade" value="{{old('cidade')}}">
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-md-4 col-lg-4"> 
                                                         <div class="form-group">
                                                             <label class="labelforms text-muted"><b>Bairro:</b></label>
-                                                            <input type="text" class="form-control" placeholder="Bairro" name="bairro" value="{{old('bairro')}}">
+                                                            <input type="text" class="form-control" name="bairro" id="bairro" value="{{old('bairro')}}">
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-2">
                                                     <div class="col-12 col-md-6 col-lg-5"> 
                                                         <div class="form-group">
-                                                            <label class="labelforms text-muted"><b>Endereço:</b></label>
-                                                            <input type="text" class="form-control" placeholder="Endereço Completo" name="rua" value="{{old('rua')}}">
+                                                            <label class="labelforms text-muted"><b>Rua:</b></label>
+                                                            <input type="text" class="form-control" name="rua" id="rua" value="{{old('rua')}}">
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-md-6 col-lg-2"> 
@@ -237,12 +233,6 @@
                                                         <div class="form-group">
                                                             <label class="labelforms text-muted"><b>Complemento:</b></label>
                                                             <input type="text" class="form-control" placeholder="Complemento (Opcional)" name="complemento" value="{{old('complemento')}}">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12 col-md-6 col-lg-2"> 
-                                                        <div class="form-group">
-                                                            <label class="labelforms text-muted"><b>CEP:</b></label>
-                                                            <input type="text" class="form-control mask-zipcode" placeholder="Digite o CEP" name="cep" value="{{old('cep')}}">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -498,9 +488,7 @@
         var $celularmask = $(".celularmask");
         $celularmask.mask('(99) 99999-9999', {reverse: false});
         var $zipcode = $(".mask-zipcode");
-        $zipcode.mask('00.000-000', {reverse: true});
-        var $money = $(".mask-money");
-        $money.mask('R$ 000.000.000.000.000,00', {reverse: true, placeholder: "R$ 0,00"});
+        $zipcode.mask('00.000-000', {reverse: true});        
     });
 </script>    
     <script>
@@ -522,29 +510,7 @@
                     file.readAsDataURL(this.files[0]);
                 }
             }
-            document.getElementById("img-input").addEventListener("change", readImage, false);
-                        
-           
-            $('#state-dd').on('change', function () {
-                var idState = this.value;
-                $("#city-dd").html('');
-                $.ajax({
-                    url: "{{route('users.fetchCity')}}",
-                    type: "POST",
-                    data: {
-                        estado_id: idState,
-                        _token: '{{csrf_token()}}'
-                    },
-                    dataType: 'json',
-                    success: function (res) {
-                        $('#city-dd').html('<option value="">Selecione a cidade</option>');
-                        $.each(res.cidades, function (key, value) {
-                            $("#city-dd").append('<option value="' + value
-                                .cidade_id + '">' + value.cidade_nome + '</option>');
-                        });
-                    }
-                });
-            });
+            document.getElementById("img-input").addEventListener("change", readImage, false);            
             
             // Visualizar senha no input
             var senha = $('#senha');
@@ -557,5 +523,53 @@
             });
             
         });
+    </script>
+    <script>
+        $(document).ready(function() {
+    
+            function limpa_formulário_cep() {
+                $("#rua").val("");
+                $("#bairro").val("");
+                $("#cidade").val("");
+                $("#uf").val("");
+            }
+            
+            $("#cep").blur(function() {
+    
+                var cep = $(this).val().replace(/\D/g, '');
+    
+                if (cep != "") {
+                    
+                    var validacep = /^[0-9]{8}$/;
+    
+                    if(validacep.test(cep)) {
+                        
+                        $("#rua").val("...");
+                        $("#bairro").val("...");
+                        $("#cidade").val("...");
+                        $("#uf").val("...");
+                        
+                        $.getJSON("https://viacep.com.br/ws/"+ cep +"/json/?callback=?", function(dados) {
+    
+                            if (!("erro" in dados)) {
+                                $("#rua").val(dados.logradouro);
+                                $("#bairro").val(dados.bairro);
+                                $("#cidade").val(dados.localidade);
+                                $("#uf").val(dados.uf);
+                            } else {
+                                limpa_formulário_cep();
+                                alert("CEP não encontrado.");
+                            }
+                        });
+                    } else {
+                        limpa_formulário_cep();
+                        alert("Formato de CEP inválido.");
+                    }
+                } else {
+                    limpa_formulário_cep();
+                }
+            });
+        });
+    
     </script>
 @stop
