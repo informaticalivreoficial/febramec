@@ -39,7 +39,8 @@
             "Tests\\": "tests/"
         },        
         "files": [            
-            "app/Helpers/funcoesGlobais.php"
+            "app/Helpers/funcoesGlobais.php",
+            "app/Helpers/custom-helpers.php"
         ]
     },
     "scripts": {

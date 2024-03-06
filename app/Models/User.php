@@ -156,119 +156,119 @@ class User extends Authenticatable
         return '';
     }
 
-    public function setCpfAttribute($value)
-    {
-        $this->attributes['cpf'] = (!empty($value) ? $this->clearField($value) : null);
-    }
+    // public function setCpfAttribute($value)
+    // {
+    //     $this->attributes['cpf'] = (!empty($value) ? $this->clearField($value) : null);
+    // }
     
-    public function getCpfAttribute($value)
-    {
-        if (empty($value)) {
-            return null;
-        }
+    // public function getCpfAttribute($value)
+    // {
+    //     if (empty($value)) {
+    //         return null;
+    //     }
 
-        return
-            substr($value, 0, 3) . '.' .
-            substr($value, 3, 3) . '.' .
-            substr($value, 6, 3) . '-' .
-            substr($value, 9, 2);
-    }
+    //     return
+    //         substr($value, 0, 3) . '.' .
+    //         substr($value, 3, 3) . '.' .
+    //         substr($value, 6, 3) . '-' .
+    //         substr($value, 9, 2);
+    // }
 
-    public function setRgAttribute($value)
-    {
-        $this->attributes['rg'] = (!empty($value) ? $this->clearField($value) : null);
-    }
+    // public function setRgAttribute($value)
+    // {
+    //     $this->attributes['rg'] = (!empty($value) ? $this->clearField($value) : null);
+    // }
     
-    public function getRgAttribute($value)
-    {
-        if (empty($value)) {
-            return null;
-        }
+    // public function getRgAttribute($value)
+    // {
+    //     if (empty($value)) {
+    //         return null;
+    //     }
 
-        return
-            substr($value, 0, 2) . '.' .
-            substr($value, 2, 3) . '.' .
-            substr($value, 5, 3) . '-' .
-            substr($value, 8, 1);
-    }
+    //     return
+    //         substr($value, 0, 2) . '.' .
+    //         substr($value, 2, 3) . '.' .
+    //         substr($value, 5, 3) . '-' .
+    //         substr($value, 8, 1);
+    // }
     
-    public function setBirthdayAttribute($value)
-    {
-        $this->attributes['birthday'] = (!empty($value) ? $this->convertStringToDate($value) : null);
-    }
+    // public function setBirthdayAttribute($value)
+    // {
+    //     $this->attributes['birthday'] = (!empty($value) ? $this->convertStringToDate($value) : null);
+    // }
     
-    public function getBirthdayAttribute($value)
-    {
-        if (empty($value)) {
-            return null;
-        }
-        return date('d/m/Y', strtotime($value));
-    }
+    // public function getBirthdayAttribute($value)
+    // {
+    //     if (empty($value)) {
+    //         return null;
+    //     }
+    //     return date('d/m/Y', strtotime($value));
+    // }
 
-    public function setPostcodeAttribute($value)
-    {
-        $this->attributes['postcode'] = (!empty($value) ? $this->clearField($value) : null);
-    }
+    // public function setPostcodeAttribute($value)
+    // {
+    //     $this->attributes['postcode'] = (!empty($value) ? $this->clearField($value) : null);
+    // }
     
-    public function getPostcodeAttribute($value)
-    {
-        if (empty($value)) {
-            return null;
-        }
+    // public function getPostcodeAttribute($value)
+    // {
+    //     if (empty($value)) {
+    //         return null;
+    //     }
 
-        return substr($value, 0, 5) . '-' . substr($value, 5, 3);
-    }
+    //     return substr($value, 0, 5) . '-' . substr($value, 5, 3);
+    // }
     
-    public function setPhoneAttribute($value)
-    {
-        $this->attributes['phone'] = (!empty($value) ? $this->clearField($value) : null);
-    }
+    // public function setPhoneAttribute($value)
+    // {
+    //     $this->attributes['phone'] = (!empty($value) ? $this->clearField($value) : null);
+    // }
     //Formata o telefone para exibir
-    public function getPhoneAttribute($value)
-    {
-        if (empty($value)) {
-            return null;
-        }
-        return  
-            substr($value, 0, 0) . '(' .
-            substr($value, 0, 2) . ') ' .
-            substr($value, 2, 4) . '-' .
-            substr($value, 6, 4) ;
-    }
+    // public function getPhoneAttribute($value)
+    // {
+    //     if (empty($value)) {
+    //         return null;
+    //     }
+    //     return  
+    //         substr($value, 0, 0) . '(' .
+    //         substr($value, 0, 2) . ') ' .
+    //         substr($value, 2, 4) . '-' .
+    //         substr($value, 6, 4) ;
+    // }
     
-    public function setCellPhoneAttribute($value)
-    {
-        $this->attributes['cell_phone'] = (!empty($value) ? $this->clearField($value) : null);
-    }
+    // public function setCellPhoneAttribute($value)
+    // {
+    //     $this->attributes['cell_phone'] = (!empty($value) ? $this->clearField($value) : null);
+    // }
     //Formata o celular para exibir
-    public function getCellPhoneAttribute($value)
-    {
-        if (empty($value)) {
-            return null;
-        }
-        return  
-            substr($value, 0, 0) . '(' .
-            substr($value, 0, 2) . ') ' .
-            substr($value, 2, 5) . '-' .
-            substr($value, 7, 4) ;
-    }
+    // public function getCellPhoneAttribute($value)
+    // {
+    //     if (empty($value)) {
+    //         return null;
+    //     }
+    //     return  
+    //         substr($value, 0, 0) . '(' .
+    //         substr($value, 0, 2) . ') ' .
+    //         substr($value, 2, 5) . '-' .
+    //         substr($value, 7, 4) ;
+    // }
     
-    public function setWhatsappAttribute($value)
-    {
-        $this->attributes['whatsapp'] = (!empty($value) ? $this->clearField($value) : null);
-    }
+    // public function setWhatsappAttribute($value)
+    // {
+    //     $this->attributes['whatsapp'] = (!empty($value) ? $this->clearField($value) : null);
+    // }
     //Formata o celular para exibir
-    public function getWhatsappAttribute($value)
-    {
-        if (empty($value)) {
-            return null;
-        }
-        return  
-            substr($value, 0, 0) . '(' .
-            substr($value, 0, 2) . ') ' .
-            substr($value, 2, 5) . '-' .
-            substr($value, 7, 4) ;
-    }
+    // public function getWhatsappAttribute($value)
+    // {
+    //     if (empty($value)) {
+    //         return null;
+    //     }
+    //     return  
+    //         substr($value, 0, 0) . '(' .
+    //         substr($value, 0, 2) . ') ' .
+    //         substr($value, 2, 5) . '-' .
+    //         substr($value, 7, 4) ;
+    // }
 
     public function setPasswordAttribute($value)
     {
@@ -336,11 +336,11 @@ class User extends Authenticatable
     //     return (new \DateTime($year . '-' . $month . '-' . $day))->format('Y-m-d');
     // }
     
-    private function clearField(?string $param)
-    {
-        if (empty($param)) {
-            return null;
-        }
-        return str_replace(['.', '-', '/', '(', ')', ' '], '', $param);
-    }
+    // private function clearField(?string $param)
+    // {
+    //     if (empty($param)) {
+    //         return null;
+    //     }
+    //     return str_replace(['.', '-', '/', '(', ')', ' '], '', $param);
+    // }
 }

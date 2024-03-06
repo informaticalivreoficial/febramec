@@ -27,10 +27,10 @@ trait TenantScopeTrait
     private static function defineTenant($model): void
     {
         if (auth()->check()) {
-            $model->tenant_id = auth()->user()->tenant_id;
+            $model->tenant = auth()->user()->tenant;
         } else {
             if (session()->get('tenant') !== null) {
-                $model->tenant_id = session()->get('tenant')->id;
+                $model->tenant = session()->get('tenant')->id;
             }
         }
     }

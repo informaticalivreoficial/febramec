@@ -27,7 +27,7 @@ class UserFactory extends Factory
         $tenant = Tenant::first();
 
         return [
-            'tenant_id' => $tenant->id, 
+            'tenant' => $tenant->id, 
             'name' => fake()->name,
             'email' => fake()->unique()->safeEmail(),
             'cpf' => fake()->cpf,
