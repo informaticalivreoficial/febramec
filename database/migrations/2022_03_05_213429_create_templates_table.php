@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTemplatesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -16,10 +16,10 @@ class CreateTemplatesTable extends Migration
         Schema::create('templates', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('imagem')->nullable();
+            $table->string('thumb')->nullable();
             $table->text('content')->nullable();
             $table->integer('status')->default(0);
-            $table->integer('exclusivo')->default(0);
+            $table->integer('exclusive')->default(0);
             
             $table->timestamps();
         });
@@ -34,4 +34,4 @@ class CreateTemplatesTable extends Migration
     {
         Schema::dropIfExists('templates');
     }
-}
+};

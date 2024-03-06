@@ -2,17 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Storage;
-use App\Support\Cropper;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -20,36 +19,30 @@ class User extends Authenticatable
      * @var string[]
      */
     protected $fillable = [
-        'academia',
+        'tenant',
+        'academy_plan', 
+        'status',
+        'information',
         'graduacao',
-        'name',
-        'email',
-        'plano',
-        'email1',
-        'password',
-        'remember_token',
-        'senha',
-        'genero',
+        'name', 'password', 'remember_token', 'code',
+        'gender',
         'cpf',
         'rg',
-        'rg_expedicao',
-        'nasc',
-        'naturalidade',
-        'estado_civil',
+        'rg_expedition',
+        'birthday',
+        'naturalness',
+        'civil_status',
         'avatar',        
-        //Endereço
-        'cep', 'rua', 'num', 'complemento', 'bairro', 'uf', 'cidade',
-        //Contato
-        'telefone', 'celular', 'whatsapp', 'telegram',
-        //Redes
-        'facebook', 'twitter', 'instagram', 'linkedin', 'vimeo', 'youtube', 'fliccr', 
-        //Responsável
-        'responsavel_nome',
-        'responsavel_cpf',
-        'responsavel_rg',
-        'responsavel_telefone',
-        //Permissão
-        'admin', 'client', 'editor', 'superadmin', 'status'
+        //Address      
+        'postcode', 'street', 'number', 'complement', 'neighborhood', 'state', 'city',
+        //Contact
+        'phone', 'cell_phone', 'whatsapp', 'skype', 'telegram', 'email', 'additional_email',
+        //Social
+        'facebook', 'twitter', 'instagram',
+        //Function
+        'admin', 'client', 'editor', 'superadmin',        
+        //Responsible
+        'responsible_name', 'responsible_cpf', 'responsible_rg', 'responsible_phone',        
     ];
 
     /**
@@ -74,20 +67,20 @@ class User extends Authenticatable
     /**
      * Relacionamentos
     */
-    public function getAcademia()
-    {
-        return $this->hasOne(Academia::class, 'id', 'academia');
-    }
+    // public function getAcademia()
+    // {
+    //     return $this->hasOne(Academia::class, 'id', 'academia');
+    // }
 
-    public function posts()
-    {
-        return $this->hasMany(Post::class, 'autor', 'id');
-    }
+    // public function posts()
+    // {
+    //     return $this->hasMany(Post::class, 'autor', 'id');
+    // }
 
-    public function pedidos()
-    {
-        return $this->hasMany(Pedidos::class, 'user', 'id');
-    }
+    // public function pedidos()
+    // {
+    //     return $this->hasMany(Pedidos::class, 'user', 'id');
+    // }
 
     /**
      * Scopes
@@ -107,19 +100,19 @@ class User extends Authenticatable
      */
 
     //Exibe a função do usuário
-    public function getFuncao() {
-        if($this->admin == 1 && $this->client == 0 && $this->superadmin == 0){
-            return 'Administrador';
-        }elseif($this->admin == 0 && $this->client == 1 && $this->superadmin == 0){
-            return 'Aluno';
-        }elseif($this->admin == 0 && $this->client == 0 && $this->editor == 1 && $this->superadmin == 0){
-            return 'Editor';
-        }elseif($this->admin == 1 && $this->client == 1 && $this->superadmin == 0){
-            return 'Administrador/Cliente'; 
-        }else{
-            return 'Super Administrador'; 
-        }
-    }
+    // public function getFuncao() {
+    //     if($this->admin == 1 && $this->client == 0 && $this->superadmin == 0){
+    //         return 'Administrador';
+    //     }elseif($this->admin == 0 && $this->client == 1 && $this->superadmin == 0){
+    //         return 'Aluno';
+    //     }elseif($this->admin == 0 && $this->client == 0 && $this->editor == 1 && $this->superadmin == 0){
+    //         return 'Editor';
+    //     }elseif($this->admin == 1 && $this->client == 1 && $this->superadmin == 0){
+    //         return 'Administrador/Cliente'; 
+    //     }else{
+    //         return 'Super Administrador'; 
+    //     }
+    // }
     
     public function getCivilStatusTranslateAttribute(string $status, string $genre)
     {
@@ -158,7 +151,6 @@ class User extends Authenticatable
     public function getUrlAvatarAttribute()
     {
         if (!empty($this->avatar)) {
-            //return Storage::url(Cropper::thumb($this->avatar, 500, 500));
             return Storage::url($this->avatar);
         }
         return '';
@@ -200,12 +192,12 @@ class User extends Authenticatable
             substr($value, 8, 1);
     }
     
-    public function setNascAttribute($value)
+    public function setBirthdayAttribute($value)
     {
-        $this->attributes['nasc'] = (!empty($value) ? $this->convertStringToDate($value) : null);
+        $this->attributes['birthday'] = (!empty($value) ? $this->convertStringToDate($value) : null);
     }
     
-    public function getNascAttribute($value)
+    public function getBirthdayAttribute($value)
     {
         if (empty($value)) {
             return null;
@@ -213,12 +205,12 @@ class User extends Authenticatable
         return date('d/m/Y', strtotime($value));
     }
 
-    public function setCepAttribute($value)
+    public function setPostcodeAttribute($value)
     {
-        $this->attributes['cep'] = (!empty($value) ? $this->clearField($value) : null);
+        $this->attributes['postcode'] = (!empty($value) ? $this->clearField($value) : null);
     }
     
-    public function getCepAttribute($value)
+    public function getPostcodeAttribute($value)
     {
         if (empty($value)) {
             return null;
@@ -227,12 +219,12 @@ class User extends Authenticatable
         return substr($value, 0, 5) . '-' . substr($value, 5, 3);
     }
     
-    public function setTelefoneAttribute($value)
+    public function setPhoneAttribute($value)
     {
-        $this->attributes['telefone'] = (!empty($value) ? $this->clearField($value) : null);
+        $this->attributes['phone'] = (!empty($value) ? $this->clearField($value) : null);
     }
     //Formata o telefone para exibir
-    public function getTelefoneAttribute($value)
+    public function getPhoneAttribute($value)
     {
         if (empty($value)) {
             return null;
@@ -244,12 +236,12 @@ class User extends Authenticatable
             substr($value, 6, 4) ;
     }
     
-    public function setCelularAttribute($value)
+    public function setCellPhoneAttribute($value)
     {
-        $this->attributes['celular'] = (!empty($value) ? $this->clearField($value) : null);
+        $this->attributes['cell_phone'] = (!empty($value) ? $this->clearField($value) : null);
     }
     //Formata o celular para exibir
-    public function getCelularAttribute($value)
+    public function getCellPhoneAttribute($value)
     {
         if (empty($value)) {
             return null;
@@ -284,7 +276,7 @@ class User extends Authenticatable
             unset($this->attributes['password']);
             return;
         }
-        $this->attributes['senha'] = $value;
+        $this->attributes['code'] = $value;
         $this->attributes['password'] = bcrypt($value);
     } 
 
@@ -317,16 +309,6 @@ class User extends Authenticatable
         $this->attributes['remember_token'] = bcrypt($value);
     }
 
-    public function setRendaAttribute($value)
-    {
-        $this->attributes['renda'] = (!empty($value) ? floatval($this->convertStringToDouble($value)) : null);
-    }
-
-    public function setRendaConjujeAttribute($value)
-    {
-        $this->attributes['renda_conjuje'] = (!empty($value) ? floatval($this->convertStringToDouble($value)) : null);
-    }
-
     public function getCreatedAtAttribute($value)
     {
         if (empty($value)) {
@@ -336,32 +318,23 @@ class User extends Authenticatable
         return date('d/m/Y', strtotime($value));
     }
 
-    public function getRendaAttribute($value)
-    {
-        if (empty($value)) {
-            return null;
-        }
+    // private function convertStringToDouble(?string $param)
+    // {
+    //     if (empty($param)) {
+    //         return null;
+    //     }
 
-        return number_format($value, 2, ',', '.');
-    }
-
-    private function convertStringToDouble(?string $param)
-    {
-        if (empty($param)) {
-            return null;
-        }
-
-        return str_replace(',', '.', str_replace('.', '', $param));
-    }
+    //     return str_replace(',', '.', str_replace('.', '', $param));
+    // }
     
-    private function convertStringToDate(?string $param)
-    {
-        if (empty($param)) {
-            return null;
-        }
-        list($day, $month, $year) = explode('/', $param);
-        return (new \DateTime($year . '-' . $month . '-' . $day))->format('Y-m-d');
-    }
+    // private function convertStringToDate(?string $param)
+    // {
+    //     if (empty($param)) {
+    //         return null;
+    //     }
+    //     list($day, $month, $year) = explode('/', $param);
+    //     return (new \DateTime($year . '-' . $month . '-' . $day))->format('Y-m-d');
+    // }
     
     private function clearField(?string $param)
     {

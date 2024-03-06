@@ -30,14 +30,14 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         //URL::forceScheme('https');
-        // Schema::defaultStringLength(191);
-        // Blade::aliasComponent('admin.components.message', 'message');
+        Schema::defaultStringLength(191);
+        Blade::aliasComponent('admin.components.message', 'message');
 
-        // //Newsletter FORM
+        //Newsletter FORM
         // $newsletter = NewsletterCat::where('sistema', 1)->where('status', 1)->get();
         // View()->share('newsletterForm', $newsletter);
 
-        // //Links
+        //Links
         // $Links = Menu::whereNull('id_pai')->orderby('created_at', 'DESC')
         //                 ->available()
         //                 ->get();        
@@ -46,6 +46,6 @@ class AppServiceProvider extends ServiceProvider
         // $configuracoes = \App\Models\Configuracoes::find(1); 
         // View()->share('configuracoes', $configuracoes);
         
-        // Paginator::useBootstrap();
+        Paginator::useBootstrap();
     }
 }
