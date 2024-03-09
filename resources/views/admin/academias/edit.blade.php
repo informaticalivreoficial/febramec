@@ -32,7 +32,7 @@ $config = [
     <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="{{route('home')}}">Painel de Controle</a></li>
-            <li class="breadcrumb-item"><a href="{{route('academias.index')}}">Academias</a></li>
+            <li class="breadcrumb-item"><a href="{{route('tenant.index')}}">Academias</a></li>
             <li class="breadcrumb-item active">Editar Academia</li>
         </ol>
     </div>
@@ -59,7 +59,7 @@ $config = [
 </div>   
                     
             
-<form action="{{ route('academia.update',['id' => $academia->id]) }}" method="post" enctype="multipart/form-data" autocomplete="off">
+<form action="{{ route('tenant.update',['id' => $academia->id]) }}" method="post" enctype="multipart/form-data" autocomplete="off">
 @csrf
 @method('PUT')      
 <div class="row">            
@@ -74,7 +74,7 @@ $config = [
         <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#custom-tabs-four-profile" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">REDES SOCIAIS</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="custom-tabs-four-settings-tab" data-toggle="pill" href="#custom-tabs-four-settings" role="tab" aria-controls="custom-tabs-four-settings" aria-selected="false">IMAGENS</a>
+        <a class="nav-link" id="custom-tabs-four-imagens-tab" data-toggle="pill" href="#custom-tabs-four-imagens" role="tab" aria-controls="custom-tabs-four-imagens" aria-selected="false">IMAGENS</a>
     </li>     
     <li class="nav-item">
         <a class="nav-link" id="custom-tabs-four-seo-tab" data-toggle="pill" href="#custom-tabs-four-seo" role="tab" aria-controls="custom-tabs-four-mapas" aria-selected="false">SEO</a>
@@ -84,116 +84,68 @@ $config = [
 <div class="card-body">
 <div class="tab-content" id="custom-tabs-four-tabContent">
     <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
-        <div class="row mb-4">
+        <div class="row mb-4 text-muted">            
             <div class="col-12 col-md-6 col-lg-4"> 
                 <div class="form-group">
-                    <div class="thumb_user_admin">
-                        <img id="preview" src="{{$academia->cover()}}" alt="{{ old('name') }}" title="{{ old('name') }}"/>
-                        <input id="img-input" type="file" name="logomarca">
-                    </div>                                                
+                    <label class="labelforms"><b>*Nome da Academia:</b> </label>
+                    <input type="text" class="form-control" name="name" value="{{ old('name') ?? $academia->name }}">
                 </div>
             </div>
-            <div class="col-12 col-md-6 col-lg-8">
-                <div class="row mb-2">
-                    <div class="col-12 col-md-8 col-lg-8"> 
-                        <div class="form-group">
-                            <label class="labelforms text-muted"><b>*Nome da Academia:</b> </label>
-                            <input type="text" class="form-control" name="name" value="{{ old('name') ?? $academia->name }}">
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-4 col-lg-4"> 
-                        <div class="form-group">
-                            <label class="labelforms text-muted"><b>Status:</b></label>
-                            <select name="status" class="form-control">
-                                <option value="1" {{ (old('status') == '1' ? 'selected' : ($academia->status == '1' ? 'selected' : '')) }}>Ativo</option>
-                                <option value="0" {{ (old('status') == '0' ? 'selected' : ($academia->status == '0' ? 'selected' : '')) }}>Inativo</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-12 col-lg-6"> 
-                        <div class="form-group">
-                            <label class="labelforms text-muted"><b>Domínio:</b> </label>
-                            <input type="text" class="form-control" name="dominio" value="{{ old('dominio') ?? $academia->dominio }}">
-                        </div>
-                    </div>                    
-                    <div class="col-12 col-md-12 col-lg-6"> 
-                        <div class="form-group">
-                            <label class="labelforms text-muted"><b>CNPJ:</b> </label>
-                            <input type="text" class="form-control cnpjmask" name="cnpj" value="{{ old('cnpj') ?? $academia->cnpj }}">
-                        </div>
-                    </div>  
-                    <div class="col-12 col-md-12 col-lg-6"> 
-                        <div class="form-group">
-                            <label class="labelforms text-muted"><b>*Email:</b></label>
-                            <input type="text" class="form-control" placeholder="Email" name="email" value="{{old('email') ?? $academia->email}}">
-                        </div>
-                    </div>                  
+            <div class="col-12 col-md-6 col-lg-4"> 
+                <div class="form-group">
+                    <label class="labelforms"><b>Razão Social:</b></label>
+                    <input type="text" class="form-control" placeholder="Razão Social" name="social_name" value="{{ old('social_name') ?? $academia->social_name }}">
                 </div>
-            </div>            
+            </div>
+            <div class="col-12 col-md-6 col-lg-4"> 
+                <div class="form-group">
+                    <label class="labelforms"><b>Nome Fantasia:</b></label>
+                    <input type="text" class="form-control" placeholder="Nome Fantasia" name="alias_name" value="{{ old('alias_name') ?? $academia->alias_name }}">
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4"> 
+                <div class="form-group">
+                    <label class="labelforms"><b>CNPJ:</b> </label>
+                    <input type="text" class="form-control cnpjmask" name="cnpj" value="{{ old('cnpj') ?? $academia->cnpj }}">
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4"> 
+                <div class="form-group">
+                    <label class="labelforms"><b>Inscrição Estadual:</b></label>
+                    <input type="text" class="form-control" placeholder="Inscrição Estadual" name="ie" value="{{old('ie') ?? $academia->ie}}">
+                </div>
+            </div>
+            <div class="col-12 col-md-3 col-lg-2"> 
+                <div class="form-group">
+                    <label class="labelforms"><b>Ano de ínicio</b></label>
+                    <input type="text" class="form-control" placeholder="Ano de ínicio" name="init_date" value="{{old('init_date') ?? $academia->init_date}}">
+                </div>
+            </div>
+            <div class="col-12 col-md-3 col-lg-2"> 
+                <div class="form-group">
+                    <label class="labelforms"><b>Status:</b></label>
+                    <select name="status" class="form-control">
+                        <option value="1" {{ (old('status') == '1' ? 'selected' : ($academia->status == '1' ? 'selected' : '')) }}>Ativo</option>
+                        <option value="0" {{ (old('status') == '0' ? 'selected' : ($academia->status == '0' ? 'selected' : '')) }}>Inativo</option>
+                    </select>
+                </div>
+            </div>             
+            <div class="col-12 col-md-6 col-lg-6"> 
+                <div class="form-group">
+                    <label class="labelforms"><b>Domínio:</b> </label>
+                    <input type="text" class="form-control" name="domain" value="{{ old('domain') ?? $academia->domain }}">
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-6"> 
+                <div class="form-group">
+                    <label class="labelforms"><b>Sub-Domínio:</b> </label>
+                    <input type="text" class="form-control" name="subdomain" value="{{ old('subdomain') ?? $academia->subdomain }}" {{(\Illuminate\Support\Facades\Auth::user()->superadmin == true ? '' : 'disabled')}}>
+                </div>
+            </div>                        
         </div>
         
 
         <div id="accordion">
-            <!-- we are adding the .class so bootstrap.js collapse plugin detects it -->
-            <div class="card">
-                <div class="card-header">
-                    <h4>
-                        <a style="border:none;color: #555;" data-toggle="collapse" data-parent="#accordion" href="#collapseEndereco">
-                            <i class="nav-icon fas fa-plus mr-2"></i> Endereço
-                        </a>
-                    </h4>
-                </div>
-                <div id="collapseEndereco" class="panel-collapse collapse show">
-                    <div class="card-body">
-                        <div class="row mb-2">
-                            <div class="col-12 col-md-6 col-lg-2"> 
-                                <div class="form-group">
-                                    <label class="labelforms text-muted"><b>*CEP:</b></label>
-                                    <input type="text" class="form-control mask-zipcode" id="cep" placeholder="Digite o CEP" name="cep" value="{{old('cep') ?? $academia->cep}}">
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-4 col-lg-3"> 
-                                <div class="form-group">
-                                    <label class="labelforms text-muted"><b>Estado:</b></label>
-                                    <input type="text" class="form-control" name="uf" id="uf" value="{{old('uf') ?? $academia->uf}}">
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-4 col-lg-3"> 
-                                <div class="form-group">
-                                    <label class="labelforms text-muted"><b>Cidade:</b></label>
-                                    <input type="text" class="form-control" name="cidade" id="cidade" value="{{old('cidade') ?? $academia->cidade}}">
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-4 col-lg-4"> 
-                                <div class="form-group">
-                                    <label class="labelforms text-muted"><b>Bairro:</b></label>
-                                    <input type="text" class="form-control" name="bairro" id="bairro" value="{{old('bairro') ?? $academia->bairro}}">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mb-2">
-                            <div class="col-12 col-md-6 col-lg-5"> 
-                                <div class="form-group">
-                                    <label class="labelforms text-muted"><b>Rua:</b></label>
-                                    <input type="text" class="form-control" name="rua" id="rua" value="{{old('rua') ?? $academia->rua}}">
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-6 col-lg-2"> 
-                                <div class="form-group">
-                                    <label class="labelforms text-muted"><b>Número:</b></label>
-                                    <input type="text" class="form-control" placeholder="Número do Endereço" name="num" value="{{old('num') ?? $academia->num}}">
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-6 col-lg-3"> 
-                                <div class="form-group">
-                                    <label class="labelforms text-muted"><b>Complemento:</b></label>
-                                    <input type="text" class="form-control" placeholder="Complemento (Opcional)" name="complemento" value="{{old('complemento') ?? $academia->complemento}}">
-                                </div>
-                            </div>                            
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="card">
                 <div class="card-header">
                     <h4>
@@ -204,44 +156,106 @@ $config = [
                 </div>
                 <div id="collapseContato" class="panel-collapse collapse show">
                     <div class="card-body">
-                        <div class="row mb-2">                            
-                            <div class="col-12 col-md-6 col-lg-3"> 
+                        <div class="row mb-2 text-muted">  
+                            <div class="col-12 col-md-6 col-lg-4"> 
                                 <div class="form-group">
-                                    <label class="labelforms text-muted"><b>Telefone Fixo:</b></label>
-                                    <input type="text" class="form-control telefonemask" placeholder="Número do Telefone com DDD" name="telefone" value="{{old('telefone') ?? $academia->telefone}}">
+                                    <label class="labelforms"><b>*Email:</b></label>
+                                    <input type="text" class="form-control" placeholder="Email" name="email" value="{{old('email') ?? $academia->email}}">
                                 </div>
-                            </div>
-                            <div class="col-12 col-md-6 col-lg-3"> 
+                            </div>                          
+                            <div class="col-12 col-md-6 col-lg-4"> 
                                 <div class="form-group">
-                                    <label class="labelforms text-muted"><b>*Celular:</b></label>
-                                    <input type="text" class="form-control celularmask" placeholder="Número do Celular com DDD" name="celular" value="{{old('celular') ?? $academia->celular}}">
+                                    <label class="labelforms"><b>Email Adicional:</b></label>
+                                    <input type="text" class="form-control" placeholder="Email Adicional" name="additional_email" value="{{old('additional_email') ?? $academia->additional_email}}">
                                 </div>
-                            </div>
-                            <div class="col-12 col-md-6 col-lg-2"> 
-                                <div class="form-group">
-                                    <label class="labelforms text-muted"><b>WhatsApp:</b></label>
-                                    <input type="text" class="form-control whatsappmask" placeholder="Número do Celular com DDD" name="whatsapp" value="{{old('whatsapp') ?? $academia->whatsapp}}">
-                                </div>
-                            </div> 
+                            </div>   
                             <div class="col-12 col-md-6 col-lg-4"> 
                                 <div class="form-group">
                                     <label class="labelforms text-muted"><b>Telegram:</b></label>
                                     <input type="text" class="form-control" placeholder="Telegram" name="telegram" value="{{old('telegram') ?? $academia->telegram}}">
                                 </div>
-                            </div>                                                   
+                            </div>                       
+                            <div class="col-12 col-md-6 col-lg-4"> 
+                                <div class="form-group">
+                                    <label class="labelforms"><b>Telefone Fixo:</b></label>
+                                    <input type="text" class="form-control telefonemask" placeholder="Número do Telefone com DDD" name="phone" value="{{old('phone') ?? $academia->phone}}">
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4"> 
+                                <div class="form-group">
+                                    <label class="labelforms"><b>*Celular:</b></label>
+                                    <input type="text" class="form-control celularmask" placeholder="Número do Celular com DDD" name="cell_phone" value="{{old('cell_phone') ?? $academia->cell_phone}}">
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4"> 
+                                <div class="form-group">
+                                    <label class="labelforms"><b>WhatsApp:</b></label>
+                                    <input type="text" class="form-control whatsappmask" placeholder="Número do Celular com DDD" name="whatsapp" value="{{old('whatsapp') ?? $academia->whatsapp}}">
+                                </div>
+                            </div>                                                                               
                         </div>
                     </div>
                 </div>
             </div>
-            
-        </div>
-        
-        <div class="row mb-2">
-            <div class="col-12">   
-                <label class="labelforms text-muted"><b>Descrição</b></label>
-                <x-adminlte-text-editor name="content" v placeholder="Descrição..." :config="$config">{{ old('content') ?? $academia->content }}</x-adminlte-text-editor>                                                                                     
+
+            <div class="card">
+                <div class="card-header">
+                    <h4>
+                        <a style="border:none;color: #555;" data-toggle="collapse" data-parent="#accordion" href="#collapseEndereco">
+                            <i class="nav-icon fas fa-plus mr-2"></i> Endereço
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseEndereco" class="panel-collapse collapse show">
+                    <div class="card-body text-muted">
+                        <div class="row mb-2">
+                            <div class="col-12 col-md-3 col-lg-2"> 
+                                <div class="form-group">
+                                    <label class="labelforms"><b>*CEP:</b></label>
+                                    <input type="text" class="form-control mask-zipcode" id="cep" placeholder="Digite o CEP" name="postcode" value="{{old('postcode') ?? $academia->postcode}}">
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-3 col-lg-3"> 
+                                <div class="form-group">
+                                    <label class="labelforms"><b>Estado:</b></label>
+                                    <input type="text" class="form-control" name="state" id="uf" value="{{old('state') ?? $academia->state}}">
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-3"> 
+                                <div class="form-group">
+                                    <label class="labelforms"><b>Cidade:</b></label>
+                                    <input type="text" class="form-control" name="city" id="cidade" value="{{old('city') ?? $academia->city}}">
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4"> 
+                                <div class="form-group">
+                                    <label class="labelforms"><b>Bairro:</b></label>
+                                    <input type="text" class="form-control" name="neighborhood" id="bairro" value="{{old('neighborhood') ?? $academia->neighborhood}}">
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-6"> 
+                                <div class="form-group">
+                                    <label class="labelforms"><b>Rua:</b></label>
+                                    <input type="text" class="form-control" name="street" id="rua" value="{{old('street') ?? $academia->street}}">
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-2"> 
+                                <div class="form-group">
+                                    <label class="labelforms"><b>Número:</b></label>
+                                    <input type="text" class="form-control" placeholder="Número do Endereço" name="number" value="{{old('number') ?? $academia->number}}">
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4"> 
+                                <div class="form-group">
+                                    <label class="labelforms"><b>Complemento:</b></label>
+                                    <input type="text" class="form-control" placeholder="Complemento (Opcional)" name="complement" value="{{old('complement') ?? $academia->complement}}">
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
             </div>
-            
         </div>
                 
     </div>
@@ -271,25 +285,13 @@ $config = [
                     <label class="labelforms"><b>Youtube:</b></label>
                     <input type="text" class="form-control text-muted" placeholder="Youtube" name="youtube" value="{{old('youtube') ?? $academia->youtube}}">
                 </div>
-            </div>
-            <div class="col-12 col-md-6 col-lg-6"> 
-                <div class="form-group">
-                    <label class="labelforms"><b>Flickr:</b></label>
-                    <input type="text" class="form-control text-muted" placeholder="Flickr" name="fliccr" value="{{old('fliccr') ?? $academia->fliccr}}">
-                </div>
-            </div>
+            </div>            
             <div class="col-12 col-md-6 col-lg-6"> 
                 <div class="form-group">
                     <label class="labelforms"><b>Instagram:</b></label>
                     <input type="text" class="form-control text-muted" placeholder="Instagram" name="instagram" value="{{old('instagram') ?? $academia->instagram}}">
                 </div>
-            </div>
-            <div class="col-12 col-md-6 col-lg-6"> 
-                <div class="form-group">
-                    <label class="labelforms"><b>Vimeo:</b></label>
-                    <input type="text" class="form-control text-muted" placeholder="Vimeo" name="vimeo" value="{{old('vimeo') ?? $academia->vimeo}}">
-                </div>
-            </div>
+            </div>           
             <div class="col-12 col-md-6 col-lg-6"> 
                 <div class="form-group">
                     <label class="labelforms"><b>Linkedin:</b></label>
@@ -299,33 +301,61 @@ $config = [
         </div>
     </div>
     
-    <div class="tab-pane fade" id="custom-tabs-four-settings" role="tabpanel" aria-labelledby="custom-tabs-four-settings-tab">
-        <div class="row mb-4">           
-            <div class="col-sm-12">                                        
+    <div class="tab-pane fade" id="custom-tabs-four-imagens" role="tabpanel" aria-labelledby="custom-tabs-four-imagens-tab">
+        <div class="row mb-2 text-muted">
+            <div class="col-sm-12">
                 <div class="form-group">
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="exampleInputFile" name="files[]" multiple>
-                        <label class="custom-file-label" for="exampleInputFile">Escolher Fotos</label>
-                    </div>
-                </div>     
-
-                <div class="content_image"></div>
-
-                <div class="property_image">
-                    @foreach($academia->images()->get() as $image)
-                    <div class="property_image_item">
-                        <a href="{{ $image->url_image }}" data-toggle="lightbox" data-title="{{$academia->name}}" data-gallery="property-gallery" data-type="image">
-                            <img src="{{ $image->url_image }}" alt="{{$academia->name}}">
-                        </a>
-                        <div class="property_image_actions">
-                            <a href="javascript:void(0)" class="btn btn-xs {{ ($image->cover == true ? 'btn-success' : 'btn-default') }} icon-notext image-set-cover px-2" data-action="{{ route('academia.imageSetCover', ['image' => $image->id]) }}"><i class="nav-icon fas fa-check"></i> </a>
-                            <a href="javascript:void(0)" class="btn btn-danger btn-xs image-remove px-2" data-action="{{ route('academia.imageRemove', ['image' => $image->id]) }}"><i class="nav-icon fas fa-times"></i> </a>
-                        </div>
-                    </div>
-                    @endforeach
+                    <h5><b>Imagens do site</b></h5>  
+                    <p>Aqui você configurar as imagens do site, fique atento ao tamanho das imagens para uma melhor experiência da sua aplicação.</p>                                          
                 </div>
             </div>
-        </div> 
+            <hr>
+            <div class="col-12 col-md-6 col-sm-6 col-lg-6"> 
+                <div class="form-group">
+                    <label class="labelforms"><b>Logomarca do site</b> - {{env('LOGOMARCA_WIDTH')}}x{{env('LOGOMARCA_HEIGHT')}} pixels</label>
+                    <div class="thumb_user_admin">                                                    
+                        <img id="preview2" width="{{env('LOGOMARCA_WIDTH')}}" height="{{env('LOGOMARCA_HEIGHT')}}" src="{{$academia->getlogo()}}" alt="{{ old('domain') ?? $academia->domain }}" title="{{ old('domain') ?? $academia->domain }}"/>
+                        <input id="img-logomarca" type="file" name="logo">
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-sm-6 col-lg-6"> 
+                <div class="form-group">
+                    <label class="labelforms"><b>Logomarca do Gerenciador</b> - {{env('LOGOMARCA_GERENCIADOR_WIDTH')}}x{{env('LOGOMARCA_GERENCIADOR_HEIGHT')}} pixels</label>
+                    <div class="thumb_user_admin">                                                    
+                        <img id="preview3" width="{{env('LOGOMARCA_GERENCIADOR_WIDTH')}}" height="{{env('LOGOMARCA_GERENCIADOR_HEIGHT')}}" src="{{$academia->getlogoadmin()}}" alt="{{ old('domain') ?? $academia->domain }}" title="{{ old('domain') ?? $academia->domain }}"/>
+                        <input id="img-logomarcaadmin" type="file" name="logo_admin">
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-sm-6 col-lg-6"> 
+                <div class="form-group">
+                    <label class="labelforms"><b>Favicon</b> - {{env('FAVEICON_WIDTH')}}x{{env('FAVEICON_HEIGHT')}} pixels</label>
+                    <div class="thumb_user_admin">                                                    
+                        <img id="preview4" width="{{env('FAVEICON_WIDTH')}}" height="{{env('FAVEICON_HEIGHT')}}" src="{{$academia->getfaveicon()}}" alt="{{ old('domain') ?? $academia->domain }}" title="{{ old('domain') ?? $academia->domain }}"/>
+                        <input id="img-favicon" type="file" name="favicon">
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-sm-6 col-lg-6"> 
+                <div class="form-group">
+                    <label class="labelforms"><b>Marca D´agua</b> - {{env('MARCADAGUA_WIDTH')}}x{{env('MARCADAGUA_HEIGHT')}} pixels</label>
+                    <div class="thumb_user_admin">                                                    
+                        <img id="preview5" width="{{env('MARCADAGUA_WIDTH')}}" height="{{env('MARCADAGUA_HEIGHT')}}" src="{{$academia->getwatermark()}}" alt="{{ old('domain') ?? $academia->domain }}" title="{{ old('domain') ?? $academia->domain }}"/>
+                        <input id="img-marcadagua" type="file" name="watermark">
+                    </div>
+                </div>
+            </div>
+            <div class="col-12"> 
+                <div class="form-group">
+                    <label class="labelforms"><b>Topo do site</b> - {{env('IMGHEADER_WIDTH')}}x{{env('IMGHEADER_HEIGHT')}} pixels</label>
+                    <div class="thumb_user_admin">
+                        <img id="preview6" width="{{env('IMGHEADER_WIDTH')}}" height="{{env('IMGHEADER_HEIGHT')}}" src="{{$academia->getimgheader()}}" alt="{{ old('domain') ?? $academia->domain }}" title="{{ old('domain') ?? $academia->domain }}"/>
+                        <input id="img-imgheader" type="file" name="imgheader">
+                    </div>
+                </div>
+            </div>
+        </div>  
     </div>
     
     <div class="tab-pane fade" id="custom-tabs-four-seo" role="tabpanel" aria-labelledby="custom-tabs-four-seo-tab">
@@ -336,6 +366,10 @@ $config = [
                     <p>Aqui você pode configurar a otimização para as aplicações de Buscas</p>                                          
                 </div>
             </div>
+            <div class="col-12">   
+                <label class="labelforms"><b>Descrição</b></label>
+                <x-adminlte-text-editor name="information" v placeholder="Descrição..." :config="$config">{{ old('information') ?? $academia->information }}</x-adminlte-text-editor>                                                                                     
+            </div>
             <div class="col-12 mb-1"> 
                 <div class="form-group">
                     <label class="labelforms"><b>MetaTags</b></label>
@@ -345,17 +379,21 @@ $config = [
             <div class="col-12 mb-1">   
                 <div class="form-group">
                     <label class="labelforms"><b>Mapa do Google</b> <small class="text-info">(Copie o código de incorporação do Google Maps e cole abaixo)</small></label>
-                    <textarea id="inputDescription" class="form-control" rows="5" name="mapa_google">{{ old('mapa_google') ?? $academia->mapa_google }}</textarea> 
+                    <textarea id="inputDescription" class="form-control" rows="5" name="maps_google">{{ old('maps_google') ?? $academia->maps_google }}</textarea> 
                 </div>                                                     
             </div>
             <div class="col-12 mb-1"> 
                 <div class="form-group">
                     <label class="labelforms"><b>Meta Imagem: </b>(800X418) pixels</label>
                     <div class="thumb_user_admin">                                                    
-                        <img id="preview1" src="{{$academia->getmetaimg()}}" alt="{{ old('dominio') ?? $academia->dominio }}" title="{{ old('dominio') ?? $academia->dominio }}"/>
+                        <img id="preview1" src="{{$academia->getmetaimg()}}" alt="{{ old('domain') ?? $academia->domain }}" title="{{ old('domain') ?? $academia->domain }}"/>
                         <input id="img-input" type="file" name="metaimg">
                     </div>
                 </div>
+            </div>
+            <div class="col-12">   
+                <label class="labelforms"><b>Política de Privacidade</b></label>
+                <x-adminlte-text-editor name="politicas_de_privacidade" v placeholder="Política de Privacidade..." :config="$config">{{ old('privacy_policy') ?? $academia->privacy_policy }}</x-adminlte-text-editor>                                                                                     
             </div>
         </div> 
     </div>

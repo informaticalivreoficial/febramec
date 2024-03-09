@@ -10,8 +10,7 @@ class TenantUrlCheck
 {
     public function handle(Request $request, Closure $next)
     {
-        $manangerT = app(ManangerTenant::class); 
-        
+        $manangerT = app(ManangerTenant::class);         
         
         if(!$manangerT->isSubDomainMain()){
             abort(401);

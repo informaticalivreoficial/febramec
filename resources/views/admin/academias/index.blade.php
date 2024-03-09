@@ -37,7 +37,7 @@
                           </div>
                     </div>
                     <div class="col-12 col-sm-6 my-2 text-right">
-                        <a href="{{route('academia.create')}}" class="btn btn-sm btn-default"><i class="fas fa-plus mr-2"></i> Cadastrar Academia</a>
+                        <a href="{{route('tenant.create')}}" class="btn btn-sm btn-default"><i class="fas fa-plus mr-2"></i> Cadastrar Academia</a>
                     </div>
                 </div>
             </div>
@@ -125,8 +125,8 @@
                                                     <button title="Enviar Email" type="submit" class="btn btn-xs text-white bg-teal"><i class="fas fa-envelope"></i></button>
                                                 </form>
                                             
-                                            <a target="_blank" href="{{ route('web.academia', ['slug' => $academia->slug]) }}" class="btn btn-xs btn-primary"><i class="fas fa-search"></i></a>
-                                            <a href="{{ route('academia.edit', ['id' => $academia->id]) }}" class="btn btn-xs btn-default"><i class="fas fa-pen"></i></a>
+                                            <a target="_blank" href="{{ route('web.tenant', ['slug' => $academia->slug]) }}" class="btn btn-xs btn-primary"><i class="fas fa-search"></i></a>
+                                            <a href="{{ route('tenant.edit', ['id' => $academia->id]) }}" class="btn btn-xs btn-default"><i class="fas fa-pen"></i></a>
 
 
                                             <button type="button" class="btn btn-xs btn-danger text-white j_modal_btn"
@@ -218,7 +218,7 @@
                 $.ajax({
                     type: 'GET',
                     dataType: 'JSON',
-                    url: "{{ route('academia.delete') }}",
+                    url: "{{ route('tenant.delete') }}",
                     data: {
                         'id': academia_id
                     },
@@ -226,9 +226,9 @@
                         if (data.error) {
                             $('.j_param_data').html(data.error);
                             $('#id_academia').val(data.id);
-                            $('#frm').prop('action', '{{ route('academia.deleteon') }}');
+                            $('#frm').prop('action', '{{ route('tenant.deleteon') }}');
                         } else {
-                            $('#frm').prop('action', '{{ route('academia.deleteon') }}');
+                            $('#frm').prop('action', '{{ route('tenant.deleteon') }}');
                         }
                     }
                 });
@@ -245,7 +245,7 @@
                 $.ajax({
                     type: 'GET',
                     dataType: 'JSON',
-                    url: "{{ route('academia.setStatus') }}",
+                    url: "{{ route('tenant.setStatus') }}",
                     data: {
                         'status': status,
                         'id': academia_id

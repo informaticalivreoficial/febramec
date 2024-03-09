@@ -16,20 +16,7 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         $tenant = Tenant::first();
-        DB::table('users')->insert([
-            [
-                'id' => 1,
-                'tenant' => 2,
-                'name' => env('ADMIN_NOME'),
-                'email' => env('ADMIN_EMAIL'),
-                'email_verified_at' => now(),
-                'password' => bcrypt(env('ADMIN_PASS')),
-                'code' => env('ADMIN_PASS'),
-                'remember_token' => \Illuminate\Support\Str::random(10),                
-                'created_at' => now(),                
-                'superadmin' => true,
-                'status' => true
-            ],
+        DB::table('users')->insert([            
             [
                 'id' => 2,
                 'tenant' => $tenant->id,
@@ -42,7 +29,20 @@ class UsersTableSeeder extends Seeder
                 'created_at' => now(),              
                 'superadmin' => true,
                 'status' => true
-            ]            
+            ],
+            [
+                'id' => 1,
+                'tenant' => 2,
+                'name' => env('ADMIN_NOME'),
+                'email' => env('ADMIN_EMAIL'),
+                'email_verified_at' => now(),
+                'password' => bcrypt(env('ADMIN_PASS')),
+                'code' => env('ADMIN_PASS'),
+                'remember_token' => \Illuminate\Support\Str::random(10),                
+                'created_at' => now(),                
+                'superadmin' => true,
+                'status' => true
+            ],            
         ]);
 
         User::factory()->count(20)->create();

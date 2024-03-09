@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\{
     PlanoController,
     SitemapController,
     SlideController,
+    TenantController,
     WhatsappController
 };
 use App\Http\Controllers\Web\RssFeedController;
@@ -78,7 +79,7 @@ Route::group(['namespace' => 'Web', 'as' => 'web.'], function () {
 
 });
 
-Route::prefix('admin')->middleware('auth')->middleware('subdomain_main')->group( function(){
+Route::prefix('admin')->middleware(['auth', 'subdomain_main'])->group( function(){
 
     //******************************* Newsletter *********************************************/
     Route::match(['post', 'get'], 'listas/padrao', [NewsletterController::class, 'padraoMark'])->name('listas.padrao');
@@ -185,18 +186,7 @@ Route::prefix('admin')->middleware('auth')->middleware('subdomain_main')->group(
     Route::post('menus/store', [MenuController::class, 'store'])->name('menus.store');
     Route::get('/menus', [MenuController::class, 'index'])->name('menus.index');
 
-    //****************************** Galerias *******************************************/
-    Route::get('galerias/set-status', [GaleriaController::class, 'galeriaSetStatus'])->name('galerias.galeriaSetStatus');
-    Route::delete('galerias/deleteon', [GaleriaController::class, 'deleteon'])->name('galerias.deleteon');
-    Route::post('galerias/image-set-cover', [GaleriaController::class, 'imageSetCover'])->name('galerias.imageSetCover');
-    Route::delete('galerias/image-remove', [GaleriaController::class, 'imageRemove'])->name('galerias.imageRemove');
-    Route::get('galerias/delete', [GaleriaController::class, 'delete'])->name('galerias.delete');
-    Route::put('galerias/{id}', [GaleriaController::class, 'update'])->name('galerias.update');
-    Route::get('galerias/{id}/edit', [GaleriaController::class, 'edit'])->name('galerias.edit');
-    Route::get('galerias/create', [GaleriaController::class, 'create'])->name('galerias.create');
-    Route::post('galerias/store', [GaleriaController::class, 'store'])->name('galerias.store');
-    Route::get('/galerias', [GaleriaController::class, 'index'])->name('galerias.index');
-
+    
     /******************** Planos *************************************************************/
     Route::match(['get', 'post'], 'planos/pesquisa', [PlanoController::class, 'search'])->name('planos.search');
     Route::get('planos/delete', [PlanoController::class, 'delete'])->name('planos.delete');
@@ -209,16 +199,16 @@ Route::prefix('admin')->middleware('auth')->middleware('subdomain_main')->group(
     Route::get('planos', [PlanoController::class, 'index'])->name('planos.index');
 
     /******************** Academias *************************************************************/
-    Route::match(['get', 'post'], 'academias/pesquisa', [AcademiaController::class, 'search'])->name('academias.search');
-    Route::get('academia/delete', [AcademiaController::class, 'delete'])->name('academia.delete');
-    Route::post('academia/image-set-cover', [AcademiaController::class, 'imageSetCover'])->name('academia.imageSetCover');
-    Route::delete('academia/image-remove', [AcademiaController::class, 'imageRemove'])->name('academia.imageRemove');
-    Route::delete('academia/deleteon', [AcademiaController::class, 'deleteon'])->name('academia.deleteon');
-    Route::get('academia/set-status', [AcademiaController::class, 'setStatus'])->name('academia.setStatus');
-    Route::put('academia/{id}', [AcademiaController::class, 'update'])->name('academia.update');
-    Route::get('academia/{id}/edit', [AcademiaController::class, 'edit'])->name('academia.edit');
-    Route::get('academia/create', [AcademiaController::class, 'create'])->name('academia.create');
-    Route::post('academia/store', [TenantController::class, 'store'])->name('academia.store');
+    Route::match(['get', 'post'], 'academias/pesquisa', [TenantController::class, 'search'])->name('tenants.search');
+    Route::get('academia/delete', [TenantController::class, 'delete'])->name('tenant.delete');
+    Route::post('academia/image-set-cover', [TenantController::class, 'imageSetCover'])->name('tenant.imageSetCover');
+    Route::delete('academia/image-remove', [TenantController::class, 'imageRemove'])->name('tenant.imageRemove');
+    Route::delete('academia/deleteon', [TenantController::class, 'deleteon'])->name('tenant.deleteon');
+    Route::get('academia/set-status', [TenantController::class, 'setStatus'])->name('tenant.setStatus');
+    Route::put('academia/{id}', [TenantController::class, 'update'])->name('tenant.update');
+    Route::get('academia/{id}/edit', [TenantController::class, 'edit'])->name('tenant.edit');
+    Route::get('academia/create', [TenantController::class, 'create'])->name('tenant.create');
+    Route::post('academia/store', [TenantController::class, 'store'])->name('tenant.store');
     Route::get('academias', [TenantController::class, 'index'])->name('tenant.index');
 
     //******************** Pedidos *************************************************************/

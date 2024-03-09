@@ -25,11 +25,11 @@ class ManangerTenant
         return $tenant->id;
     }
 
-    // public function getTenantIdentify()
-    // {
-    //     dd(auth()->user()->tenant);
-    //     return auth()->check() ? auth()->user()->tenant : '';
-    // }
+    public function getTenantIdentify()
+    {
+        dd(auth()->user()->tenant);
+        return auth()->check() ? auth()->user()->tenant : '';
+    }
 
     public function getTenant()
     {

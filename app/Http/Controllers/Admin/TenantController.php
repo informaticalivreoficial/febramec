@@ -3,63 +3,119 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\AcademiaRequest;
+use App\Http\Requests\Admin\TenantRequest;
 use App\Models\Tenant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
-class AcademiaController extends Controller
+class TenantController extends Controller
 {
     public function index()
     {
-        $academias = Tenant::orderBy('status', 'ASC')
+        $tenants = Tenant::orderBy('status', 'ASC')
                 ->orderBy('created_at', 'DESC')
+                ->where('subdomain', '!=', 'master')
                 ->paginate(25);
         return view('admin.academias.index', [
-            'academias' => $academias
+            'academias' => $tenants
         ]);
     }
 
     public function edit($id)
     {
-        $academia = Academia::where('id', $id)->first();    
+        $tenant = Tenant::where('id', $id)->first();    
         return view('admin.academias.edit', [
-            'academia' => $academia
+            'academia' => $tenant
         ]);
     }
 
-    public function update(AcademiaRequest $request, $id)
+    public function update(TenantRequest $request, $id)
     {     
-        $academia = Academia::where('id', $id)->first();        
+        $tenant = Tenant::where('id', $id)->first();        
 
-        if(!empty($request->hasFile('logomarca'))){
-            Storage::delete($academia->logomarca);
-            $academia->logomarca = null;
+        if(!empty($request->hasFile('logo'))){
+            Storage::delete($tenant->logo);
+            $tenant->logo = null;
+        }
+
+        if(!empty($request->file('logo_admin'))){
+            Storage::delete($tenant->logo_admin);
+            $tenant->logo_admin = null;
+        }
+
+        if(!empty($request->file('logo_footer'))){
+            Storage::delete($tenant->logo_footer);
+            $tenant->logo_footer = null;
+        }
+
+        if(!empty($request->file('favicon'))){
+            Storage::delete($tenant->favicon);
+            $tenant->favicon = null;
         }
 
         if(!empty($request->file('metaimg'))){
-            Storage::delete($academia->metaimg);
-            $academia->metaimg = null;
+            Storage::delete($tenant->metaimg);
+            $tenant->metaimg = null;
         }
 
-        $academia->fill($request->all());
+        if(!empty($request->file('imgheader'))){
+            Storage::delete($tenant->imgheader);
+            $tenant->imgheader = null;
+        }
 
-        if(!empty($request->hasFile('logomarca'))){
-            $academia->logomarca = $request->file('logomarca')->storeAs(env('AWS_PASTA') . 'academias/' . $academia->id, 
+        if(!empty($request->file('watermark'))){
+            Storage::delete($tenant->watermark);
+            $tenant->watermark = null;
+        }
+
+        $tenant->fill($request->all());
+
+        if(!empty($request->hasFile('logo'))){
+            $tenant->logo = $request->file('logo')->storeAs(env('AWS_PASTA') . 'academias/' . $tenant->uuid, 
             Str::slug($request->name)  . '-' . str_replace('.',
-             '', microtime(true)) . '.' . $request->file('logomarca')->extension());
+             '', microtime(true)) . '.' . $request->file('logo')->extension());
+        }
+
+        if(!empty($request->hasFile('logo_admin'))){
+            $tenant->logo_admin = $request->file('logo_admin')->storeAs(env('AWS_PASTA') . 'academias/' . $tenant->uuid, 
+            Str::slug($request->name)  . '-' . str_replace('.',
+             '', microtime(true)) . '.' . $request->file('logo_admin')->extension());
+        }
+
+        if(!empty($request->hasFile('logo_footer'))){
+            $tenant->logo_footer = $request->file('logo_footer')->storeAs(env('AWS_PASTA') . 'academias/' . $tenant->uuid, 
+            Str::slug($request->name)  . '-' . str_replace('.',
+             '', microtime(true)) . '.' . $request->file('logo_footer')->extension());
+        }
+
+        if(!empty($request->hasFile('favicon'))){
+            $tenant->favicon = $request->file('favicon')->storeAs(env('AWS_PASTA') . 'academias/' . $tenant->uuid, 
+            Str::slug($request->name)  . '-' . str_replace('.',
+             '', microtime(true)) . '.' . $request->file('favicon')->extension());
         }
 
         if(!empty($request->hasFile('metaimg'))){
-            $academia->metaimg = $request->file('metaimg')->storeAs(env('AWS_PASTA') . 'academias/' . $academia->id, 
+            $tenant->metaimg = $request->file('metaimg')->storeAs(env('AWS_PASTA') . 'academias/' . $tenant->uuid, 
             Str::slug($request->name)  . '-' . str_replace('.',
              '', microtime(true)) . '.' . $request->file('metaimg')->extension());
         }
 
-        $academia->save();
-        $academia->setSlug();
+        if(!empty($request->hasFile('imgheader'))){
+            $tenant->imgheader = $request->file('imgheader')->storeAs(env('AWS_PASTA') . 'academias/' . $tenant->uuid, 
+            Str::slug($request->name)  . '-' . str_replace('.',
+             '', microtime(true)) . '.' . $request->file('imgheader')->extension());
+        }
+
+        if(!empty($request->hasFile('watermark'))){
+            $tenant->watermark = $request->file('watermark')->storeAs(env('AWS_PASTA') . 'academias/' . $tenant->uuid, 
+            Str::slug($request->name)  . '-' . str_replace('.',
+             '', microtime(true)) . '.' . $request->file('watermark')->extension());
+        }
+
+        $tenant->save();
+        $tenant->setSlug();
 
         $validator = Validator::make($request->only('files'), ['files.*' => 'image']);
 
@@ -70,18 +126,8 @@ class AcademiaController extends Controller
             ]);
         }
 
-        if (isset($request->allFiles()['files']) && $request->allFiles()) {
-            foreach ($request->allFiles()['files'] as $image) {
-                $academiaImage = new AcademiaGb();
-                $academiaImage->academia = $academia->id;
-                $academiaImage->path = $image->storeAs(env('AWS_PASTA') . 'academias/' . $academia->id, Str::slug($request->name) . '-' . str_replace('.', '', microtime(true)) . '.' . $image->extension());
-                $academiaImage->save();
-                unset($academiaImage);
-            }
-        }
-
-        return redirect()->route('academia.edit', [
-            'id' => $academia->id,
+        return redirect()->route('tenant.edit', [
+            'id' => $tenant->id,
         ])->with(['color' => 'success', 'message' => 'Academia atualizada com sucesso!']);
     }
 

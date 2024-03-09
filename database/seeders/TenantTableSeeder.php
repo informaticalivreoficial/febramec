@@ -17,18 +17,22 @@ class TenantTableSeeder extends Seeder
     {
         DB::table('tenants')->insert([
             [
+                'id' => 1,
                 'plan_id' => 1,
                 'uuid' => (string) Str::uuid(),
-                'name' => 'Client',    
+                'name' => 'Client',   
+                'slug' => 'client', 
                 'domain' => 'teste.com',
                 'subdomain' => 'client',
                 'template' => 'default',
                 'status' => true
             ],
             [
+                'id' => 2,
                 'plan_id' => 1,
                 'uuid' => (string) Str::uuid(),
-                'name' => 'Admin',    
+                'name' => 'Admin',  
+                'slug' => 'admin',  
                 'domain' => 'teste.com',
                 'subdomain' => 'master',
                 'template' => 'default',
