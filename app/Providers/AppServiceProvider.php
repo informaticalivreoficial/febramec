@@ -43,7 +43,7 @@ class AppServiceProvider extends ServiceProvider
         //                 ->get();        
         // View()->share('Links', $Links);
 
-        $configuracoes = \App\Models\Configuracoes::find(1); 
+        //$configuracoes = \App\Models\Configuracoes::find(1); 
         // View()->share('configuracoes', $configuracoes);
         
         Paginator::useBootstrap();

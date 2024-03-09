@@ -21,42 +21,48 @@ use App\Models\{
 };
 use App\Services\ConfigService;
 use App\Support\Seo;
+use App\Tenant\ManangerTenant;
 use Carbon\Carbon;
 
 class WebController extends Controller
 {
+    protected $tenant;
     protected $configService;
     protected $seo;
 
-    public function __construct(ConfigService $configService)
+    public function __construct(
+        ManangerTenant $tenant,
+        ConfigService $configService
+    )
     {
+        $this->tenant = $tenant->tenant();
         $this->configService = $configService;
         $this->seo = new Seo();        
     }
 
     public function home()
-    {
-        $artigos = Post::orderBy('created_at', 'DESC')->where('tipo', 'artigo')
-                    ->postson()
-                    ->limit(6)
-                    ->get();
-        $slides = Slide::orderBy('created_at', 'ASC')
-                    ->available()
-                    ->where('expira', '>=', Carbon::now())
-                    ->get();   
-        $galerias = Galeria::orderBy('created_at', 'DESC')->available()->limit(3)->get();
+    {        
+        // $artigos = Post::orderBy('created_at', 'DESC')->where('tipo', 'artigo')
+        //             ->postson()
+        //             ->limit(6)
+        //             ->get();
+        // $slides = Slide::orderBy('created_at', 'ASC')
+        //             ->available()
+        //             ->where('expira', '>=', Carbon::now())
+        //             ->get();   
+        // $galerias = Galeria::orderBy('created_at', 'DESC')->available()->limit(3)->get();
         
-        $head = $this->seo->render($this->configService->getConfig()->nomedosite ?? 'Informática Livre',
-            $this->configService->getConfig()->descricao ?? 'Informática Livre desenvolvimento de sistemas web desde 2005',
-            route('web.home'),
-            $this->configService->getConfig()->getMetaImg() ?? 'https://informaticalivre.com/media/metaimg.jpg'
-        ); 
+        // $head = $this->seo->render($this->configService->getConfig()->nomedosite ?? 'Informática Livre',
+        //     $this->configService->getConfig()->descricao ?? 'Informática Livre desenvolvimento de sistemas web desde 2005',
+        //     route('web.home'),
+        //     $this->configService->getConfig()->getMetaImg() ?? 'https://informaticalivre.com/media/metaimg.jpg'
+        // ); 
 
-		return view('web.'.$this->configService->getConfig()->template.'.home',[
-            'head' => $head,            
-            'slides' => $slides,
-            'artigos' => $artigos,
-            'galerias' => $galerias
+		return view('web.'.$this->tenant->template.'.home',[
+            //'head' => $head,            
+            //'slides' => $slides,
+            //'artigos' => $artigos,
+            'tenant' => $this->tenant
 		]);
     }
 

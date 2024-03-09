@@ -19,7 +19,7 @@ class UsersTableSeeder extends Seeder
         DB::table('users')->insert([
             [
                 'id' => 1,
-                'tenant' => null,
+                'tenant' => 2,
                 'name' => env('ADMIN_NOME'),
                 'email' => env('ADMIN_EMAIL'),
                 'email_verified_at' => now(),

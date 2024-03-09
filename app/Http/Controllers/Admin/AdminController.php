@@ -25,40 +25,40 @@ class AdminController extends Controller
         $clientesAvailable = User::where('client', 1)->available()->count();
         $clientesUnavailable = User::where('client', 1)->unavailable()->count();
         //Newsletter
-        $listas = NewsletterCat::count();
-        $emails = Newsletter::count();
-        $emailsCount = Newsletter::get();
+        //$listas = NewsletterCat::count();
+        //$emails = Newsletter::count();
+        //$emailsCount = Newsletter::get();
         //CHART PIZZA
-        $postsArtigos = Post::where('tipo', 'artigo')->count();
-        $postsPaginas = Post::where('tipo', 'pagina')->count();
-        $postsNoticias = Post::where('tipo', 'noticia')->count();
+        //$postsArtigos = Post::where('tipo', 'artigo')->count();
+        //$postsPaginas = Post::where('tipo', 'pagina')->count();
+        //$postsNoticias = Post::where('tipo', 'noticia')->count();
                
         //Artigos
-        $artigosAvailable = Post::postson()->where('tipo', 'artigo')->count();
-        $artigosUnavailable = Post::postsoff()->where('tipo', 'artigo')->count();
-        $artigosTop = Post::orderBy('views', 'DESC')
-                ->where('tipo', 'artigo')
-                ->limit(6)
-                ->postson()   
-                ->get();                
-        $totalViewsArtigos = Post::orderBy('views', 'DESC')
-                ->where('tipo', 'artigo')
-                ->postson()
-                ->limit(6)
-                ->get()
-                ->sum('views');
+        //$artigosAvailable = Post::postson()->where('tipo', 'artigo')->count();
+        //$artigosUnavailable = Post::postsoff()->where('tipo', 'artigo')->count();
+        //$artigosTop = Post::orderBy('views', 'DESC')
+        //         ->where('tipo', 'artigo')
+        //         ->limit(6)
+        //         ->postson()   
+        //         ->get();                
+        // $totalViewsArtigos = Post::orderBy('views', 'DESC')
+        //         ->where('tipo', 'artigo')
+        //         ->postson()
+        //         ->limit(6)
+        //         ->get()
+        //         ->sum('views');
         //Páginas
-        $paginasTop = Post::orderBy('views', 'DESC')
-                ->where('tipo', 'pagina')
-                ->limit(6)
-                ->postson()   
-                ->get();
-        $totalViewsPaginas = Post::orderBy('views', 'DESC')
-                ->where('tipo', 'pagina')
-                ->postson()
-                ->limit(6)
-                ->get()
-                ->sum('views');
+        // $paginasTop = Post::orderBy('views', 'DESC')
+        //         ->where('tipo', 'pagina')
+        //         ->limit(6)
+        //         ->postson()   
+        //         ->get();
+        // $totalViewsPaginas = Post::orderBy('views', 'DESC')
+        //         ->where('tipo', 'pagina')
+        //         ->postson()
+        //         ->limit(6)
+        //         ->get()
+        //         ->sum('views');
 
         //Analitcs
         //$analyticsData = Analytics::fetchVisitorsAndPageViews(Period::days(7));
@@ -79,26 +79,26 @@ class AdminController extends Controller
         
         return view('admin.dashboard',[
             //Newsletter
-            'listas' => $listas,
-            'emails' => $emails,
-            'emailsCount' => $emailsCount->sum('count'),
+            //'listas' => $listas,
+            //'emails' => $emails,
+            //'emailsCount' => $emailsCount->sum('count'),
             'time' => $time,            
             //Artigos
-            'artigosAvailable' => $artigosAvailable,
-            'artigosUnavailable' => $artigosUnavailable,
-            'artigosTop' => $artigosTop,
-            'artigostotalviews' => $totalViewsArtigos,
+            //'artigosAvailable' => $artigosAvailable,
+            //'artigosUnavailable' => $artigosUnavailable,
+            //'artigosTop' => $artigosTop,
+            //'artigostotalviews' => $totalViewsArtigos,
             //Páginas
-            'paginasTop' => $paginasTop,
-            'paginastotalviews' => $totalViewsPaginas,
+            //'paginasTop' => $paginasTop,
+            //'paginastotalviews' => $totalViewsPaginas,
             'usersAvailable' => $usersAvailable,
             'usersUnavailable' => $usersUnavailable,
             //Clientes
             'clientesAvailable' => $clientesAvailable,
             'clientesUnavailable' => $clientesUnavailable,
-            'postsArtigos' => $postsArtigos,
-            'postsNoticias' => $postsNoticias,
-            'postsPaginas' => $postsPaginas,
+            //'postsArtigos' => $postsArtigos,
+            //'postsNoticias' => $postsNoticias,
+            //'postsPaginas' => $postsPaginas,
             //Analytics
             //'visitasHoje' => $visitasHoje,
             //'visitas365' => $visitas365,

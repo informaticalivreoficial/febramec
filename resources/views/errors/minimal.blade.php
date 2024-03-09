@@ -7,7 +7,7 @@
         <title>@yield('title')</title>
 
         <!-- CSS -->
-        <link rel="icon" href="{{$configuracoes->getfaveicon()}}" type="image/x-icon">
+        <link rel="icon" href="https://informatica-livre.s3.us-east-2.amazonaws.com/febramec/configuracoes/7f10c661-44d9-496f-9dbd-d0600b0f6207/favivon-febramec.png" type="image/x-icon">
         <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Montserrat:400,700%7CLato:300,300italic,400,400italic,700,900%7CPlayfair+Display:700italic,900">
         <link rel="stylesheet" href="{{url(asset('frontend/assets/css/bootstrap.css'))}}">
         <link rel="stylesheet" href="{{url(asset('frontend/assets/css/fonts.css'))}}">
@@ -24,7 +24,7 @@
             <header class="section-single-header">
                 <div class="container">
                     <a href="{{route('web.home')}}">
-                        <img src="{{$configuracoes->getLogomarca()}}" alt="{{$configuracoes->nomedosite}}" width="139" height="22"/>
+                        <img width="{{env('LOGOMARCA_GERENCIADOR_WIDTH')}}" height="{{env('LOGOMARCA_GERENCIADOR_HEIGHT')}}" src="{{env('LOGOMARCA_GERENCIADOR')}}" alt="{{env('APP_NAME')}}" width="139" height="22"/>
                     </a>
                 </div>
             </header>

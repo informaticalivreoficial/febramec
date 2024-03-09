@@ -19,9 +19,18 @@ class TenantTableSeeder extends Seeder
             [
                 'plan_id' => 1,
                 'uuid' => (string) Str::uuid(),
-                'name' => 'Admin',    
+                'name' => 'Client',    
                 'domain' => 'teste.com',
                 'subdomain' => 'client',
+                'template' => 'default',
+                'status' => true
+            ],
+            [
+                'plan_id' => 1,
+                'uuid' => (string) Str::uuid(),
+                'name' => 'Admin',    
+                'domain' => 'teste.com',
+                'subdomain' => 'master',
                 'template' => 'default',
                 'status' => true
             ]            

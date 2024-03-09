@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('cnpj')->nullable();
             $table->string('ie')->nullable();
             $table->string('domain')->nullable();
-            $table->string('subdomain')->nullable();
+            $table->string('subdomain')->unique();
             $table->string('template')->nullable();
             $table->string('template_exclusive')->nullable();
 

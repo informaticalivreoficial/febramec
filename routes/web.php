@@ -3,14 +3,12 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\{
-    AcademiaController,
     AdminController,
     UserController,
     EmailController,
     PostController,
     CatPostController,
     ConfigController,
-    EmpresaController,
     FaturaController,
     GaleriaController,
     MenuController,
@@ -26,6 +24,8 @@ use App\Http\Controllers\Web\RssFeedController;
 use App\Http\Controllers\Web\SendEmailController;
 use App\Http\Controllers\Web\SendWhatsappController;
 use App\Http\Controllers\Web\WebController;
+
+Route::view('error-404', 'errors.404')->name('404.error');
 
 Route::group(['namespace' => 'Web', 'as' => 'web.'], function () {
 
@@ -78,7 +78,7 @@ Route::group(['namespace' => 'Web', 'as' => 'web.'], function () {
 
 });
 
-Route::prefix('admin')->middleware('auth')->group( function(){
+Route::prefix('admin')->middleware('auth')->middleware('subdomain_main')->group( function(){
 
     //******************************* Newsletter *********************************************/
     Route::match(['post', 'get'], 'listas/padrao', [NewsletterController::class, 'padraoMark'])->name('listas.padrao');
@@ -218,8 +218,8 @@ Route::prefix('admin')->middleware('auth')->group( function(){
     Route::put('academia/{id}', [AcademiaController::class, 'update'])->name('academia.update');
     Route::get('academia/{id}/edit', [AcademiaController::class, 'edit'])->name('academia.edit');
     Route::get('academia/create', [AcademiaController::class, 'create'])->name('academia.create');
-    Route::post('academia/store', [AcademiaController::class, 'store'])->name('academia.store');
-    Route::get('academias', [AcademiaController::class, 'index'])->name('academias.index');
+    Route::post('academia/store', [TenantController::class, 'store'])->name('academia.store');
+    Route::get('academias', [TenantController::class, 'index'])->name('tenant.index');
 
     //******************** Pedidos *************************************************************/
     Route::match(['post', 'get'], 'pedidos/fetchCity', [PedidoController::class, 'fetchPlan'])->name('pedidos.fetchPlan');

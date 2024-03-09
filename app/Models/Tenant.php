@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Tenant extends Model
 {
@@ -48,5 +49,30 @@ class Tenant extends Model
     public function users()
     {
         return $this->hasMany(User::class);
+    }
+
+    public function images()
+    {
+        return $this->hasMany(TenantGb::class, 'tenant', 'id')->orderBy('cover', 'ASC');
+    }
+
+    /**
+     * Accerssors and Mutators
+     */
+    public function cover()
+    {
+        $images = $this->images();
+        $cover = $images->where('cover', 1)->first(['path']);
+
+        if(!$cover) {
+            $images = $this->images();
+            $cover = $images->first(['path']);
+        }
+
+        if(empty($cover['path']) || !Storage::disk()->exists($cover['path'])) {
+            return url(asset('backend/assets/images/image.jpg'));
+        }
+
+        return Storage::url($cover['path']);
     }
 }

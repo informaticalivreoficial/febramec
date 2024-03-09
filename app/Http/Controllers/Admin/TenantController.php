@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\AcademiaRequest;
-use App\Models\Academia;
-use App\Models\AcademiaGb;
+use App\Models\Tenant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -15,7 +14,7 @@ class AcademiaController extends Controller
 {
     public function index()
     {
-        $academias = Academia::orderBy('status', 'ASC')
+        $academias = Tenant::orderBy('status', 'ASC')
                 ->orderBy('created_at', 'DESC')
                 ->paginate(25);
         return view('admin.academias.index', [

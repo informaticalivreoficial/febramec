@@ -60,9 +60,9 @@
 
             <div class="info-box-content">
                 <span class="info-box-text"><b>Newsletter</b></span>
-                <span class="info-box-text">Listas: {{$listas}}</span>
-                <span class="info-box-text">Emails: {{$emails}}</span>
-                <span class="info-box-text">Envios: {{$emailsCount}}</span>
+                <span class="info-box-text">Listas: {{--$listas--}}</span>
+                <span class="info-box-text">Emails: {{--$emails--}}</span>
+                <span class="info-box-text">Envios: {{--$emailsCount--}}</span>
             </div>
             <!-- /.info-box-content -->
         </div>
@@ -487,32 +487,32 @@
             });
     }); 
 
-    $(function (){
-        var donutChartCanvasPosts = $('#donutChartposts').get(0).getContext('2d');
-        var donutDataposts        = {
-            labels: [ 
-                'Artigos', 
-                'Páginas',
-                'Notícias'             
-            ],
-            datasets: [
-                {
-                data: [{{ $postsArtigos }}, {{ $postsPaginas }}, {{ $postsNoticias }}],
-                    backgroundColor : ['#8EC63D', '#60BA47', '#69BD63'],
-                }
-            ]
-            }
-            var donutOptions     = {
-            maintainAspectRatio : false,
-            responsive : true,
-            }
+    // $(function (){
+    //     var donutChartCanvasPosts = $('#donutChartposts').get(0).getContext('2d');
+    //     var donutDataposts        = {
+    //         labels: [ 
+    //             'Artigos', 
+    //             'Páginas',
+    //             'Notícias'             
+    //         ],
+    //         datasets: [
+    //             {
+    //             data: [{{-- $postsArtigos --}}, {{-- $postsPaginas --}}, {{-- $postsNoticias --}}],
+    //                 backgroundColor : ['#8EC63D', '#60BA47', '#69BD63'],
+    //             }
+    //         ]
+    //         }
+    //         var donutOptions     = {
+    //         maintainAspectRatio : false,
+    //         responsive : true,
+    //         }
 
-            var donutChart = new Chart(donutChartCanvasPosts, {
-            type: 'doughnut',
-            data: donutDataposts,
-            options: donutOptions      
-            });
-    });  
+    //         var donutChart = new Chart(donutChartCanvasPosts, {
+    //         type: 'doughnut',
+    //         data: donutDataposts,
+    //         options: donutOptions      
+    //         });
+    // });  
 
     // $(function (){
     //     var donutChartCanvasPedidos = $('#donutChartpedidos').get(0).getContext('2d');

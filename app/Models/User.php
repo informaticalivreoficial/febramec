@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Tenant\Traits\TenantTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Storage;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, TenantTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -43,7 +44,7 @@ class User extends Authenticatable
         'admin', 'client', 'editor', 'superadmin',        
         //Responsible
         'responsible_name', 'responsible_cpf', 'responsible_rg', 'responsible_phone',        
-    ];
+    ];    
 
     /**
      * The attributes that should be hidden for serialization.
@@ -67,10 +68,10 @@ class User extends Authenticatable
     /**
      * Relacionamentos
     */
-    // public function getAcademia()
-    // {
-    //     return $this->hasOne(Academia::class, 'id', 'academia');
-    // }
+    public function tenant()
+    {
+        return $this->belongsTo(Tenant::class, 'tenant', 'id');
+    }
 
     // public function posts()
     // {

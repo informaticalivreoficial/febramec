@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
-class AcademiaGb extends Model
+class TenantGb extends Model
 {
     use HasFactory;
 
-    protected $table = 'academia_gbs'; 
+    protected $table = 'tenant_gbs'; 
 
     protected $fillable = [
-        'academia',
+        'tenant',
         'path',
         'cover'
     ];
