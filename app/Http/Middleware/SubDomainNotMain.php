@@ -5,18 +5,18 @@ namespace App\Http\Middleware;
 use App\Tenant\ManangerTenant;
 use Closure;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
-class TenantUrlCheck
+class SubDomainNotMain
 {
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
         $manangerT = app(ManangerTenant::class);         
         
-        if(!$manangerT->isSubDomainMain()){
+        if($manangerT->isSubDomainMain()){
             abort(401);
-            return;
         }
             
         return $next($request);
-    }   
+    }
 }

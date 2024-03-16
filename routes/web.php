@@ -21,6 +21,10 @@ use App\Http\Controllers\Admin\{
     TenantController,
     WhatsappController
 };
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Web\RssFeedController;
 use App\Http\Controllers\Web\SendEmailController;
 use App\Http\Controllers\Web\SendWhatsappController;
@@ -51,12 +55,11 @@ Route::group(['namespace' => 'Web', 'as' => 'web.'], function () {
     Route::match(['post', 'get'], '/blog/pesquisar', [WebController::class, 'searchBlog'])->name('blog.searchBlog');
 
     //******************************** Academias ************************************/
-    Route::get('/academias', [WebController::class, 'academias'])->name('academias');
-    Route::get('/academia/{slug}', [WebController::class, 'academia'])->name('academia');
+    Route::get('/academias', [WebController::class, 'academias'])->name('tenants');
+    Route::get('/academia/{slug}', [WebController::class, 'academia'])->name('tenant');
 
     //******************************** Filiados ************************************/
     Route::get('/filiados/login', [WebController::class, 'login'])->name('login');
-    Route::get('/academia/{slug}', [WebController::class, 'academia'])->name('academia');
 
     //*************************************** Páginas *******************************************/
     Route::get('/pagina/{slug}', [WebController::class, 'pagina'])->name('pagina');
@@ -199,7 +202,7 @@ Route::prefix('admin')->middleware(['auth', 'subdomain_main'])->group( function(
     Route::get('planos', [PlanoController::class, 'index'])->name('planos.index');
 
     /******************** Academias *************************************************************/
-    Route::match(['get', 'post'], 'academias/pesquisa', [TenantController::class, 'search'])->name('tenants.search');
+    Route::match(['get', 'post'], 'academias/pesquisa', [TenantController::class, 'search'])->name('tenant.search');
     Route::get('academia/delete', [TenantController::class, 'delete'])->name('tenant.delete');
     Route::post('academia/image-set-cover', [TenantController::class, 'imageSetCover'])->name('tenant.imageSetCover');
     Route::delete('academia/image-remove', [TenantController::class, 'imageRemove'])->name('tenant.imageRemove');
@@ -232,4 +235,17 @@ Route::prefix('admin')->middleware(['auth', 'subdomain_main'])->group( function(
     Route::get('/', [AdminController::class, 'home'])->name('home');
 });
 
-Auth::routes();
+// Registration Routes...
+Route::middleware('subdomain_not_main')->group(function(){
+    Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+    Route::post('register', [RegisterController::class, 'register']);
+});
+
+Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('login', [LoginController::class, 'login']);
+Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+
+Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('password/reset', [ResetPasswordController::class, 'reset']);

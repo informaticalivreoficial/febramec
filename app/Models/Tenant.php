@@ -62,23 +62,6 @@ class Tenant extends Model
     /**
      * Accerssors and Mutators
      */
-    public function cover()
-    {
-        $images = $this->images();
-        $cover = $images->where('cover', 1)->first(['path']);
-
-        if(!$cover) {
-            $images = $this->images();
-            $cover = $images->first(['path']);
-        }
-
-        if(empty($cover['path']) || !Storage::disk()->exists($cover['path'])) {
-            return url(asset('backend/assets/images/image.jpg'));
-        }
-
-        return Storage::url($cover['path']);
-    }
-
     public function getmetaimg()
     {
         if(empty($this->metaimg) || !Storage::disk()->exists($this->metaimg)) {

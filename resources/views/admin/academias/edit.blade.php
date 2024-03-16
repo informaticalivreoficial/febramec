@@ -425,66 +425,11 @@ $config = [
         div.tagsinput span.tag a {
             color: #43886e;    
         }
-        /* Lista de ImÃ³veis */
-        img {
-            max-width: 100%;
-        }
-        .realty_list_item  {    
-            border: 1px solid #F3F3F3;
-            -webkit-border-radius: 4px;
-            -moz-border-radius: 4px;
-            border-radius: 4px;
-        }
-
-        .border-item-imovel{
-            -webkit-border-radius: 4px;
-            -moz-border-radius: 4px;
-            border-radius: 4px;
-            border: 1px solid #F3F3F3;  
-            background-color: #F3F3F3;
-        }
-       
-        .property_image, .content_image {
-            width: 100%;
-            flex-basis: 100%;
-            display: flex;
-            justify-content: flex-start;
-            flex-wrap: wrap;
-        }
-        .property_image .property_image_item, .content_image .property_image_item {
-            flex-basis: calc(25% - 20px) !important;
-            margin-bottom: 20px;
-            margin-right: 20px;
-            -webkit-border-radius: 4px;
-            -moz-border-radius: 4px;
-            border-radius: 4px;
-            position: relative;
-        }
-
-        .property_image .property_image_item img, .content_image .property_image_item img {
-            -webkit-border-radius: 4px;
-            -moz-border-radius: 4px;
-            border-radius: 4px;
-        }
-        .property_image .property_image_item .property_image_actions, .content_image .property_image_item .property_image_actions {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-        }
-
-        .embed {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
-            max-width: 100%;
-        }
-         /* Foto User Admin */
-         .thumb_user_admin{
+        /* Foto User Admin */
+        .thumb_user_admin{
         border: 1px solid #ddd;
         border-radius: 4px; 
         text-align: center;
-        min-height: 250px;
         }
         .thumb_user_admin input[type=file]{
             width: 100%;
@@ -495,7 +440,7 @@ $config = [
             opacity: 0;
         }
         .thumb_user_admin img{
-                        
+            max-width: 100%;          
         }
     </style>
     @stop
@@ -528,75 +473,67 @@ $config = [
             }
         });  
 
-        function readImage() {
+        function readImageMetaImagem() {
             if (this.files && this.files[0]) {
                 var file = new FileReader();
                 file.onload = function(e) {
-                    document.getElementById("preview").src = e.target.result;
+                    document.getElementById("preview1").src = e.target.result;
                 };       
                 file.readAsDataURL(this.files[0]);
             }
         }
-        document.getElementById("img-input").addEventListener("change", readImage, false);
         
-       $('input[name="files[]"]').change(function (files) {
-            $('.content_image').text('');
-            $.each(files.target.files, function (key, value) {
-                var reader = new FileReader();
-                reader.onload = function (value) {
-                    $('.content_image').append(
-                        '<div id="list" class="property_image_item">' +
-                        '<div class="embed radius" style="background-image: url(' + value.target.result + '); background-size: cover; background-position: center center;"></div>' +
-                        '<div class="property_image_actions">' +
-                            '<a href="javascript:void(0)" class="btn btn-danger btn-xs image-remove px-2"><i class="nav-icon fas fa-times"></i> </a>' +
-                        '</div>' +
-                        '</div>');
-
-                    $('.image-remove').click(function(){
-                        $(this).closest('#list').remove()
-                    });
-                };
-                reader.readAsDataURL(value);
-            });
-        });
-
-        $('.image-set-cover').click(function (event) {
-            event.preventDefault();
-            var button = $(this);
-            $.post(button.data('action'), {}, function (response) {
-                if (response.success === true) {
-                    $('.property_image').find('a.btn-success').removeClass('btn-success');
-                    button.addClass('btn-success');
-                }
-                if(response.success === false){
-                    button.addClass('btn-default');
-                }
-            }, 'json');
-        });
-
-        $('.image-remove').click(function(event){
-            event.preventDefault();
-            var button = $(this);
-            $.ajax({
-                url: button.data('action'),
-                type: 'DELETE',
-                dataType: 'json',
-                success: function(response){
-                    if(response.success === true) {
-                        button.closest('.property_image_item').fadeOut(function(){
-                            $(this).remove();
-                        });
-                    }
-                }
-            });
-        });
-
-        $(document).on('click', '[data-toggle="lightbox"]', function(event) {
-            event.preventDefault();
-            $(this).ekkoLightbox({
-                alwaysShowClose: true
-            });
-        }); 
+        function readImageLogomarca() {
+            if (this.files && this.files[0]) {
+                var file = new FileReader();
+                file.onload = function(e) {
+                    document.getElementById("preview2").src = e.target.result;
+                };       
+                file.readAsDataURL(this.files[0]);
+            }
+        }
+        function readImageLogoAdmin() {
+            if (this.files && this.files[0]) {
+                var file = new FileReader();
+                file.onload = function(e) {
+                    document.getElementById("preview3").src = e.target.result;
+                };       
+                file.readAsDataURL(this.files[0]);
+            }
+        }
+        function readImageFavicon() {
+            if (this.files && this.files[0]) {
+                var file = new FileReader();
+                file.onload = function(e) {
+                    document.getElementById("preview4").src = e.target.result;
+                };       
+                file.readAsDataURL(this.files[0]);
+            }
+        }
+        function readImageMarcadagua() {
+            if (this.files && this.files[0]) {
+                var file = new FileReader();
+                file.onload = function(e) {
+                    document.getElementById("preview5").src = e.target.result;
+                };       
+                file.readAsDataURL(this.files[0]);
+            }
+        }
+        function readImageImgheader() {
+            if (this.files && this.files[0]) {
+                var file = new FileReader();
+                file.onload = function(e) {
+                    document.getElementById("preview6").src = e.target.result;
+                };       
+                file.readAsDataURL(this.files[0]);
+            }
+        }
+        document.getElementById("img-input").addEventListener("change", readImageMetaImagem, false);
+        document.getElementById("img-logomarca").addEventListener("change", readImageLogomarca, false);
+        document.getElementById("img-logomarcaadmin").addEventListener("change", readImageLogoAdmin, false);
+        document.getElementById("img-favicon").addEventListener("change", readImageFavicon, false);
+        document.getElementById("img-marcadagua").addEventListener("change", readImageMarcadagua, false);
+        document.getElementById("img-imgheader").addEventListener("change", readImageImgheader, false); 
 
         //tag input
         function onAddTag(tag) {

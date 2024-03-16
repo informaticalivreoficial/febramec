@@ -35,41 +35,41 @@ class TenantController extends Controller
     {     
         $tenant = Tenant::where('id', $id)->first();        
 
-        if(!empty($request->hasFile('logo'))){
-            Storage::delete($tenant->logo);
+        if(!empty($request->file('logo'))){
+            !is_null($tenant->logo) && Storage::delete($tenant->logo);
             $tenant->logo = null;
         }
 
         if(!empty($request->file('logo_admin'))){
-            Storage::delete($tenant->logo_admin);
-            $tenant->logo_admin = null;
+            !is_null($tenant->logo_admin) && Storage::delete($tenant->logo_admin);
+            $tenant->logo_admin = '';
         }
 
         if(!empty($request->file('logo_footer'))){
-            Storage::delete($tenant->logo_footer);
+            !is_null($tenant->logo_footer) && Storage::delete($tenant->logo_footer);
             $tenant->logo_footer = null;
         }
 
         if(!empty($request->file('favicon'))){
-            Storage::delete($tenant->favicon);
+            !is_null($tenant->favicon) && Storage::delete($tenant->favicon);
             $tenant->favicon = null;
         }
 
         if(!empty($request->file('metaimg'))){
-            Storage::delete($tenant->metaimg);
+            !is_null($tenant->metaimg) && Storage::delete($tenant->metaimg);
             $tenant->metaimg = null;
         }
 
         if(!empty($request->file('imgheader'))){
-            Storage::delete($tenant->imgheader);
+            !is_null($tenant->imgheader) && Storage::delete($tenant->imgheader);
             $tenant->imgheader = null;
         }
 
         if(!empty($request->file('watermark'))){
-            Storage::delete($tenant->watermark);
+            !is_null($tenant->watermark) && Storage::delete($tenant->watermark);
             $tenant->watermark = null;
         }
-
+        
         $tenant->fill($request->all());
 
         if(!empty($request->hasFile('logo'))){

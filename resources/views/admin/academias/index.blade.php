@@ -23,7 +23,7 @@
                     <div class="col-12 col-sm-6 my-2">
                         <div class="card-tools">
                             <div style="width: 250px;">
-                                <form class="input-group input-group-sm" action="{{route('academias.search')}}" method="post">
+                                <form class="input-group input-group-sm" action="{{route('tenant.search')}}" method="post">
                                     @csrf   
                                     <input type="text" name="filter" value="{{ $filters['filter'] ?? '' }}" class="form-control float-right" placeholder="Pesquisar">
                     
@@ -98,7 +98,7 @@
                                                 </ul>
                                             </div>
                                             <div class="col-5 text-center">
-                                                <img src="{{ $academia->cover() }}" alt="{{ $academia->name }}" class="img-circle img-fluid">
+                                                <img src="{{$academia->getlogo()}}" alt="{{ $academia->name }}" class="img-circle img-fluid">
                                             </div>
                                         </div>
                                     </div>
