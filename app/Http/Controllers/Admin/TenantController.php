@@ -23,6 +23,18 @@ class TenantController extends Controller
         ]);
     }
 
+    public function create()
+    {
+        return view('admin.academias.create');
+    }
+
+    public function store(TenantRequest $request)
+    {
+        dd($request->all());
+        $createTenant = Tenant::create($request->all());
+        $createTenant->fill($request->all());
+    }
+
     public function edit($id)
     {
         $tenant = Tenant::where('id', $id)->first();    
