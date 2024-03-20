@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\TenantRequest;
 use App\Models\Tenant;
+use App\Models\Plan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -30,16 +31,73 @@ class TenantController extends Controller
 
     public function store(TenantRequest $request)
     {
-        dd($request->all());
         $createTenant = Tenant::create($request->all());
         $createTenant->fill($request->all());
+
+        if(!empty($request->hasFile('logo'))){
+            $createTenant->logo = $request->file('logo')->storeAs(env('AWS_PASTA') . 'academias/' . $tenant->uuid, 
+            Str::slug($request->name)  . '-' . str_replace('.',
+             '', microtime(true)) . '.' . $request->file('logo')->extension());
+        }
+
+        if(!empty($request->hasFile('logo_admin'))){
+            $createTenant->logo_admin = $request->file('logo_admin')->storeAs(env('AWS_PASTA') . 'academias/' . $tenant->uuid, 
+            Str::slug($request->name)  . '-' . str_replace('.',
+             '', microtime(true)) . '.' . $request->file('logo_admin')->extension());
+        }
+
+        if(!empty($request->hasFile('logo_footer'))){
+            $createTenant->logo_footer = $request->file('logo_footer')->storeAs(env('AWS_PASTA') . 'academias/' . $tenant->uuid, 
+            Str::slug($request->name)  . '-' . str_replace('.',
+             '', microtime(true)) . '.' . $request->file('logo_footer')->extension());
+        }
+
+        if(!empty($request->hasFile('favicon'))){
+            $createTenant->favicon = $request->file('favicon')->storeAs(env('AWS_PASTA') . 'academias/' . $tenant->uuid, 
+            Str::slug($request->name)  . '-' . str_replace('.',
+             '', microtime(true)) . '.' . $request->file('favicon')->extension());
+        }
+
+        if(!empty($request->hasFile('metaimg'))){
+            $createTenant->metaimg = $request->file('metaimg')->storeAs(env('AWS_PASTA') . 'academias/' . $tenant->uuid, 
+            Str::slug($request->name)  . '-' . str_replace('.',
+             '', microtime(true)) . '.' . $request->file('metaimg')->extension());
+        }
+
+        if(!empty($request->hasFile('imgheader'))){
+            $createTenant->imgheader = $request->file('imgheader')->storeAs(env('AWS_PASTA') . 'academias/' . $tenant->uuid, 
+            Str::slug($request->name)  . '-' . str_replace('.',
+             '', microtime(true)) . '.' . $request->file('imgheader')->extension());
+        }
+
+        if(!empty($request->hasFile('watermark'))){
+            $createTenant->watermark = $request->file('watermark')->storeAs(env('AWS_PASTA') . 'academias/' . $tenant->uuid, 
+            Str::slug($request->name)  . '-' . str_replace('.',
+             '', microtime(true)) . '.' . $request->file('watermark')->extension());
+        }
+
+        $validator = Validator::make($request->only('files'), ['files.*' => 'image']);
+
+        if ($validator->fails() === true) {
+            return redirect()->back()->withInput()->with([
+                'color' => 'orange',
+                'message' => 'Todas as imagens devem ser do tipo jpg, jpeg ou png.',
+            ]);
+        }
+        dd();
+        return redirect()->route('tenant.edit', $createTenant->id)->with([
+            'color' => 'success', 
+            'message' => 'Academia cadastrada com sucesso!'
+        ]);
     }
 
     public function edit($id)
     {
+        $plans = Plan::orderBy('created_at', 'ASC')->get();
         $tenant = Tenant::where('id', $id)->first();    
         return view('admin.academias.edit', [
-            'academia' => $tenant
+            'academia' => $tenant,
+            'plans' => $plans
         ]);
     }
 

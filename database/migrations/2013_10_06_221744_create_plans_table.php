@@ -22,7 +22,6 @@ return new class extends Migration
             /** pricing and values */
             $table->integer('trial')->nullable();
             $table->boolean('display_value')->nullable();
-            $table->decimal('value', 10, 2)->nullable();
             $table->decimal('value_monthly', 10, 2)->nullable();            
             $table->decimal('value_quarterly', 10, 2)->nullable();            
             $table->decimal('value_semi-annual', 10, 2)->nullable();            

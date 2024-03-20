@@ -17,6 +17,7 @@ class TenantObserver
     {
         $tenant->uuid = (string) Str::uuid();
         $tenant->slug = (string) Str::slug($tenant->name);
+        $tenant->subdomain = (string) Str::slug($tenant->name);
     }
 
     public function updating(Tenant $tenant)
