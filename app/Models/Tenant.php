@@ -17,6 +17,7 @@ class Tenant extends Model
     protected $fillable = [
         'name', 
         'uuid',
+        'plan_id',
         'social_name',
         'alias_name',
         'status',
@@ -57,6 +58,11 @@ class Tenant extends Model
     public function images()
     {
         return $this->hasMany(TenantGb::class, 'tenant', 'id')->orderBy('cover', 'ASC');
+    }
+
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class, 'plan_id', 'id');
     }
 
     /**

@@ -58,7 +58,7 @@
                                 <div class="card bg-light"
                                     style="{{ $academia->status == '1' ? '' : 'background: #fffed8 !important;' }}">
                                     <div class="card-header text-muted border-bottom-0">
-                                        ssssssss
+                                        <strong>Plano:</strong> {{ $academia->plan->name }}
                                     </div>
                                     <div class="card-body pt-0">
                                         <div class="row">
@@ -66,31 +66,31 @@
                                                 <h2 class="lead"><b>{{ $academia->name }}</b></h2>
                                                 <p class="text-muted text-sm">ssssss</p>
                                                 <p class="text-muted text-sm"><b>Data de Entrada: </b><br>
-                                                    {{ $academia->created_at }}</p>
+                                                    {{ \Carbon\Carbon::parse($academia->created_at)->format('d/m/Y') }}</p>
                                                 <ul class="ml-4 mb-0 fa-ul text-muted">
                                                     <li class="small">
-                                                        @if ($academia->rua != '')
+                                                        @if ($academia->street != '')
                                                             <span class="fa-li">
                                                                 <i class="fas fa-lg fa-home"></i>
-                                                            </span> {{ $academia->rua }}
+                                                            </span> {{ $academia->street }}
                                                         @endif
-                                                        @if ($academia->rua != '' && $academia->num != '')
-                                                            , {{ $academia->num }}
+                                                        @if ($academia->street != '' && $academia->number != '')
+                                                            , {{ $academia->number }}
                                                         @endif
-                                                        @if ($academia->rua != '' || $academia->num != '')
-                                                            , {{ $academia->bairro }}
+                                                        @if ($academia->street != '' || $academia->number != '')
+                                                            , {{ $academia->neighborhood }}
                                                         @endif
-                                                        @if ($academia->rua != '' || $academia->num != '' || $academia->bairro != '')
+                                                        @if ($academia->street != '' || $academia->number != '' || $academia->neighborhood != '')
                                                             -
-                                                            {{ $academia->cidade }}
+                                                            {{ $academia->city }}
                                                         @endif
                                                     </li>
-                                                    @if ($academia->telefone)
+                                                    @if ($academia->phone)
                                                         <li class="small">
                                                             <span class="fa-li"><i class="fas fa-lg fa-phone"></i></span>
-                                                            {{ $academia->telefone }}
-                                                            @if ($academia->celular)
-                                                                - {{ $academia->celular }}
+                                                            {{ $academia->phone }}
+                                                            @if ($academia->cell_phone)
+                                                                - {{ $academia->cell_phone }}
                                                             @endif
                                                         </li>
                                                     @endif

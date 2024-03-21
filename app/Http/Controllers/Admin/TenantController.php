@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\TenantRequest;
 use App\Models\Tenant;
 use App\Models\Plan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -26,7 +27,10 @@ class TenantController extends Controller
 
     public function create()
     {
-        return view('admin.academias.create');
+        $plans = Plan::orderBy('created_at', 'ASC')->get();
+        return view('admin.academias.create', [
+            'plans' => $plans
+        ]);
     }
 
     public function store(TenantRequest $request)
@@ -35,43 +39,43 @@ class TenantController extends Controller
         $createTenant->fill($request->all());
 
         if(!empty($request->hasFile('logo'))){
-            $createTenant->logo = $request->file('logo')->storeAs(env('AWS_PASTA') . 'academias/' . $tenant->uuid, 
+            $createTenant->logo = $request->file('logo')->storeAs(env('AWS_PASTA') . 'academias/' . $createTenant->uuid, 
             Str::slug($request->name)  . '-' . str_replace('.',
              '', microtime(true)) . '.' . $request->file('logo')->extension());
         }
 
         if(!empty($request->hasFile('logo_admin'))){
-            $createTenant->logo_admin = $request->file('logo_admin')->storeAs(env('AWS_PASTA') . 'academias/' . $tenant->uuid, 
+            $createTenant->logo_admin = $request->file('logo_admin')->storeAs(env('AWS_PASTA') . 'academias/' . $createTenant->uuid, 
             Str::slug($request->name)  . '-' . str_replace('.',
              '', microtime(true)) . '.' . $request->file('logo_admin')->extension());
         }
 
         if(!empty($request->hasFile('logo_footer'))){
-            $createTenant->logo_footer = $request->file('logo_footer')->storeAs(env('AWS_PASTA') . 'academias/' . $tenant->uuid, 
+            $createTenant->logo_footer = $request->file('logo_footer')->storeAs(env('AWS_PASTA') . 'academias/' . $createTenant->uuid, 
             Str::slug($request->name)  . '-' . str_replace('.',
              '', microtime(true)) . '.' . $request->file('logo_footer')->extension());
         }
 
         if(!empty($request->hasFile('favicon'))){
-            $createTenant->favicon = $request->file('favicon')->storeAs(env('AWS_PASTA') . 'academias/' . $tenant->uuid, 
+            $createTenant->favicon = $request->file('favicon')->storeAs(env('AWS_PASTA') . 'academias/' . $createTenant->uuid, 
             Str::slug($request->name)  . '-' . str_replace('.',
              '', microtime(true)) . '.' . $request->file('favicon')->extension());
         }
 
         if(!empty($request->hasFile('metaimg'))){
-            $createTenant->metaimg = $request->file('metaimg')->storeAs(env('AWS_PASTA') . 'academias/' . $tenant->uuid, 
+            $createTenant->metaimg = $request->file('metaimg')->storeAs(env('AWS_PASTA') . 'academias/' . $createTenant->uuid, 
             Str::slug($request->name)  . '-' . str_replace('.',
              '', microtime(true)) . '.' . $request->file('metaimg')->extension());
         }
 
         if(!empty($request->hasFile('imgheader'))){
-            $createTenant->imgheader = $request->file('imgheader')->storeAs(env('AWS_PASTA') . 'academias/' . $tenant->uuid, 
+            $createTenant->imgheader = $request->file('imgheader')->storeAs(env('AWS_PASTA') . 'academias/' . $createTenant->uuid, 
             Str::slug($request->name)  . '-' . str_replace('.',
              '', microtime(true)) . '.' . $request->file('imgheader')->extension());
         }
 
         if(!empty($request->hasFile('watermark'))){
-            $createTenant->watermark = $request->file('watermark')->storeAs(env('AWS_PASTA') . 'academias/' . $tenant->uuid, 
+            $createTenant->watermark = $request->file('watermark')->storeAs(env('AWS_PASTA') . 'academias/' . $createTenant->uuid, 
             Str::slug($request->name)  . '-' . str_replace('.',
              '', microtime(true)) . '.' . $request->file('watermark')->extension());
         }
@@ -79,13 +83,13 @@ class TenantController extends Controller
         $validator = Validator::make($request->only('files'), ['files.*' => 'image']);
 
         if ($validator->fails() === true) {
-            return redirect()->back()->withInput()->with([
+            return Redirect::back()->withInput()->with([
                 'color' => 'orange',
                 'message' => 'Todas as imagens devem ser do tipo jpg, jpeg ou png.',
             ]);
         }
-        dd();
-        return redirect()->route('tenant.edit', $createTenant->id)->with([
+        
+        return Redirect::route('tenant.edit', $createTenant->id)->with([
             'color' => 'success', 
             'message' => 'Academia cadastrada com sucesso!'
         ]);
@@ -190,49 +194,24 @@ class TenantController extends Controller
         $validator = Validator::make($request->only('files'), ['files.*' => 'image']);
 
         if ($validator->fails() === true) {
-            return redirect()->back()->withInput()->with([
+            return Redirect::back()->withInput()->with([
                 'color' => 'orange',
                 'message' => 'Todas as imagens devem ser do tipo jpg, jpeg ou png.',
             ]);
         }
 
-        return redirect()->route('tenant.edit', [
+        return Redirect::route('tenant.edit', [
             'id' => $tenant->id,
         ])->with(['color' => 'success', 'message' => 'Academia atualizada com sucesso!']);
     }
 
     public function setStatus(Request $request)
     {        
-        $academia = Academia::find($request->id);
-        $academia->status = $request->status;
-        $academia->save();
+        $tenant = Tenant::find($request->id);
+        $tenant->status = $request->status;
+        $tenant->save();
         return response()->json(['success' => true]);
     }
 
-    public function imageRemove(Request $request)
-    {
-        $imageDelete = AcademiaGb::where('id', $request->image)->first();
-        Storage::delete($imageDelete->path);
-        $imageDelete->delete();
-        $json = [
-            'success' => true,
-        ];
-        return response()->json($json);
-    }
-
-    public function imageSetCover(Request $request)
-    {
-        $imageSetCover = AcademiaGb::where('id', $request->image)->first();
-        $allImage = AcademiaGb::where('academia', $imageSetCover->academia)->get();
-        foreach ($allImage as $image) {
-            $image->cover = null;
-            $image->save();
-        }
-        $imageSetCover->cover = true;
-        $imageSetCover->save();
-        $json = [
-            'success' => true,
-        ];
-        return response()->json($json);
-    }
+    
 }

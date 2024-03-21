@@ -204,8 +204,7 @@ Route::prefix('admin')->middleware(['auth', 'subdomain_main'])->group( function(
     /******************** Academias *************************************************************/
     Route::match(['get', 'post'], 'academias/pesquisa', [TenantController::class, 'search'])->name('tenant.search');
     Route::get('academia/delete', [TenantController::class, 'delete'])->name('tenant.delete');
-    Route::post('academia/image-set-cover', [TenantController::class, 'imageSetCover'])->name('tenant.imageSetCover');
-    Route::delete('academia/image-remove', [TenantController::class, 'imageRemove'])->name('tenant.imageRemove');
+    
     Route::delete('academia/deleteon', [TenantController::class, 'deleteon'])->name('tenant.deleteon');
     Route::get('academia/set-status', [TenantController::class, 'setStatus'])->name('tenant.setStatus');
     Route::put('academia/{id}', [TenantController::class, 'update'])->name('tenant.update');

@@ -77,6 +77,21 @@ $config = [
 <div class="card-body">
     <div class="tab-content" id="custom-tabs-four-tabContent">
         <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
+            <div class="row mb-4 text-muted">
+                <div class="col-12 col-md-4 col-lg-4"> 
+                    <div class="form-group">
+                        <label class="labelforms"><b>*Plano:</b> </label>
+                        <select name="plan_id" class="form-control">
+                            @if ($plans && $plans->count() > 0)
+                                @foreach ($plans as $plan)
+                                    <option value=""> Selecione </option>
+                                    <option value="{{$plan->id}}" {{ (old('plan_id') == $plan->id ? 'selected' : '') }}>{{$plan->name}} - {{$plan->value_monthly ?? 'R$0,00'}}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                    </div>
+                </div>
+            </div>
             <div class="row mb-4 text-muted">            
                 <div class="col-12 col-md-6 col-lg-4"> 
                     <div class="form-group">

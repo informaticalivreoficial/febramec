@@ -192,6 +192,9 @@ return [
 
         'dormitorios' => 'Leitos',
         'titulo' => 'Título',
+        'plan_id' => 'Plano',
+        'postcode' => 'Cep',
+        'cell_phone' => 'Celular',
     ],
 
 ];

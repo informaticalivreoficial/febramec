@@ -27,11 +27,12 @@ class TenantRequest extends FormRequest
         $id = $this->segment(3);
         
         return [
+            'plan_id' => 'required',
             'name' => ['required', 'min:3', 'max:255'],
             'email' => ['required', 'min:3', 'max:255', "unique:tenants,email,{$id},id"],
             'information' => 'nullable|min:3',
             'postcode' => 'required',            
-            'cell_phone' => 'required'
+            'cell_phone' => 'required',
         ];
     }
 }
