@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\TenantRequest;
 use App\Models\Tenant;
 use App\Models\Plan;
+use App\Models\TenantGb;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
@@ -200,6 +201,17 @@ class TenantController extends Controller
             ]);
         }
 
+        dd($_FILES);
+        if ($request->allFiles()) {
+            foreach ($request->allFiles()['files'] as $image) {
+                $tenantImages = new TenantGb();
+                $tenantImages->tenant = $tenant->id;
+                $tenantImages->path = $image->storeAs(env('AWS_PASTA') . 'academias/Fotos/' . $tenant->uuid, Str::slug($tenant->titulo) . '-' . str_replace('.', '', microtime(true)) . '.' . $image->extension());
+                $tenantImages->save();
+                unset($tenantImages);
+            }
+        }
+
         return Redirect::route('tenant.edit', [
             'id' => $tenant->id,
         ])->with(['color' => 'success', 'message' => 'Academia atualizada com sucesso!']);
@@ -213,5 +225,52 @@ class TenantController extends Controller
         return response()->json(['success' => true]);
     }
 
+    public function delete(Request $request)
+    {
+        $tenantdelete = Tenant::where('id', $request->id)->first();
+        $postGb = PostGb::where('post', $postdelete->id)->first();
+        $nome = \App\Helpers\Renato::getPrimeiroNome(Auth::user()->name);
+
+        $tipo = ($postdelete->tipo == 'artigo' ? 'este artigo' : 
+                 ($postdelete->tipo == 'noticia' ? 'esta notícia' : 
+                 ($postdelete->tipo == 'pagina' ? 'esta página' : 'este post')));
+
+        if(!empty($postdelete)){
+            if(!empty($postGb)){
+                $json = "<b>$nome</b> você tem certeza que deseja excluir $tipo? Existem imagens adicionadas e todas serão excluídas!";
+                return response()->json(['error' => $json,'id' => $postdelete->id]);
+            }else{
+                $json = "<b>$nome</b> você tem certeza que deseja excluir $tipo?";
+                return response()->json(['error' => $json,'id' => $postdelete->id]);
+            }            
+        }else{
+            return response()->json(['error' => 'Erro ao excluir']);
+        }
+    }
+    
+    public function deleteon(Request $request)
+    {
+        $postdelete = Post::where('id', $request->post_id)->first();  
+        $imageDelete = PostGb::where('post', $postdelete->id)->first();
+        $postR = $postdelete->titulo;
+
+        $secao = ($postdelete->tipo == 'artigo' ? 'artigos' : 
+                 ($postdelete->tipo == 'noticia' ? 'noticias' : 
+                 ($postdelete->tipo == 'pagina' ? 'paginas' : 'posts')));
+
+        if(!empty($postdelete)){
+            if(!empty($imageDelete)){
+                Storage::delete($imageDelete->path);
+                $imageDelete->delete();
+                Storage::deleteDirectory($secao.'/'.$postdelete->id);
+                $postdelete->delete();
+            }
+            $postdelete->delete();
+        }
+        return redirect()->route('posts.'.$secao.'')->with([
+            'color' => 'success', 
+            'message' => $postdelete->tipo.' '.$postR.' foi removido com sucesso!'
+        ]);
+    }
     
 }

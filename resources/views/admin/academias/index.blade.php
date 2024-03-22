@@ -250,7 +250,9 @@
                         'status': status,
                         'id': academia_id
                     },
-                    success: function(data) {}
+                    success: function(data) {
+                    
+                    }
                 });
             });
         });

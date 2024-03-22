@@ -74,7 +74,10 @@ $config = [
         <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#custom-tabs-four-profile" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">REDES SOCIAIS</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="custom-tabs-four-imagens-tab" data-toggle="pill" href="#custom-tabs-four-imagens" role="tab" aria-controls="custom-tabs-four-imagens" aria-selected="false">IMAGENS</a>
+        <a class="nav-link" id="custom-tabs-four-imagens-tab" data-toggle="pill" href="#custom-tabs-four-imagens" role="tab" aria-controls="custom-tabs-four-imagens" aria-selected="false">LOGOMARCAS</a>
+    </li>     
+    <li class="nav-item">
+        <a class="nav-link" id="custom-tabs-four-fotos-tab" data-toggle="pill" href="#custom-tabs-four-fotos" role="tab" aria-controls="custom-tabs-four-fotos" aria-selected="false">IMAGENS</a>
     </li>     
     <li class="nav-item">
         <a class="nav-link" id="custom-tabs-four-seo-tab" data-toggle="pill" href="#custom-tabs-four-seo" role="tab" aria-controls="custom-tabs-four-mapas" aria-selected="false">SEO</a>
@@ -316,6 +319,42 @@ $config = [
         </div>
     </div>
     
+    <div class="tab-pane fade" id="custom-tabs-four-fotos" role="tabpanel" aria-labelledby="custom-tabs-four-fotos-tab">
+        <div class="row mb-2 text-muted">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <h5><b>Fotos da Academia</b></h5>  
+                    <p>Aqui você adicionar as fotos da academia, fique atento ao tamanho das fotos para uma melhor experiência da sua aplicação.</p>                                          
+                </div>
+            </div>
+            <hr>
+            <div class="col-sm-12">                                        
+                <div class="form-group">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" name="files[]" multiple>
+                        <label class="custom-file-label" for="exampleInputFile">Escolher Fotos</label>
+                    </div>
+                </div>
+                
+                <div class="content_image"></div> 
+                
+                <div class="property_image">
+                    @foreach($academia->images()->get() as $image)
+                    <div class="property_image_item">
+                        <a href="{{ $image->url_image }}" data-toggle="lightbox" data-gallery="property-gallery" data-type="image">
+                        <img src="{{ $image->url_image }}" alt="">
+                        </a>
+                        <div class="property_image_actions">
+                            <a href="javascript:void(0)" class="btn btn-xs {{ ($image->cover == true ? 'btn-success' : 'btn-default') }} icon-notext image-set-cover px-2" data-action="{{ route('tenant.imageSetCover', ['image' => $image->id]) }}"><i class="nav-icon fas fa-check"></i> </a>
+                            <a href="javascript:void(0)" class="btn btn-danger btn-xs image-remove px-2" data-action="{{ route('tenant.imageRemove', ['image' => $image->id]) }}"><i class="nav-icon fas fa-times"></i> </a>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>  
+    </div>
+
     <div class="tab-pane fade" id="custom-tabs-four-imagens" role="tabpanel" aria-labelledby="custom-tabs-four-imagens-tab">
         <div class="row mb-2 text-muted">
             <div class="col-sm-12">
@@ -457,6 +496,59 @@ $config = [
         .thumb_user_admin img{
             max-width: 100%;          
         }
+
+        img {
+            max-width: 100%;
+        }
+        .realty_list_item  {    
+            border: 1px solid #F3F3F3;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+        }
+
+        .border-item-imovel{
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+            border: 1px solid #F3F3F3;  
+            background-color: #F3F3F3;
+        }
+       
+        .property_image, .content_image {
+            width: 100%;
+            flex-basis: 100%;
+            display: flex;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+        }
+        .property_image .property_image_item, .content_image .property_image_item {
+            flex-basis: calc(25% - 20px) !important;
+            margin-bottom: 20px;
+            margin-right: 20px;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .property_image .property_image_item img, .content_image .property_image_item img {
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+        }
+        .property_image .property_image_item .property_image_actions, .content_image .property_image_item .property_image_actions {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+        .embed {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+        }
     </style>
     @stop
 
@@ -486,7 +578,62 @@ $config = [
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
-        });  
+        }); 
+
+        $('input[name="files[]"]').change(function (files) {
+
+            $('.content_image').text('');
+
+            $.each(files.target.files, function (key, value) {
+                var reader = new FileReader();
+                reader.onload = function (value) {
+                    $('.content_image').append(
+                        '<div id="list" class="property_image_item">' +
+                        '<div class="embed radius" style="background-image: url(' + value.target.result + '); background-size: cover; background-position: center center;"></div>' +
+                        '<div class="property_image_actions">' +
+                            '<a href="javascript:void(0)" class="btn btn-danger btn-xs image-remove1 px-2"><i class="nav-icon fas fa-times"></i> </a>' +
+                        '</div>' +
+                        '</div>');
+                        
+                    $('.image-remove1').click(function(){
+                        $(this).closest('#list').remove()
+                    });
+                };
+                reader.readAsDataURL(value);
+            });
+        });            
+
+
+        $('.image-set-cover').click(function (event) {
+            event.preventDefault();
+            var button = $(this);
+            $.post(button.data('action'), {}, function (response) {
+                if (response.success === true) {
+                    $('.property_image').find('a.btn-success').removeClass('btn-success');
+                    button.addClass('btn-success');
+                }
+                if(response.success === false){
+                    button.addClass('btn-default');
+                }
+            }, 'json');
+        });
+
+        $('.image-remove').click(function(event){
+            event.preventDefault();
+            var button = $(this);
+            $.ajax({
+                url: button.data('action'),
+                type: 'DELETE',
+                dataType: 'json',
+                success: function(response){
+                    if(response.success === true) {
+                        button.closest('.property_image_item').fadeOut(function(){
+                            $(this).remove();
+                        });
+                    }
+                }
+            });
+        });
 
         function readImageMetaImagem() {
             if (this.files && this.files[0]) {
