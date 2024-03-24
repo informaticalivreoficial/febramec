@@ -342,7 +342,7 @@ $config = [
                     @foreach($academia->images()->get() as $image)
                     <div class="property_image_item">
                         <a href="{{ $image->url_image }}" data-toggle="lightbox" data-gallery="property-gallery" data-type="image">
-                        <img src="{{ $image->url_image }}" alt="">
+                            <img src="{{ $image->url_image }}" alt="">
                         </a>
                         <div class="property_image_actions">
                             <a href="javascript:void(0)" class="btn btn-xs {{ ($image->cover == true ? 'btn-success' : 'btn-default') }} icon-notext image-set-cover px-2" data-action="{{ route('tenant.imageSetCover', ['image' => $image->id]) }}"><i class="nav-icon fas fa-check"></i> </a>
@@ -633,69 +633,7 @@ $config = [
                     }
                 }
             });
-        });
-
-        function readImageMetaImagem() {
-            if (this.files && this.files[0]) {
-                var file = new FileReader();
-                file.onload = function(e) {
-                    document.getElementById("preview1").src = e.target.result;
-                };       
-                file.readAsDataURL(this.files[0]);
-            }
-        }
-        
-        function readImageLogomarca() {
-            if (this.files && this.files[0]) {
-                var file = new FileReader();
-                file.onload = function(e) {
-                    document.getElementById("preview2").src = e.target.result;
-                };       
-                file.readAsDataURL(this.files[0]);
-            }
-        }
-        function readImageLogoAdmin() {
-            if (this.files && this.files[0]) {
-                var file = new FileReader();
-                file.onload = function(e) {
-                    document.getElementById("preview3").src = e.target.result;
-                };       
-                file.readAsDataURL(this.files[0]);
-            }
-        }
-        function readImageFavicon() {
-            if (this.files && this.files[0]) {
-                var file = new FileReader();
-                file.onload = function(e) {
-                    document.getElementById("preview4").src = e.target.result;
-                };       
-                file.readAsDataURL(this.files[0]);
-            }
-        }
-        function readImageMarcadagua() {
-            if (this.files && this.files[0]) {
-                var file = new FileReader();
-                file.onload = function(e) {
-                    document.getElementById("preview5").src = e.target.result;
-                };       
-                file.readAsDataURL(this.files[0]);
-            }
-        }
-        function readImageImgheader() {
-            if (this.files && this.files[0]) {
-                var file = new FileReader();
-                file.onload = function(e) {
-                    document.getElementById("preview6").src = e.target.result;
-                };       
-                file.readAsDataURL(this.files[0]);
-            }
-        }
-        document.getElementById("img-input").addEventListener("change", readImageMetaImagem, false);
-        document.getElementById("img-logomarca").addEventListener("change", readImageLogomarca, false);
-        document.getElementById("img-logomarcaadmin").addEventListener("change", readImageLogoAdmin, false);
-        document.getElementById("img-favicon").addEventListener("change", readImageFavicon, false);
-        document.getElementById("img-marcadagua").addEventListener("change", readImageMarcadagua, false);
-        document.getElementById("img-imgheader").addEventListener("change", readImageImgheader, false); 
+        });        
 
         //tag input
         function onAddTag(tag) {

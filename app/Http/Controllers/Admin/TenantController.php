@@ -201,7 +201,6 @@ class TenantController extends Controller
             ]);
         }
 
-        dd($_FILES);
         if ($request->allFiles()) {
             foreach ($request->allFiles()['files'] as $image) {
                 $tenantImages = new TenantGb();

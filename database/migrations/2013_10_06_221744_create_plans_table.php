@@ -24,7 +24,7 @@ return new class extends Migration
             $table->boolean('display_value')->nullable();
             $table->decimal('value_monthly', 10, 2)->nullable();            
             $table->decimal('value_quarterly', 10, 2)->nullable();            
-            $table->decimal('value_semi-annual', 10, 2)->nullable();            
+            $table->decimal('value_semi_anual', 10, 2)->nullable();            
             $table->decimal('value_anual', 10, 2)->nullable();            
             $table->decimal('value_bianual', 10, 2)->nullable();
 

@@ -23,7 +23,7 @@
             <div class="col-12 col-sm-6 my-2">
                 <div class="card-tools">
                     <div style="width: 250px;">
-                        <form class="input-group input-group-sm" action="{{route('planos.search')}}" method="post">
+                        <form class="input-group input-group-sm" action="{{route('plan.search')}}" method="post">
                             @csrf   
                             <input type="text" name="filter" value="{{ $filters['filter'] ?? '' }}" class="form-control float-right" placeholder="Pesquisar">
             
@@ -37,7 +37,7 @@
                   </div>
             </div>
             <div class="col-12 col-sm-6 my-2 text-right">
-                <a href="{{route('planos.create')}}" class="btn btn-sm btn-default"><i class="fas fa-plus mr-2"></i> Cadastrar Novo</a>
+                <a href="{{route('plan.create')}}" class="btn btn-sm btn-default"><i class="fas fa-plus mr-2"></i> Cadastrar Plano</a>
             </div>
         </div>
     </div>        
@@ -66,15 +66,15 @@
                         <tr style="{{ ($plano->status == '1' ? '' : 'background: #fffed8 !important;')  }}">
                             <td>{{$plano->name}}</td>
                             <td class="text-center">                            
-                                {{($plano->valor_mensal ? 'Mensal: R$'.$plano->valor_mensal : '')}}
-                                {!!($plano->valor_trimestral ? '<br>Trimestral: R$'.$plano->valor_trimestral : '')!!}
-                                {!!($plano->valor_semestral ? '<br>Semestral: R$'.$plano->valor_semestral : '')!!}
-                                {!!($plano->valor_anual ? '<br>Anual: R$'.$plano->valor_anual : '')!!}
-                                {!!($plano->valor_bianual ? '<br>Bianual: R$'.$plano->valor_bianual : '')!!}                            
+                                {{($plano->value_monthly ? 'Mensal: R$'.$plano->value_monthly : 'Mensal: R$0,00')}}
+                                {!!($plano->value_quarterly ? '<br>Trimestral: R$'.$plano->value_quarterly : '<br>Trimestral: R$0,00')!!}
+                                {!!($plano->value_semi_anual ? '<br>Semestral: R$'.$plano->value_semi_anual : '<br>Semestral: R$0,00')!!}
+                                {!!($plano->value_anual ? '<br>Anual: R$'.$plano->value_anual : '<br>Anual: R$0,00')!!}                           
+                                {!!($plano->value_bianual ? '<br>Bi-anual: R$'.$plano->value_bianual : '<br>Bi-anual: R$0,00')!!}                           
                             </td>
                             <td>
                                 <input type="checkbox" data-onstyle="success" data-offstyle="warning" data-size="mini" class="toggle-class" data-id="{{ $plano->id }}" data-toggle="toggle" data-style="slow" data-on="<i class='fas fa-check'></i>" data-off="<i style='color:#fff !important;' class='fas fa-exclamation-triangle'></i>" {{ $plano->status == true ? 'checked' : ''}}>
-                                <a href="{{route('planos.edit',['id' => $plano->id])}}" class="btn btn-xs btn-default"><i class="fas fa-pen"></i></a>
+                                <a href="{{route('plan.edit',['id' => $plano->id])}}" class="btn btn-xs btn-default"><i class="fas fa-pen"></i></a>
                                 <button type="button" class="btn btn-xs btn-danger text-white j_modal_btn" data-id="{{$plano->id}}" data-toggle="modal" data-target="#modal-default">
                                     <i class="fas fa-trash"></i>
                                 </button>
@@ -162,7 +162,7 @@
                 $.ajax({
                     type: 'GET',
                     dataType: 'JSON',
-                    url: "{{ route('planos.delete') }}",
+                    url: "{{ route('plan.delete') }}",
                     data: {
                        'id': plano_id
                     },
@@ -170,9 +170,9 @@
                         if(data.error){
                             $('.j_param_data').html(data.error);
                             $('#id_plano').val(data.id);
-                            $('#frm').prop('action','{{ route('planos.deleteon') }}');
+                            $('#frm').prop('action','{{ route('plan.deleteon') }}');
                         }else{
-                            $('#frm').prop('action','{{ route('planos.deleteon') }}');
+                            $('#frm').prop('action','{{ route('plan.deleteon') }}');
                         }
                     }
                 });
@@ -189,7 +189,7 @@
                 $.ajax({
                     type: 'GET',
                     dataType: 'JSON',
-                    url: "{{ route('plano.setStatus') }}",
+                    url: "{{ route('plan.setStatus') }}",
                     data: {
                         'status': status,
                         'id': plano_id

@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\{
     NewsletterController,
     ParceiroController,
     PedidoController,
+    PlanController,
     PlanoController,
     SitemapController,
     SlideController,
@@ -191,15 +192,15 @@ Route::prefix('admin')->middleware(['auth', 'subdomain_main'])->group( function(
 
     
     /******************** Planos *************************************************************/
-    Route::match(['get', 'post'], 'planos/pesquisa', [PlanoController::class, 'search'])->name('planos.search');
-    Route::get('planos/delete', [PlanoController::class, 'delete'])->name('planos.delete');
-    Route::delete('planos/deleteon', [PlanoController::class, 'deleteon'])->name('planos.deleteon');
-    Route::get('planos/set-status', [PlanoController::class, 'planosetStatus'])->name('plano.setStatus');
-    Route::put('planos/{id}', [PlanoController::class, 'update'])->name('planos.update');
-    Route::get('planos/{id}/edit', [PlanoController::class, 'edit'])->name('planos.edit');
-    Route::get('planos/create', [PlanoController::class, 'create'])->name('planos.create');
-    Route::post('planos/store', [PlanoController::class, 'store'])->name('planos.store');
-    Route::get('planos', [PlanoController::class, 'index'])->name('planos.index');
+    Route::match(['get', 'post'], 'planos/pesquisa', [PlanController::class, 'search'])->name('plan.search');
+    Route::get('planos/delete', [PlanController::class, 'delete'])->name('plan.delete');
+    Route::delete('planos/deleteon', [PlanController::class, 'deleteon'])->name('plan.deleteon');
+    Route::get('planos/set-status', [PlanController::class, 'planosetStatus'])->name('plan.setStatus');
+    Route::put('planos/{id}', [PlanController::class, 'update'])->name('plan.update');
+    Route::get('planos/{id}/edit', [PlanController::class, 'edit'])->name('plan.edit');
+    Route::get('planos/create', [PlanController::class, 'create'])->name('plan.create');
+    Route::post('planos/store', [PlanController::class, 'store'])->name('plan.store');
+    Route::get('planos', [PlanController::class, 'index'])->name('plan.index');
 
     /******************** Academias *************************************************************/
     Route::match(['get', 'post'], 'academias/pesquisa', [TenantController::class, 'search'])->name('tenant.search');

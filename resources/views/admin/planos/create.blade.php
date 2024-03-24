@@ -32,7 +32,7 @@ $config = [
     <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="{{route('home')}}">Painel de Controle</a></li>
-            <li class="breadcrumb-item"><a href="{{route('planos.index')}}">Planos</a></li>
+            <li class="breadcrumb-item"><a href="{{route('plan.index')}}">Planos</a></li>
             <li class="breadcrumb-item active">Cadastrar novo Plano</li>
         </ol>
     </div>
@@ -53,7 +53,7 @@ $config = [
 </div>   
                     
             
-<form action="{{ route('planos.store') }}" method="post">
+<form action="{{ route('plan.store') }}" method="post">
     @csrf          
     <div class="row">            
         <div class="col-12">
@@ -89,21 +89,34 @@ $config = [
                             </div>
                             
                             <div class="row mb-3">
-                                <div class="col-12 col-sm-6 col-md-3 col-lg-3">
+                                <div class="col-12 col-sm-4 col-md-3 col-lg-2">
+                                    <div class="form-group">
+                                        <label class="labelforms text-muted"><b>Exibir Valores?</b></label>
+                                        <select name="display_value" class="form-control">
+                                            <option value="1" {{ (old('display_value') == '1' ? 'selected' : '') }}>Sim</option>
+                                                <option value="0" {{ (old('display_value') == '0' ? 'selected' : '') }}>Não</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6 col-md-3 col-lg-2">
                                     <label class="labelforms text-muted"><b>Mensal</b></label>
-                                    <input type="text" class="form-control mask-money m" name="valor_mensal" value="{{ old('valor_mensal') }}">
+                                    <input type="text" class="form-control mask-money m" name="value_monthly" value="{{ old('value_monthly') }}">
                                 </div>
-                                <div class="col-12 col-sm-6 col-md-3 col-lg-3">
+                                <div class="col-12 col-sm-6 col-md-3 col-lg-2">
                                     <label class="labelforms text-muted"><b>Trimestral</b></label>
-                                    <input type="text" class="form-control mask-money t" name="valor_trimestral" value="{{ old('valor_trimestral') }}">
+                                    <input type="text" class="form-control mask-money t" name="value_quarterly" value="{{ old('value_quarterly') }}">
                                 </div>
-                                <div class="col-12 col-sm-6 col-md-3 col-lg-3">
+                                <div class="col-12 col-sm-6 col-md-3 col-lg-2">
                                     <label class="labelforms text-muted"><b>Semestral</b></label>
-                                    <input type="text" class="form-control mask-money s" name="valor_semestral" value="{{ old('valor_semestral') }}">
+                                    <input type="text" class="form-control mask-money s" name="value_semi_anual" value="{{ old('value_semi_anual') }}">
                                 </div>
-                                <div class="col-12 col-sm-6 col-md-3 col-lg-3">
+                                <div class="col-12 col-sm-6 col-md-3 col-lg-2">
                                     <label class="labelforms text-muted"><b>Anual</b></label>
-                                    <input type="text" class="form-control mask-money a" name="valor_anual" value="{{ old('valor_anual') }}">
+                                    <input type="text" class="form-control mask-money a" name="value_anual" value="{{ old('value_anual') }}">
+                                </div>
+                                <div class="col-12 col-sm-6 col-md-3 col-lg-2">
+                                    <label class="labelforms text-muted"><b>Bi-Anual</b></label>
+                                    <input type="text" class="form-control mask-money a" name="value_bianual" value="{{ old('value_bianual') }}">
                                 </div>
                             </div>
 
